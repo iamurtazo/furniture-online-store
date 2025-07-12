@@ -11,7 +11,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="../deps/favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="../deps/favicon/favicon-16x16.png">
     <link rel="manifest" href="../deps/favicon/site.webmanifest">
-    <title>Каталог</title>
+    <title>Catalog</title>
 </head>
 
 <body>
@@ -29,40 +29,40 @@
                         <li class="nav-item dropdown ">
                             <a class="nav-link dropdown-toggle text-white" href="#" role="button"
                                 data-bs-toggle="dropdown" aria-expanded="false">
-                                Информация
+                                Information
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item  text-white" href="#">Доставка и оплата</a></li>
-                                <li><a class="dropdown-item  text-white" href="#">Контактная информация</a></li>
-                                <li><a class="dropdown-item  text-white" href="#">Про нас</a></li>
+                                <li><a class="dropdown-item  text-white" href="#">Delivery and Payment</a></li>
+                                <li><a class="dropdown-item  text-white" href="#">Contact Information</a></li>
+                                <li><a class="dropdown-item  text-white" href="#">About Us</a></li>
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link  text-white" href="../carts/cart.html">Корзина</a>
+                            <a class="nav-link  text-white" href="../carts/cart.html">Cart</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link  text-white" href="../users/login.html">Войти</a>
+                            <a class="nav-link  text-white" href="../users/login.html">Login</a>
                         </li>
                         <li class="nav-item dropdown ">
                             <a class="nav-link dropdown-toggle text-white" href="#" role="button"
                                 data-bs-toggle="dropdown" aria-expanded="false">
-                                Мой профиль
+                                My Profile
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item  text-white" href="../carts/cart.html">Корзина</a></li>
-                                <li><a class="dropdown-item  text-white" href="../users/profile.html">Личный кабинет</a>
+                                <li><a class="dropdown-item  text-white" href="../carts/cart.html">Cart</a></li>
+                                <li><a class="dropdown-item  text-white" href="../users/profile.html">Personal Account</a>
                                 </li>
-                                <li><a class="dropdown-item  text-white" href="#">Админ панель</a></li>
+                                <li><a class="dropdown-item  text-white" href="#">Admin Panel</a></li>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
-                                <li><a class="dropdown-item  text-white" href="#">Выйти</a></li>
+                                <li><a class="dropdown-item  text-white" href="#">Logout</a></li>
                             </ul>
                         </li>
                     </ul>
                     <form class="d-flex" role="search">
                         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-outline-success text-white" type="submit">Поиск</button>
+                        <button class="btn btn-outline-success text-white" type="submit">Search</button>
                     </form>
                 </div>
             </div>
@@ -70,27 +70,27 @@
     </header>
     <section>
         <div class="container">
-            <!-- Каталог и корзина с фиксированным расположением на странице -->
+            <!-- Catalog and cart with fixed positioning on the page -->
             <div class="row mt-1 position-fixed z-3">
-                <!-- Каталог -->
+                <!-- Catalog -->
                 <div class="dropdown mb-2">
                     <button class="btn btn-secondary dropdown-toggle btn-dark" type="button" data-bs-toggle="dropdown"
                         aria-expanded="false">
-                        Каталог
+                        Catalog
                         <img class="mx-1" src="../deps/icons/grid-fill.svg" alt="Catalog Icon" width="16"
                             height="16">
                     </button>
                     <ul class="dropdown-menu bg-dark" data-bs-theme="dark">
-                        <li><a class="dropdown-item text-white" href="../goods/catalog.html">Все товары</a></li>
-                        <li><a class="dropdown-item text-white" href="../goods/catalog.html">Кухня</a></li>
-                        <li><a class="dropdown-item text-white" href="../goods/catalog.html">Спальня</a></li>
-                        <li><a class="dropdown-item text-white" href="../goods/catalog.html">Гостинная</a></li>
-                        <li><a class="dropdown-item text-white" href="../goods/catalog.html">Офис</a></li>
-                        <li><a class="dropdown-item text-white" href="../goods/catalog.html">Фурнитура</a></li>
-                        <li><a class="dropdown-item text-white" href="../goods/catalog.html">Декор</a></li>
+                        <li><a class="dropdown-item text-white" href="../goods/catalog.html">All Products</a></li>
+                        <li><a class="dropdown-item text-white" href="../goods/catalog.html">Kitchen</a></li>
+                        <li><a class="dropdown-item text-white" href="../goods/catalog.html">Bedroom</a></li>
+                        <li><a class="dropdown-item text-white" href="../goods/catalog.html">Living Room</a></li>
+                        <li><a class="dropdown-item text-white" href="../goods/catalog.html">Office</a></li>
+                        <li><a class="dropdown-item text-white" href="../goods/catalog.html">Hardware</a></li>
+                        <li><a class="dropdown-item text-white" href="../goods/catalog.html">Decor</a></li>
                     </ul>
                 </div>
-                <!-- Значек корзины, вызывает модальное окно -->
+                <!-- Cart icon, opens modal window -->
                 <div>
                     <button type="button" class="btn btn-dark btn-secondary d-flex" id="modalButton" aria-expanded="false">
                         <img class="mx-1" src="../deps/icons/basket2-fill.svg" alt="Catalog Icon" width="24"
@@ -98,7 +98,7 @@
                         <span>0</span>
                     </button>
                 </div>
-                <!-- Разметка модального окна корзины -->
+                <!-- Cart modal window markup -->
                 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
                     aria-hidden="true">
                     <div class="modal-dialog modal-dialog-scrollable">
@@ -108,12 +108,12 @@
                                     aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <h3 class="text-center mb-4">Корзина</h3>
+                                <h3 class="text-center mb-4">Cart</h3>
                                 <div class="container" id="cart-items-container">
-                                    <!-- Разметка корзины -->
+                                    <!-- Cart markup -->
                                     <div class="card mb-3 text-bg-light shadow-lg">
                                         <div class="card-header">
-                                            <h5 class="card-title">Товар</h5>
+                                            <h5 class="card-title">Product</h5>
                                         </div>
                                         <ul class="list-group list-group-flush">
                                             <li class="list-group-item">
@@ -148,36 +148,36 @@
                                     </div>
                                     <div class="card mb-3 shadow-lg">
                                         <div class="card-footer">
-                                            <p class="float-left">Итого <strong>1</strong> товар(а) на сумму</p>
+                                            <p class="float-left">Total <strong>1</strong> product(s) for amount</p>
                                             <h4 class="float-left"><strong>100.00 $</strong></h4>
                                         </div>
                                     </div>
-                                    <!-- Закончилась разметка корзины -->
+                                    <!-- End of cart markup -->
                                 </div>
                                 <a class="btn btn-dark" href="../orders/create_order.html">
-                                    Оформить заказ
+                                    Place Order
                                 </a>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- Закончилась разметка модального окна -->
+                <!-- End of modal window markup -->
             </div>
         </div>
-        <!-- Контент -->
+        <!-- Content -->
         <div class="container">
             <div class="row mt-1">
                 <div class="col-lg-2">
-                    <!-- Пустой блок на усмотрение -->
+                    <!-- Empty block at discretion -->
                 </div>
                 <div class="col-lg-10">
-                    <!-- Контент на странице -->
+                    <!-- Page content -->
                     <div class="row">
-                        <!-- Форма фильтров -->
+                        <!-- Filter form -->
                         <div class="dropdown mb-2">
                             <button class="btn btn-secondary dropdown-toggle btn-dark" type="button" data-bs-toggle="dropdown"
                                 aria-expanded="false">
-                                Фильтры
+                                Filters
                             </button>
                     
                             <form action="" method="get" class="dropdown-menu bg-dark" data-bs-theme="dark">
@@ -185,29 +185,29 @@
                                     <input class="form-check-input" type="checkbox" name="on_sale" id="flexCheckDefault" value="on">
                                     <input type="hidden" name="q" value="request.GET.q">
                                     <label class="form-check-label" for="flexCheckDefault">
-                                        Товары по акции
+                                        Products on sale
                                     </label>
                                 </div>
-                                <p class="text-white mx-3 mt-3">Сортировать:</p>
+                                <p class="text-white mx-3 mt-3">Sort by:</p>
                                 <div class="form-check text-white mx-3">
                                     <input class="form-check-input" type="radio" name="order_by" id="flexRadioDefault1" value="default" checked>
                                     <label class="form-check-label" for="flexRadioDefault1">
-                                        По умолчанию
+                                        Default
                                     </label>
                                 </div>
                                 <div class="form-check text-white mx-3">
                                     <input class="form-check-input" type="radio" name="order_by" id="flexRadioDefault2" value="price">
                                     <label class="form-check-label" for="flexRadioDefault2">
-                                        От дешевых к дорогим
+                                        From cheap to expensive
                                     </label>
                                 </div>
                                 <div class="form-check text-white mx-3">
                                     <input class="form-check-input" type="radio" name="order_by" id="flexRadioDefault3" value="-price">
                                     <label class="form-check-label" for="flexRadioDefault3">
-                                        От дорогих к дешевым
+                                        From expensive to cheap
                                     </label>
                                 </div>
-                                <button type="submit" class="btn btn-primary mx-3 mt-3">Применить</button>
+                                <button type="submit" class="btn btn-primary mx-3 mt-3">Apply</button>
                             </form>
                         </div>
                         <!-- Карта товара -->
@@ -216,9 +216,9 @@
                                 <img src="../deps/images/goods/set of tea table and three chairs.jpg" class="card-img-top" alt="...">
                                 <div class="card-body">
                                     <a href="../goods/product.html">
-                                        <p class="card-title">Чайный столик и три стула</p>
+                                        <p class="card-title">Tea table and three chairs</p>
                                     </a>
-                                    <p class="card-text text-truncate">Комплект из трёх стульев и дизайнерский столик для гостинной комнаты.</p>
+                                    <p class="card-text text-truncate">Set of three chairs and designer table for living room.</p>
                                     <p class="product_id">id: 02265</p>
                                     <div class="d-flex justify-content-between">
                                         <p><s>100</s> $</p>
@@ -239,9 +239,9 @@
                                 <img src="../deps/images/goods/set of tea table and two chairs.jpg" class="card-img-top" alt="...">
                                 <div class="card-body">
                                     <a href="#">
-                                        <p class="card-title">Чайный столик и два стула</p>
+                                        <p class="card-title">Tea table and two chairs</p>
                                     </a>
-                                    <p class="card-text text-truncate">Набор из стола и двух стульев в минималистическом стиле.</p>
+                                    <p class="card-text text-truncate">Set of table and two chairs in minimalist style.</p>
                                     <p class="product_id">id: 02265</p>
                                     <div class="d-flex justify-content-between">
                                         <p><s>100</s> $</p>
@@ -262,9 +262,9 @@
                                 <img src="../deps/images/goods/double bed.jpg" class="card-img-top" alt="...">
                                 <div class="card-body">
                                     <a href="#">
-                                        <p class="card-title">Двухспальная кровать</p>
+                                        <p class="card-title">Double bed</p>
                                     </a>
-                                    <p class="card-text text-truncate">Кровать двухспальная с надголовником и вообще очень ортопедичная.</p>
+                                    <p class="card-text text-truncate">Double bed with headboard and very orthopedic.</p>
                                     <p class="product_id">id: 02265</p>
                                     <div class="d-flex justify-content-between">
                                         <p><s>100</s> $</p>
@@ -285,9 +285,9 @@
                                 <img src="../deps/images/goods/kitchen table.jpg" class="card-img-top" alt="...">
                                 <div class="card-body">
                                     <a href="#">
-                                        <p class="card-title">Кухонный стол с раковиной</p>
+                                        <p class="card-title">Kitchen table with sink</p>
                                     </a>
-                                    <p class="card-text text-truncate">Кухонныйй стол для обеда с встроенной раковиной и стульями.</p>
+                                    <p class="card-text text-truncate">Kitchen table for dining with built-in sink and chairs.</p>
                                     <p class="product_id">id: 02265</p>
                                     <div class="d-flex justify-content-between">
                                         <p><s>100</s> $</p>
@@ -308,9 +308,9 @@
                                 <img src="../deps/images/goods/kitchen table 2.jpg" class="card-img-top" alt="...">
                                 <div class="card-body">
                                     <a href="#">
-                                        <p class="card-title">Кухонный стол с встройкой</p>
+                                        <p class="card-title">Kitchen table with built-in</p>
                                     </a>
-                                    <p class="card-text text-truncate">Кухонный стол со встроенной плитой и раковиной. Много полок и вообще красивый.</p>
+                                    <p class="card-text text-truncate">Kitchen table with built-in stove and sink. Many shelves and generally beautiful.</p>
                                     <p class="product_id">id: 02265</p>
                                     <div class="d-flex justify-content-between">
                                         <p><s>100</s> $</p>
@@ -331,9 +331,9 @@
                                 <img src="../deps/images/goods/corner sofa.jpg" class="card-img-top" alt="...">
                                 <div class="card-body">
                                     <a href="#">
-                                        <p class="card-title">Угловой диван для гостинной</p>
+                                        <p class="card-title">Corner sofa for living room</p>
                                     </a>
-                                    <p class="card-text text-truncate">Угловой диван, раскладывается в двухспальную кровать, для гостинной и приема гостей самое то!</p>
+                                    <p class="card-text text-truncate">Corner sofa, unfolds into a double bed, perfect for living room and receiving guests!</p>
                                     <p class="product_id">id: 02265</p>
                                     <div class="d-flex justify-content-between">
                                         <p><s>100</s> $</p>
@@ -377,9 +377,9 @@
                                 <img src="../deps/images/goods/sofa.jpg" class="card-img-top" alt="...">
                                 <div class="card-body">
                                     <a href="#">
-                                        <p class="card-title">Диван обыкновенный</p>
+                                        <p class="card-title">Ordinary sofa</p>
                                     </a>
-                                    <p class="card-text text-truncate">Диван, он же софа обыкновенная, ничего примечательного для описания.</p>
+                                    <p class="card-text text-truncate">Sofa, also known as ordinary sofa, nothing remarkable to describe.</p>
                                     <p class="product_id">id: 02265</p>
                                     <div class="d-flex justify-content-between">
                                         <p><s>100</s> $</p>
@@ -400,9 +400,9 @@
                                 <img src="../deps/images/goods/office chair.jpg" class="card-img-top" alt="...">
                                 <div class="card-body">
                                     <a href="#">
-                                        <p class="card-title">Стул офисный</p>
+                                        <p class="card-title">Office chair</p>
                                     </a>
-                                    <p class="card-text text-truncate">Описание товара, про то какой он классный, но это стул, что тут сказать...</p>
+                                    <p class="card-text text-truncate">Product description about how great it is, but it's a chair, what can I say...</p>
                                     <p class="product_id">id: 02265</p>
                                     <div class="d-flex justify-content-between">
                                         <p><s>100</s> $</p>
@@ -423,9 +423,9 @@
                                 <img src="../deps/images/goods/plants.jpg" class="card-img-top" alt="...">
                                 <div class="card-body">
                                     <a href="#">
-                                        <p class="card-title">Растение</p>
+                                        <p class="card-title">Plant</p>
                                     </a>
-                                    <p class="card-text text-truncate">Растение для украшения вашего интерьера подарит свежесть и безмятежность обстановке.</p>
+                                    <p class="card-text text-truncate">Plant for decorating your interior will give freshness and serenity to the atmosphere.</p>
                                     <p class="product_id">id: 02265</p>
                                     <div class="d-flex justify-content-between">
                                         <p><s>100</s> $</p>
@@ -446,9 +446,9 @@
                                 <img src="../deps/images/goods/flower.jpg" class="card-img-top" alt="...">
                                 <div class="card-body">
                                     <a href="#">
-                                        <p class="card-title">Цветок стилизированный</p>
+                                        <p class="card-title">Stylized flower</p>
                                     </a>
-                                    <p class="card-text text-truncate">Дизайнерский цветок (возможно искусственный) для украшения интерьера.</p>
+                                    <p class="card-text text-truncate">Designer flower (possibly artificial) for interior decoration.</p>
                                     <p class="product_id">id: 02265</p>
                                     <div class="d-flex justify-content-between">
                                         <p><s>100</s> $</p>

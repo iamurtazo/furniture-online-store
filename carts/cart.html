@@ -11,7 +11,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="../deps/favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="../deps/favicon/favicon-16x16.png">
     <link rel="manifest" href="../deps/favicon/site.webmanifest">
-    <title>Корзина</title>
+    <title>Cart</title>
 </head>
 
 <body>
@@ -29,40 +29,40 @@
                         <li class="nav-item dropdown ">
                             <a class="nav-link dropdown-toggle text-white" href="#" role="button"
                                 data-bs-toggle="dropdown" aria-expanded="false">
-                                Информация
+                                Information
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item  text-white" href="#">Доставка и оплата</a></li>
-                                <li><a class="dropdown-item  text-white" href="#">Контактная информация</a></li>
-                                <li><a class="dropdown-item  text-white" href="#">Про нас</a></li>
+                                <li><a class="dropdown-item  text-white" href="#">Delivery and Payment</a></li>
+                                <li><a class="dropdown-item  text-white" href="#">Contact Information</a></li>
+                                <li><a class="dropdown-item  text-white" href="#">About Us</a></li>
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link  text-white" href="../users/cart.html">Корзина</a>
+                            <a class="nav-link  text-white" href="../users/cart.html">Cart</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link  text-white" href="../users/login.html">Войти</a>
+                            <a class="nav-link  text-white" href="../users/login.html">Login</a>
                         </li>
                         <li class="nav-item dropdown ">
                             <a class="nav-link dropdown-toggle text-white" href="#" role="button"
                                 data-bs-toggle="dropdown" aria-expanded="false">
-                                Мой профиль
+                                My Profile
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item  text-white" href="../users/cart.html">Корзина</a></li>
-                                <li><a class="dropdown-item  text-white" href="../users/profile.html">Личный кабинет</a>
+                                <li><a class="dropdown-item  text-white" href="../users/cart.html">Cart</a></li>
+                                <li><a class="dropdown-item  text-white" href="../users/profile.html">Personal Account</a>
                                 </li>
-                                <li><a class="dropdown-item  text-white" href="#">Админ панель</a></li>
+                                <li><a class="dropdown-item  text-white" href="#">Admin Panel</a></li>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
-                                <li><a class="dropdown-item  text-white" href="#">Выйти</a></li>
+                                <li><a class="dropdown-item  text-white" href="#">Logout</a></li>
                             </ul>
                         </li>
                     </ul>
                     <form class="d-flex" role="search">
                         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-outline-success text-white" type="submit">Поиск</button>
+                        <button class="btn btn-outline-success text-white" type="submit">Search</button>
                     </form>
                 </div>
             </div>
@@ -70,46 +70,46 @@
     </header>
     <section>
         <div class="container">
-            <!-- Каталог и корзина с фиксированным расположением на странице -->
+            <!-- Catalog and cart with fixed positioning on the page -->
             <div class="row mt-1 position-fixed z-3">
-                <!-- Каталог -->
+                <!-- Catalog -->
                 <div class="dropdown mb-2">
                     <button class="btn btn-secondary dropdown-toggle btn-dark" type="button" data-bs-toggle="dropdown"
                         aria-expanded="false">
-                        Каталог
+                        Catalog
                         <img class="mx-1" src="../deps/icons/grid-fill.svg" alt="Catalog Icon" width="16"
                             height="16">
                     </button>
                     <ul class="dropdown-menu bg-dark" data-bs-theme="dark">
-                        <li><a class="dropdown-item text-white" href="../goods/catalog.html">Все товары</a></li>
-                        <li><a class="dropdown-item text-white" href="../goods/catalog.html">Кухня</a></li>
-                        <li><a class="dropdown-item text-white" href="../goods/catalog.html">Спальня</a></li>
-                        <li><a class="dropdown-item text-white" href="../goods/catalog.html">Гостинная</a></li>
-                        <li><a class="dropdown-item text-white" href="../goods/catalog.html">Офис</a></li>
-                        <li><a class="dropdown-item text-white" href="../goods/catalog.html">Фурнитура</a></li>
-                        <li><a class="dropdown-item text-white" href="../goods/catalog.html">Декор</a></li>
+                        <li><a class="dropdown-item text-white" href="../goods/catalog.html">All Products</a></li>
+                        <li><a class="dropdown-item text-white" href="../goods/catalog.html">Kitchen</a></li>
+                        <li><a class="dropdown-item text-white" href="../goods/catalog.html">Bedroom</a></li>
+                        <li><a class="dropdown-item text-white" href="../goods/catalog.html">Living Room</a></li>
+                        <li><a class="dropdown-item text-white" href="../goods/catalog.html">Office</a></li>
+                        <li><a class="dropdown-item text-white" href="../goods/catalog.html">Hardware</a></li>
+                        <li><a class="dropdown-item text-white" href="../goods/catalog.html">Decor</a></li>
                     </ul>
                 </div>
             </div>
         </div>
-        <!-- Контент -->
+        <!-- Content -->
         <div class="container">
             <div class="row mt-1">
                 <div class="col-lg-2">
-                    <!-- Пустой блок на усмотрение -->
+                    <!-- Empty block at discretion -->
                 </div>
                 <div class="col-lg-10">
-                    <!-- Контент на странице -->
+                    <!-- Page content -->
                     <div class="row">
                         <div class="container mt-5">
                             <div class="row justify-content-center">
                                 <div class=" bg-white p-4 mb-4 mx-2 rounded custom-shadow">
-                                    <h3 class="text-center mb-4">Корзина</h3>
+                                    <h3 class="text-center mb-4">Cart</h3>
                                     <div class="container" id="cart-items-container">
-                                        <!-- Разметка корзины -->
+                                        <!-- Cart markup -->
                                         <div class="card mb-3 text-bg-light shadow-lg">
                                             <div class="card-header">
-                                                <h5 class="card-title">Товар</h5>
+                                                <h5 class="card-title">Product</h5>
                                             </div>
                                             <ul class="list-group list-group-flush">
                                                 <li class="list-group-item">
@@ -144,14 +144,14 @@
                                         </div>
                                         <div class="card mb-3 shadow-lg">
                                             <div class="card-footer">
-                                                <p class="float-left">Итого <strong>1</strong> товар(а) на сумму</p>
+                                                <p class="float-left">Total <strong>1</strong> product(s) for amount</p>
                                                 <h4 class="float-left"><strong>100.00 $</strong></h4>
                                             </div>
                                         </div>
-                                        <!-- Закончилась разметка корзины -->
+                                        <!-- End of cart markup -->
                                     </div>
                                     <a class="btn btn-dark" href="../orders/create_order.html">
-                                        Оформить заказ
+                                        Place Order
                                     </a>
                                 </div>
                             </div>
