@@ -1,1 +1,12 @@
 /src/venv/
+__pycache__/
+.vscode/
+.idea/
+db.sqlite3
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.pylintrc
+.DS_Store
