@@ -1,12 +1,59 @@
-/src/venv/
+# macOS system files
+.DS_Store
+
+# Python cache and virtual environment
 __pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+
+# SQLite DB files
+*.sqlite3
+*.db
+
+# Logs and temporary files
+*.log
+*.tmp
+*.swp
+*.bak
+
+# IDEs and editors
 .vscode/
 .idea/
-db.sqlite3
+*.code-workspace
+
+# Environments
 .env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-.pylintrc
-.DS_Store
+.env.*
+venv/
+env/
+
+# Node / JS related
+node_modules/
+npm-debug.log*
+yarn-error.log
+
+# OS/Editor trash
+Thumbs.db
+ehthumbs.db
+*.orig
+
+# Coverage/test reports
+htmlcov/
+coverage.*
+*.cover
+.pytest_cache/
+
+# Media/uploads (if not needed)
+media/
+uploads/
+
+# Compiled frontend assets (optional)
+*.js.map
+*.css.map
+staticfiles/
