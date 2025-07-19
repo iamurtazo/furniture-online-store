@@ -22,7 +22,7 @@
     <header>
         <nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
             <div class="container">
-                <a class="navbar-brand" href="{% url 'index' %}">Home</a>
+                <a class="navbar-brand" href="{% url 'main:index' %}">Home</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
@@ -38,7 +38,7 @@
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item  text-white" href="#">Delivery and Payment</a></li>
                                 <li><a class="dropdown-item  text-white" href="#">Contact Information</a></li>
-                                <li><a class="dropdown-item  text-white" href="{% url 'about' %}">About Us</a></li>
+                                <li><a class="dropdown-item  text-white" href="{% url 'main:about' %}">About Us</a></li>
                             </ul>
                         </li>
                         <li class="nav-item">
@@ -85,13 +85,13 @@
                             height="16">
                     </button>
                     <ul class="dropdown-menu bg-dark" data-bs-theme="dark">
-                        <li><a class="dropdown-item text-white" href="goods/catalog.html">All Products</a></li>
-                        <li><a class="dropdown-item text-white" href="goods/catalog.html">Kitchen</a></li>
-                        <li><a class="dropdown-item text-white" href="goods/catalog.html">Bedroom</a></li>
-                        <li><a class="dropdown-item text-white" href="goods/catalog.html">Living Room</a></li>
-                        <li><a class="dropdown-item text-white" href="goods/catalog.html">Office</a></li>
-                        <li><a class="dropdown-item text-white" href="goods/catalog.html">Hardware</a></li>
-                        <li><a class="dropdown-item text-white" href="goods/catalog.html">Decor</a></li>
+                        <li><a class="dropdown-item text-white" href="{% url 'goods:index' %}">All Products</a></li>
+                        <li><a class="dropdown-item text-white" href="{% url 'goods:index' %}">Kitchen</a></li>
+                        <li><a class="dropdown-item text-white" href="{% url 'goods:index' %}">Bedroom</a></li>
+                        <li><a class="dropdown-item text-white" href="{% url 'goods:index' %}">Living Room</a></li>
+                        <li><a class="dropdown-item text-white" href="{% url 'goods:index' %}">Office</a></li>
+                        <li><a class="dropdown-item text-white" href="{% url 'goods:index' %}">Hardware</a></li>
+                        <li><a class="dropdown-item text-white" href="{% url 'goods:index' %}">Decor</a></li>
                     </ul>
                 </div>
                 <!-- Cart icon, opens modal window -->
