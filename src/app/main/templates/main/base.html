@@ -56,7 +56,7 @@
                                 <li><a class="dropdown-item  text-white" href="carts/cart.html">Cart</a></li>
                                 <li><a class="dropdown-item  text-white" href="users/profile.html">Personal Account</a>
                                 </li>
-                                <li><a class="dropdown-item  text-white" href="#">Admin Panel</a></li>
+                                <li><a class="dropdown-item  text-white" href="{% url 'admin:index' %}">Admin Panel</a></li>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
@@ -85,13 +85,9 @@
                             height="16">
                     </button>
                     <ul class="dropdown-menu bg-dark" data-bs-theme="dark">
-                        <li><a class="dropdown-item text-white" href="{% url 'goods:index' %}">All Products</a></li>
-                        <li><a class="dropdown-item text-white" href="{% url 'goods:index' %}">Kitchen</a></li>
-                        <li><a class="dropdown-item text-white" href="{% url 'goods:index' %}">Bedroom</a></li>
-                        <li><a class="dropdown-item text-white" href="{% url 'goods:index' %}">Living Room</a></li>
-                        <li><a class="dropdown-item text-white" href="{% url 'goods:index' %}">Office</a></li>
-                        <li><a class="dropdown-item text-white" href="{% url 'goods:index' %}">Hardware</a></li>
-                        <li><a class="dropdown-item text-white" href="{% url 'goods:index' %}">Decor</a></li>
+                        {% for category in categories %}
+                            <li><a class="dropdown-item text-white" href="{% url 'goods:index' %}">{{ category.name }}</a></li>
+                        {% endfor %}    
                     </ul>
                 </div>
                 <!-- Cart icon, opens modal window -->
