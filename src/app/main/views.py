@@ -2,7 +2,15 @@ from django.shortcuts import render
 
 # Create your views here.
 def index(request):
-    return render(request, 'main/index.html')
+    context = {
+        'title': 'Home',
+        'description': 'Furniture Store - Home',
+    }
+    return render(request, 'main/index.html', context=context)
 
 def about(request):
-    return render(request, 'main/about.html')
+    context = {
+        'title': 'About Us',
+        'description': 'Text about how great this online store is.'
+    }
+    return render(request, 'main/about.html', context=context)
