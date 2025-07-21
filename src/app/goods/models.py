@@ -32,4 +32,12 @@ class Products(models.Model):
         
     def __str__(self):
         return self.name
+    
+    def display_id(self):
+        return f'{self.id:05d}'
+    
+    def calculate_discount(self):
+        if self.discount > 0:
+            return self.price * (1 - self.discount / 100)
+        return self.price
 
