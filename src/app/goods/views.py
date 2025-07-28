@@ -3,7 +3,9 @@ from django.shortcuts import render, get_object_or_404, get_list_or_404
 from .models import *
 
 # Create your views here.
-def catalog(request, category_slug, page_number=1):
+def catalog(request, category_slug):
+    
+    page = request.GET.get('page', 1)
     
     if category_slug == 'all-categories':
         goods = Products.objects.all()
@@ -11,7 +13,7 @@ def catalog(request, category_slug, page_number=1):
         goods = get_list_or_404(Products.objects.filter(category__slug=category_slug))
     
     paginator = Paginator(goods, 3)
-    current_page = paginator.page(page_number)
+    current_page = paginator.page(int(page))
     
     context = {
         'title': 'Catalog - Home',
