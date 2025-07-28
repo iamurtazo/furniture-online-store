@@ -1,20 +1,23 @@
 from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404, get_list_or_404
 from .models import *
+from .utils import q_search
 
 # Create your views here.
-def catalog(request, category_slug):
+def catalog(request, category_slug=None):
     
     page = request.GET.get('page', 1)
     on_sale = request.GET.get('on_sale', None) 
     order_by = request.GET.get('order_by', None)  
+    query = request.GET.get('q', None)
     
     # Base queryset
     if category_slug == 'all-categories':
         goods = Products.objects.all()
+    elif query:
+        goods = q_search(query)
     else:
         goods = get_list_or_404(Products.objects.filter(category__slug=category_slug))
-    
     
     if on_sale:
         goods = goods.filter(discount__gt=0)
@@ -22,8 +25,8 @@ def catalog(request, category_slug):
     
     if order_by and order_by != 'default':
         goods = goods.order_by(order_by)
-    # elif order_by == '-price':
-    #    goods = goods.order_by('-price')
+    elif order_by == '-price':
+       goods = goods.order_by('-price')
     
     
     paginator = Paginator(goods, 3)

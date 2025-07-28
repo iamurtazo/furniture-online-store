@@ -9,10 +9,12 @@
       Filters
     </button>
 
-    <form action="{% url 'goods:index' slug_url %}" method="get" class="dropdown-menu bg-dark" data-bs-theme="dark">
+    <form action="{% if request.GET.q %}{% url 'goods:search' %}{% else %}{% url 'goods:index' slug_url %}{% endif %}" method="get" class="dropdown-menu bg-dark" data-bs-theme="dark">
       <div class="form-check text-white mx-3">
         <input class="form-check-input" type="checkbox" name="on_sale" id="flexCheckDefault" value="on"/>
-        <input type="hidden" name="q" value="{{ request.GET.q }}" />  
+        {% if request.GET.q %}  
+            <input type="hidden" name="q" value="{{ request.GET.q }}" />  
+        {% endif %}
         <label class="form-check-label" for="flexCheckDefault">
           Products on Sale
         </label>
