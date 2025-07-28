@@ -1,111 +1,173 @@
-{% extends "main/base.html" %}
-{% load static %}
+{% extends "main/base.html" %} {% load static %} {% block content %}
+<div class="row">
+  <!-- Filter form -->
+  <div class="dropdown mb-2">
+    <button
+      class="btn btn-secondary dropdown-toggle btn-dark"
+      type="button"
+      data-bs-toggle="dropdown"
+      aria-expanded="false"
+    >
+      Filters
+    </button>
 
-{% block content %}
-    <div class="row">
-        <!-- Filter form -->
-        <div class="dropdown mb-2">
-            <button class="btn btn-secondary dropdown-toggle btn-dark" type="button" data-bs-toggle="dropdown"
-                aria-expanded="false">
-                Filters
-            </button>
+    <form
+      action=""
+      method="get"
+      class="dropdown-menu bg-dark"
+      data-bs-theme="dark"
+    >
+      <div class="form-check text-white mx-3">
+        <input
+          class="form-check-input"
+          type="checkbox"
+          name="on_sale"
+          id="flexCheckDefault"
+          value="on"
+        />
+        <input type="hidden" name="q" value="request.GET.q" />
+        <label class="form-check-label" for="flexCheckDefault">
+          Products on sale
+        </label>
+      </div>
+      <p class="text-white mx-3 mt-3">Sort by:</p>
+      <div class="form-check text-white mx-3">
+        <input
+          class="form-check-input"
+          type="radio"
+          name="order_by"
+          id="flexRadioDefault1"
+          value="default"
+          checked
+        />
+        <label class="form-check-label" for="flexRadioDefault1">
+          Default
+        </label>
+      </div>
+      <div class="form-check text-white mx-3">
+        <input
+          class="form-check-input"
+          type="radio"
+          name="order_by"
+          id="flexRadioDefault2"
+          value="price"
+        />
+        <label class="form-check-label" for="flexRadioDefault2">
+          From cheap to expensive
+        </label>
+      </div>
+      <div class="form-check text-white mx-3">
+        <input
+          class="form-check-input"
+          type="radio"
+          name="order_by"
+          id="flexRadioDefault3"
+          value="-price"
+        />
+        <label class="form-check-label" for="flexRadioDefault3">
+          From expensive to cheap
+        </label>
+      </div>
+      <button type="submit" class="btn btn-primary mx-3 mt-3">Apply</button>
+    </form>
+  </div>
 
-            <form action="" method="get" class="dropdown-menu bg-dark" data-bs-theme="dark">
-                <div class="form-check text-white mx-3">
-                    <input class="form-check-input" type="checkbox" name="on_sale" id="flexCheckDefault" value="on">
-                    <input type="hidden" name="q" value="request.GET.q">
-                    <label class="form-check-label" for="flexCheckDefault">
-                        Products on sale
-                    </label>
-                </div>
-                <p class="text-white mx-3 mt-3">Sort by:</p>
-                <div class="form-check text-white mx-3">
-                    <input class="form-check-input" type="radio" name="order_by" id="flexRadioDefault1" value="default" checked>
-                    <label class="form-check-label" for="flexRadioDefault1">
-                        Default
-                    </label>
-                </div>
-                <div class="form-check text-white mx-3">
-                    <input class="form-check-input" type="radio" name="order_by" id="flexRadioDefault2" value="price">
-                    <label class="form-check-label" for="flexRadioDefault2">
-                        From cheap to expensive
-                    </label>
-                </div>
-                <div class="form-check text-white mx-3">
-                    <input class="form-check-input" type="radio" name="order_by" id="flexRadioDefault3" value="-price">
-                    <label class="form-check-label" for="flexRadioDefault3">
-                        From expensive to cheap
-                    </label>
-                </div>
-                <button type="submit" class="btn btn-primary mx-3 mt-3">Apply</button>
-            </form>
-        </div>
-
-        <div class="row">
-            {% for good in goods %}
-                <!-- Product card -->
-                <div class="col-lg-4 col-md-6 p-4">
-                    <div class="card border-primary rounded custom-shadow position-relative">
-                        <!-- Discount badge in top-right corner -->
-                        {% if good.discount > 0 %}
-                            <span class="position-absolute top-0 end-0 badge bg-danger text-white m-2 px-2 py-1 rounded-pill shadow" style="z-index: 10;">
-                                -{{ good.discount }}%
-                            </span>
-                        {% endif %}
-                        
-                        {% if good.image %}
-                            <img src="{{ good.image.url }}" class="card-img-top" alt="...">
-                        {% else %}
-                            <img src="{% static 'deps/images/Not found image.png' %}" class="card-img-top" alt="...">
-                        {% endif %}
-                        <div class="card-body">
-                            <a href="{% url 'goods:product' good.id %}">
-                                <p class="card-title">{{ good.name }}</p>
-                            </a>
-                            <p class="card-text text-truncate">{{ good.description }}</p>
-                            <p class="product_id">id: {{ good.display_id }}</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="price-section">
-                                    {% if good.discount > 0 %}
-                                        <p class="mb-0"><small class="text-muted text-decoration-line-through">${{ good.price }}</small></p>
-                                        <p class="mb-0"><strong class="text-success fs-5">${{ good.calculate_discount }}</strong></p>
-                                    {% else %}
-                                        <p class="mb-0"><strong class="fs-5">${{ good.price }}</strong></p>
-                                    {% endif %}
-                                </div>
-                                <a href="#" class="btn add-to-cart">
-                                    <img class="mx-1" src="{% static "deps/icons/cart-plus.svg" %}" alt="Catalog Icon"
-                                        width="32" height="32">
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
-        </div> 
-    </div>
-    <!-- Pagination -->
-    <nav aria-label="Page navigation example">
-        <ul class="pagination justify-content-center my-4">
-            <div class="custom-shadow d-flex">
-                <li class="page-item disabled">
-                <a class="page-link">Previous</a>
-                </li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item">
-                <a class="page-link" href="#">Next</a>
-                </li>
+  <div class="row">
+    {% for good in goods %}
+    <!-- Product card -->
+    <div class="col-lg-4 col-md-6 p-4">
+      <div class="card border-primary rounded custom-shadow position-relative">
+        <!-- Discount badge in top-right corner -->
+        {% if good.discount > 0 %}
+        <span
+          class="position-absolute top-0 end-0 badge bg-danger text-white m-2 px-2 py-1 rounded-pill shadow"
+          style="z-index: 10"
+        >
+          -{{ good.discount }}%
+        </span>
+        {% endif %} {% if good.image %}
+        <img src="{{ good.image.url }}" class="card-img-top" alt="..." />
+        {% else %}
+        <img
+          src="{% static 'deps/images/Not found image.png' %}"
+          class="card-img-top"
+          alt="..."
+        />
+        {% endif %}
+        <div class="card-body">
+          <a href="{% url 'goods:product' good.id %}">
+            <p class="card-title">{{ good.name }}</p>
+          </a>
+          <p class="card-text">{{ good.description|truncatechars:50 }}</p>
+          <p class="product_id">id: {{ good.display_id }}</p>
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="price-section">
+              {% if good.discount > 0 %}
+              <p class="mb-0">
+                <small class="text-muted text-decoration-line-through"
+                  >${{ good.price }}</small
+                >
+              </p>
+              <p class="mb-0">
+                <strong class="text-success fs-5"
+                  >${{ good.calculate_discount }}</strong
+                >
+              </p>
+              {% else %}
+              <p class="mb-0">
+                <strong class="fs-5">${{ good.price }}</strong>
+              </p>
+              {% endif %}
             </div>
-        </ul>
-    </nav>
-{% endblock %}
-
-{% block footer %}
-    <footer class="py-4 bg-dark">
-        <div class="container">
-            <p class="m-0 text-center text-white">Copyright &copy; iamurtazo 2023</p>
+            <a href="#" class="btn add-to-cart">
+              <img class="mx-1" src="{% static "deps/icons/cart-plus.svg" %}"
+              alt="Catalog Icon" width="32" height="32">
+            </a>
+          </div>
         </div>
-    </footer>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+<!-- Pagination -->
+<nav aria-label="Page navigation example">
+  <ul class="pagination justify-content-center my-4">
+    <div class="custom-shadow d-flex">
+      <li class="page-item {% if not goods.has_previous %}disabled{% endif %}">
+        <a
+          class="page-link"
+          href="{% if goods.has_previous %}{% url 'goods:page' slug_url goods.previous_page_number %}{% else %}#{% endif %}"
+        >
+          Previous
+        </a>
+      </li>
+
+      {% for page in goods.paginator.page_range %}
+      {% if page > goods.number|add:-2 and page < goods.number|add:2 %}
+      <li class="page-item {% if page == goods.number %}active{% endif %}">
+        <a class="page-link" href="{% url 'goods:page' slug_url page %}"
+          >{{ page }}</a
+        >
+      </li>
+      {% endif %}
+      {% endfor %}
+
+      <li class="page-item {% if not goods.has_next %}disabled{% endif %}">
+        <a
+          class="page-link" 
+          href="{% if goods.has_next %}{% url 'goods:page' slug_url goods.next_page_number %}{% else %}#{% endif %}"
+        >
+          Next
+        </a>
+      </li>
+    </div>
+  </ul>
+</nav>
+{% endblock %} {% block footer %}
+<footer class="py-4 bg-dark">
+  <div class="container">
+    <p class="m-0 text-center text-white">Copyright &copy; iamurtazo 2023</p>
+  </div>
+</footer>
 {% endblock %}
