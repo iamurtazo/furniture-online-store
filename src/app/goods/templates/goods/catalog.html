@@ -1,69 +1,37 @@
-{% extends "main/base.html" %} {% load static %} {% block content %}
+{% extends "main/base.html" %} 
+{% load static %} 
+{% load goods_tags %}   
+{% block content %}
 <div class="row">
   <!-- Filter form -->
   <div class="dropdown mb-2">
-    <button
-      class="btn btn-secondary dropdown-toggle btn-dark"
-      type="button"
-      data-bs-toggle="dropdown"
-      aria-expanded="false"
-    >
+    <button class="btn btn-secondary dropdown-toggle btn-dark" type="button" data-bs-toggle="dropdown" aria-expanded="false">
       Filters
     </button>
 
-    <form
-      action=""
-      method="get"
-      class="dropdown-menu bg-dark"
-      data-bs-theme="dark"
-    >
+    <form action="{% url 'goods:index' slug_url %}" method="get" class="dropdown-menu bg-dark" data-bs-theme="dark">
       <div class="form-check text-white mx-3">
-        <input
-          class="form-check-input"
-          type="checkbox"
-          name="on_sale"
-          id="flexCheckDefault"
-          value="on"
-        />
-        <input type="hidden" name="q" value="request.GET.q" />
+        <input class="form-check-input" type="checkbox" name="on_sale" id="flexCheckDefault" value="on"/>
+        <input type="hidden" name="q" value="{{ request.GET.q }}" />  
         <label class="form-check-label" for="flexCheckDefault">
-          Products on sale
+          Products on Sale
         </label>
       </div>
       <p class="text-white mx-3 mt-3">Sort by:</p>
       <div class="form-check text-white mx-3">
-        <input
-          class="form-check-input"
-          type="radio"
-          name="order_by"
-          id="flexRadioDefault1"
-          value="default"
-          checked
-        />
+        <input class="form-check-input" type="radio" name="order_by" id="flexRadioDefault1" value="default"/>
         <label class="form-check-label" for="flexRadioDefault1">
           Default
         </label>
       </div>
       <div class="form-check text-white mx-3">
-        <input
-          class="form-check-input"
-          type="radio"
-          name="order_by"
-          id="flexRadioDefault2"
-          value="price"
-        />
+        <input class="form-check-input" type="radio" name="order_by" id="flexRadioDefault2" value="price"/>
         <label class="form-check-label" for="flexRadioDefault2">
           From cheap to expensive
         </label>
       </div>
       <div class="form-check text-white mx-3">
-        <input
-          class="form-check-input"
-          type="radio"
-          name="order_by"
-          id="flexRadioDefault3"
-          value="-price"
-        />
+        <input class="form-check-input" type="radio"name="order_by"id="flexRadioDefault3" value="-price"/>
         <label class="form-check-label" for="flexRadioDefault3">
           From expensive to cheap
         </label>
@@ -137,17 +105,13 @@
       <li class="page-item {% if not goods.has_previous %}disabled{% endif %}">
         <a
           class="page-link"
-          href="{% if goods.has_previous %}?page={{ goods.previous_page_number }}{% else %}
-          #
-          {% endif %}"> Previous</a>
+          href="{% if goods.has_previous %}?page={{ goods.previous_page_number }}{% if on_sale %}&on_sale={{ on_sale }}{% endif %}{% if order_by and order_by != 'default' %}&order_by={{ order_by }}{% endif %}{% else %}#{% endif %}"> Previous</a>
       </li>
 
       {% for page in goods.paginator.page_range %}
       {% if page > goods.number|add:-3 and page < goods.number|add:3 %}
       <li class="page-item {% if page == goods.number %}active{% endif %}">
-        <a class="page-link" href="?page={{ page }}"
-          >{{ page }}</a
-        >
+        <a class="page-link" href="?page={{ page }}{% if on_sale %}&on_sale={{ on_sale }}{% endif %}{% if order_by and order_by != 'default' %}&order_by={{ order_by }}{% endif %}">{{ page }}</a>
       </li>
       {% endif %}
       {% endfor %}
@@ -155,12 +119,28 @@
       <li class="page-item {% if not goods.has_next %}disabled{% endif %}">
         <a
           class="page-link" 
-          href="{% if goods.has_next %}?page={{ goods.next_page_number }}{% else %}#{% endif %}"
+          href="{% if goods.has_next %}?page={{ goods.next_page_number }}{% if on_sale %}&on_sale={{ on_sale }}{% endif %}{% if order_by and order_by != 'default' %}&order_by={{ order_by }}{% endif %}{% else %}#{% endif %}"
         > Next</a>
       </li>
     </div>
   </ul>
 </nav>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Prevent dropdown from closing when clicking inside it
+    document.querySelectorAll('.dropdown-menu').forEach(function(dropdown) {
+        dropdown.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+    });
+    
+    // Allow dropdown to close when clicking Apply button
+    document.querySelector('.dropdown-menu button[type="submit"]').addEventListener('click', function(e) {
+        // Form will submit and page will reload, so dropdown will close naturally
+    });
+});
+</script>
+
 {% endblock %} {% block footer %}
 <footer class="py-4 bg-dark">
   <div class="container">
