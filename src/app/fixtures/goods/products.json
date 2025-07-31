@@ -1,114 +1,128 @@
 [
-  {
-    "model": "goods.products",
-    "pk": 1,
-    "fields": {
-      "name": "Armchair",
-      "slug": null,
-      "description": "",
-      "image": "",
-      "price": "30.00",
-      "discount": "0.00",
-      "quantity": 10,
-      "category": 3
+    {
+        "model": "goods.products",
+        "pk": 1,
+        "fields": {
+            "name": "Armchair",
+            "slug": "armchair",
+            "description": "good armchair",
+            "image": "goods_images/set_of_tea_table_and_two_chairs.jpg",
+            "price": "30.00",
+            "discount": "0.00",
+            "quantity": 10,
+            "category": 3
+        }
+    },
+    {
+        "model": "goods.products",
+        "pk": 2,
+        "fields": {
+            "name": "Tea table and three chairs",
+            "slug": "tea-table-and-three-chairs",
+            "description": "Set of three chairs and designer table for the living room.",
+            "image": "goods_images/set_of_tea_table_and_three_chairs.jpg",
+            "price": "150.00",
+            "discount": "0.00",
+            "quantity": 5,
+            "category": 3
+        }
+    },
+    {
+        "model": "goods.products",
+        "pk": 3,
+        "fields": {
+            "name": "Double bed",
+            "slug": "double-bed",
+            "description": "Double bed with headboard and very orthopedic.",
+            "image": "goods_images/double_bed.jpg",
+            "price": "670.00",
+            "discount": "0.00",
+            "quantity": 2,
+            "category": 2
+        }
+    },
+    {
+        "model": "goods.products",
+        "pk": 4,
+        "fields": {
+            "name": "Kitchen table with built-ins",
+            "slug": "kitchen-table-with-built-ins",
+            "description": "Kitchen table with built-in stove and sink. Lots of shelves and generally beautiful.",
+            "image": "goods_images/kitchen_table.jpg",
+            "price": "230.00",
+            "discount": "10.00",
+            "quantity": 10,
+            "category": 1
+        }
+    },
+    {
+        "model": "goods.products",
+        "pk": 5,
+        "fields": {
+            "name": "Corner sofa for living room",
+            "slug": "corner-sofa-for-living-room",
+            "description": "Corner sofa, unfolds into a double bed, perfect for the living room and receiving guests!",
+            "image": "goods_images/corner_sofa.jpg",
+            "price": "130.00",
+            "discount": "0.00",
+            "quantity": 5,
+            "category": 4
+        }
+    },
+    {
+        "model": "goods.products",
+        "pk": 6,
+        "fields": {
+            "name": "Office chair",
+            "slug": "office-chair",
+            "description": "Product description about how cool it is, but it\\'s a chair, what can you say...",
+            "image": "goods_images/office_chair.jpg",
+            "price": "90.00",
+            "discount": "0.00",
+            "quantity": 15,
+            "category": null
+        }
+    },
+    {
+        "model": "goods.products",
+        "pk": 7,
+        "fields": {
+            "name": "Plant",
+            "slug": "plant",
+            "description": "Plant to decorate your interior will bring freshness and serenity to the atmosphere.",
+            "image": "goods_images/flower.jpg",
+            "price": "10.00",
+            "discount": "0.00",
+            "quantity": 13,
+            "category": 6
+        }
+    },
+    {
+        "model": "goods.products",
+        "pk": 8,
+        "fields": {
+            "name": "Furniture legs",
+            "slug": "furniture-legs",
+            "description": "attachable legs for sofas, tables, beds",
+            "image": "goods_images/strange_table.jpg",
+            "price": "190.00",
+            "discount": "0.00",
+            "quantity": 7,
+            "category": 5
+        }
+    },
+    {
+        "model": "goods.products",
+        "pk": 9,
+        "fields": {
+            "name": "Study Table",
+            "slug": "study-table",
+            "description": "classic study table with chair as a gift",
+            "image": "goods_images/pexels-lina-1813502.jpg",
+            "price": "30.00",
+            "discount": "10.00",
+            "quantity": 100,
+            "category": 4
+        }
     }
-  },
-  {
-    "model": "goods.products",
-    "pk": 2,
-    "fields": {
-      "name": "Tea table and three chairs",
-      "slug": "tea-table-and-three-chairs",
-      "description": "Set of three chairs and designer table for the living room.",
-      "image": "",
-      "price": "150.00",
-      "discount": "0.00",
-      "quantity": 5,
-      "category": 3
-    }
-  },
-  {
-    "model": "goods.products",
-    "pk": 3,
-    "fields": {
-      "name": "Double bed",
-      "slug": "double-bed",
-      "description": "Double bed with headboard and very orthopedic.",
-      "image": "",
-      "price": "670.00",
-      "discount": "0.00",
-      "quantity": 2,
-      "category": 2
-    }
-  },
-  {
-    "model": "goods.products",
-    "pk": 4,
-    "fields": {
-      "name": "Kitchen table with built-ins",
-      "slug": "kitchen-table-with-built-ins",
-      "description": "Kitchen table with built-in stove and sink. Lots of shelves and generally beautiful.",
-      "image": "",
-      "price": "230.00",
-      "discount": "0.00",
-      "quantity": 10,
-      "category": 1
-    }
-  },
-  {
-    "model": "goods.products",
-    "pk": 5,
-    "fields": {
-      "name": "Corner sofa for living room",
-      "slug": "corner-sofa-for-living-room",
-      "description": "Corner sofa, unfolds into a double bed, perfect for the living room and receiving guests!",
-      "image": "",
-      "price": "130.00",
-      "discount": "0.00",
-      "quantity": 5,
-      "category": 4
-    }
-  },
-  {
-    "model": "goods.products",
-    "pk": 6,
-    "fields": {
-      "name": "Office chair",
-      "slug": "office-chair",
-      "description": "Product description about how cool it is, but it\\'s a chair, what can you say...",
-      "image": "",
-      "price": "90.00",
-      "discount": "0.00",
-      "quantity": 15,
-      "category": null
-    }
-  },
-  {
-    "model": "goods.products",
-    "pk": 7,
-    "fields": {
-      "name": "Plant",
-      "slug": "plant",
-      "description": "Plant to decorate your interior will bring freshness and serenity to the atmosphere.",
-      "image": "",
-      "price": "10.00",
-      "discount": "0.00",
-      "quantity": 13,
-      "category": 6
-    }
-  },
-  {
-    "model": "goods.products",
-    "pk": 8,
-    "fields": {
-      "name": "Furniture legs",
-      "slug": "furniture-legs",
-      "description": "attachable legs for sofas, tables, beds",
-      "image": "",
-      "price": "190.00",
-      "discount": "0.00",
-      "quantity": 7,
-      "category": 5
-    }
-  }
 ]

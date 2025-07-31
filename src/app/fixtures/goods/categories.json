@@ -1,57 +1,57 @@
 [
     {
-        "model": "goods.categories", 
-        "pk": 1, 
+        "model": "goods.categories",
+        "pk": 1,
         "fields": {
-            "name": "Kitchen", 
+            "name": "Kitchen",
             "slug": "kitchen"
         }
-    }, 
+    },
     {
-        "model": "goods.categories", 
-        "pk": 2, 
+        "model": "goods.categories",
+        "pk": 2,
         "fields": {
-            "name": "Bedroom", 
+            "name": "Bedroom",
             "slug": "bedroom"
         }
-    }, 
+    },
     {
-        "model": "goods.categories", 
-        "pk": 3, 
+        "model": "goods.categories",
+        "pk": 3,
         "fields": {
-            "name": "Living Room", 
+            "name": "Living Room",
             "slug": "living-room"
         }
-    }, 
+    },
     {
-        "model": "goods.categories", 
-        "pk": 4, 
+        "model": "goods.categories",
+        "pk": 4,
         "fields": {
-            "name": "Office", 
+            "name": "Office",
             "slug": "office"
         }
     },
     {
-        "model": "goods.categories", 
-        "pk": 5, 
+        "model": "goods.categories",
+        "pk": 5,
         "fields": {
-            "name": "Hardware", 
+            "name": "Hardware",
             "slug": "hardware"
         }
-    }, 
+    },
     {
-        "model": "goods.categories", 
-        "pk": 6, 
+        "model": "goods.categories",
+        "pk": 6,
         "fields": {
-            "name": "Decor", 
+            "name": "Decor",
             "slug": "decor"
         }
-    }, 
+    },
     {
-        "model": "goods.categories", 
-        "pk": 7, 
+        "model": "goods.categories",
+        "pk": 7,
         "fields": {
-            "name": "All Categories", 
+            "name": "All Categories",
             "slug": "all-categories"
         }
     }
