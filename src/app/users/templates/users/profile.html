@@ -1,0 +1,185 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block footer_css %}
+    <link rel="stylesheet" href="{% static 'deps/css/my_footer_css.css' %}">
+{% endblock %}
+
+{% block content %} 
+    <div class="row">
+        <div class="container mt-5">
+            <div class="row">
+                <!-- User profile with data -->
+                <div class="col-md-5">
+                    <div class=" bg-white p-4 mb-4 mx-2 rounded custom-shadow">
+                        <h3 class="text-center mb-4">User Profile</h3>
+                        <form>
+                            <div class="row">
+                                <div class="col-md-12 mb-3 text-center">
+                                    <img src="{% static 'deps/images/baseavatar.jpg' %}"
+                                        alt="User avatar" class="img-fluid rounded-circle"
+                                        style="max-width: 150px;">
+                                    <input type="file" class="form-control mt-3" id="avatar"
+                                        accept="image/*">
+                                </div>
+                                <div class="col-md-12 mb-3">
+                                    <label for="firstName" class="form-label">First Name*</label>
+                                    <input type="text" class="form-control" id="firstName"
+                                                                                                placeholder="Enter your first name" value="" required>
+                                </div>
+                                <div class="col-md-12 mb-3">
+                                    <label for="lastName" class="form-label">Last Name*</label>
+                                    <input type="text" class="form-control" id="lastName"
+                                                                                                placeholder="Enter your last name" value="" required>
+                                </div>
+                                <div class="col-md-12 mb-3">
+                                    <label for="username" class="form-label">Username*</label>
+                                    <input type="text" class="form-control" id="username"
+                                                                                                placeholder="Enter your username" value="" required>
+                                </div>
+                                <div class="col-md-12 mb-3">
+                                    <label for="email" class="form-label">Email*</label>
+                                    <input type="email" class="form-control" id="email"
+                                                                                                placeholder="Enter your email *youremail@example.com" value=""
+                                        required>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-dark">Save</button>
+                        </form>
+                    </div>
+                </div>
+                <!-- Cart -->
+                <div class="col-md-7">
+                    <div class=" bg-white p-4 mb-4 mx-2 rounded custom-shadow">
+                        <h3 class="text-center mb-4">Cart</h3>
+                        <div class="container" id="cart-items-container">
+                            <!-- Cart markup -->
+                            <div class="card mb-3 text-bg-light shadow-lg">
+                                <div class="card-header">
+                                    <h5 class="card-title">Product</h5>
+                                </div>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        <div class="row text-center">
+                                            <div class="col p-0">
+                                                <div class="input-group">
+                                                    <span class="input-group-btn">
+                                                        <button type="button" class="btn btn-dark btn-sm decrement"
+                                                            data-cart-id="" data-cart-change-url="">-</button>
+                                                    </span>
+                                                    <input type="text" class="form-control number" value="1"
+                                                        readonly>
+                                                    <span class="input-group-btn">
+                                                        <button type="button" class="btn btn-dark btn-sm increment"
+                                                            data-cart-id="" data-cart-change-url="">+</button>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="col p-0">
+                                                <p>x 100.00 = </p>
+                                            </div>
+                                            <div class="col p-0"><strong>100.00 $</strong></div>
+                                            <div class="col p-0">
+                                                <a href="#" class="remove-from-cart" data-cart-id="">
+                                                    <img class="mx-1" src="{% static 'deps/icons/trash3-fill.svg' %}"
+                                                        alt="Catalog Icon" width="16" height="16">
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="card mb-3 shadow-lg">
+                                <div class="card-footer">
+                                                                                                <p class="float-left">Total <strong>1</strong> product(s) for amount</p>
+                                    <h4 class="float-left"><strong>100.00 $</strong></h4>
+                                </div>
+                            </div>
+                            <!-- End of cart markup -->
+                        </div>
+                        <a class="btn btn-dark" href="#">
+                                                                        Place Order
+                        </a>
+                    </div>
+                </div>
+                <!-- Placed Orders -->
+                <div class="col-md-12">
+                    <div class=" bg-white p-4 mb-4 mx-2 rounded custom-shadow">
+                        <h3 class="text-center mb-4">My Orders</h3>
+                        <!-- Orders markup -->
+                        <div class="container">
+                            <div class="accordion" id="accordionExample">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="heading1">
+                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1" aria-expanded="false" aria-controls="collapse1">
+                                            Order № 256 - September 09, 2023 9:04 | Status:<strong class="mx-2"> In Processing</strong>
+                                        </button>
+                                    </h2>
+                                    <div id="collapse1" class="accordion-collapse collapse show" aria-labelledby="heading1" data-bs-parent="#accordionExample">
+                                        <div class="accordion-body">
+                                            <table class="table table-dark table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Product</th>
+                                                        <th>Quantity</th>
+                                                        <th>Price</th>
+                                                        <th>Total Cost</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td><a class="text-white" href="#">Set: Table and Three Chairs</a></td>
+                                                        <td>1</td>
+                                                        <td>255.00 $</td>
+                                                        <td>255.00 $</td>
+                                                        
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <div class="d-flex justify-content-between">
+                                                <p><strong>Total:</strong></p>
+                                                <p><strong>255.00 $</strong></p>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="heading2">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2" aria-expanded="false" aria-controls="collapse2">
+                                            Order № 248 - August 01, 2023 11:28 | Status: <strong>Received</strong>
+                                        </button>
+                                    </h2>
+                                    <div id="collapse2" class="accordion-collapse collapse" aria-labelledby="heading2" data-bs-parent="#accordionExample">
+                                        <div class="accordion-body">
+                                            <table class="table table-dark table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Product</th>
+                                                        <th>Quantity</th>
+                                                        <th>Price</th>
+                                                        <th>Total Cost</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td><a class="text-white" href="#">Office Chair</a></td>
+                                                        <td>2</td>
+                                                        <td>30.00 $</td>
+                                                        <td>60.00 $</td>
+                                                        
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Закончилась разметка заказов -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
