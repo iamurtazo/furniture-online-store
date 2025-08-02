@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block footer_css %}
+    <link rel="stylesheet" href="{% static 'deps/css/my_footer_css.css' %}">
+{% endblock %}
+
+{% block content %} 
+    <div class="row">
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <div class="col-md-6 col-lg-5 bg-white p-5 mb-5 mx-2 rounded custom-shadow text-center">
+                    <div class="mb-4">
+                        <i class="fas fa-sign-out-alt text-secondary" style="font-size: 4rem;"></i>
+                    </div>
+                    
+                    <h2 class="mb-4">You've Been Logged Out</h2>
+                    
+                    <p class="text-muted mb-4">
+                        Thank you for visiting our furniture store. You have been successfully logged out of your account.
+                    </p>
+                    
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'users:login' %}" class="btn btn-dark btn-lg">
+                            <i class="fas fa-sign-in-alt me-2"></i>Sign In Again
+                        </a>
+                        
+                        <a href="{% url 'main:index' %}" class="btn btn-outline-secondary btn-lg">
+                            <i class="fas fa-home me-2"></i>Go to Home
+                        </a>
+                        
+                        <a href="{% url 'users:registration' %}" class="btn btn-link">
+                            Don't have an account? <strong>Register here</strong>
+                        </a>
+                    </div>
+                    
+                    <hr class="my-4">
+                    
+                    <div class="text-muted">
+                        <small>
+                            <i class="fas fa-shield-alt me-1"></i>
+                            Your session has been securely terminated
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

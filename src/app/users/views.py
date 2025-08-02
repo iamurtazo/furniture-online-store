@@ -14,6 +14,8 @@ def login(request):
             user = auth.authenticate(username=username, password=password)
             if user:
                 auth.login(request, user)
+                welcome_name = user.first_name or user.username
+                messages.success(request, f'Welcome back, {welcome_name}! You have successfully logged in.')
                 return redirect('main:index')
     else:
         form = UserLoginForm()
@@ -26,6 +28,10 @@ def login(request):
     return render(request, 'users/login.html', context)
 
 def logout(request):
+    if request.user.is_authenticated:
+        username = request.user.first_name or request.user.username
+        auth.logout(request)
+        messages.success(request, f'Goodbye {username}! You have been successfully logged out.')
     
     context = {
         'title': 'Home - Logout'
