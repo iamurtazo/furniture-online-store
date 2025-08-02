@@ -1,6 +1,9 @@
 from django import forms
 from users.models import Users
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 class UserLoginForm(AuthenticationForm):
     
@@ -89,4 +92,107 @@ class UserRegistrationForm(UserCreationForm):
         email = self.cleaned_data.get('email')
         if Users.objects.filter(email=email).exists():
             raise forms.ValidationError("A user with this email already exists.")
+        return email
+
+
+class UserProfileForm(UserChangeForm):
+    """
+    Form for updating user profile information.
+    Inherits from UserChangeForm following Django best practices.
+    """
+    
+    first_name = forms.CharField(
+        max_length=30,
+        widget=forms.TextInput(attrs={
+            "class": "form-control", 
+            "placeholder": "Enter your first name"
+        }),
+        required=True
+    )
+    
+    last_name = forms.CharField(
+        max_length=30,
+        widget=forms.TextInput(attrs={
+            "class": "form-control", 
+            "placeholder": "Enter your last name"
+        }),
+        required=True
+    )
+    
+    username = forms.CharField(
+        max_length=150,
+        widget=forms.TextInput(attrs={
+            "class": "form-control", 
+            "placeholder": "Enter your username"
+        }),
+        required=True,
+        help_text="Choose a unique username. This will be your login identifier."
+    )
+    
+    email = forms.EmailField(
+        widget=forms.EmailInput(attrs={
+            "class": "form-control", 
+            "placeholder": "Enter your email"
+        }),
+        required=True
+    )
+    
+    # Remove password field from profile editing
+    password = None
+    
+    class Meta:
+        model = Users
+        fields = ['first_name', 'last_name', 'username', 'email']
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Remove password field completely
+        if 'password' in self.fields:
+            del self.fields['password']
+    
+    def clean_username(self):
+        """
+        Validate username for uniqueness and format.
+        """
+        username = self.cleaned_data.get('username')
+        
+        if not username:
+            raise forms.ValidationError("Username is required.")
+        
+        # Check minimum length
+        if len(username) < 3:
+            raise forms.ValidationError("Username must be at least 3 characters long.")
+        
+        # Check format (letters, numbers, underscores only)
+        import re
+        if not re.match(r'^[a-zA-Z0-9_]+$', username):
+            raise forms.ValidationError("Username can only contain letters, numbers, and underscores.")
+        
+        # Check uniqueness (exclude current user)
+        if self.instance and self.instance.pk:
+            if User.objects.filter(username=username).exclude(pk=self.instance.pk).exists():
+                raise forms.ValidationError(f'Username "{username}" is already taken. Please choose a different one.')
+        else:
+            if User.objects.filter(username=username).exists():
+                raise forms.ValidationError(f'Username "{username}" is already taken. Please choose a different one.')
+        
+        return username
+    
+    def clean_email(self):
+        """
+        Validate email for format and uniqueness.
+        """
+        email = self.cleaned_data.get('email')
+        
+        if not email:
+            raise forms.ValidationError("Email is required.")
+        
+        # Check uniqueness (exclude current user)
+        if self.instance and self.instance.pk:
+            if User.objects.filter(email=email).exclude(pk=self.instance.pk).exists():
+                raise forms.ValidationError(f'Email "{email}" is already registered. Please use a different email.')
+        else:
+            if User.objects.filter(email=email).exists():
+                raise forms.ValidationError(f'Email "{email}" is already registered. Please use a different email.')
+        
         return email
