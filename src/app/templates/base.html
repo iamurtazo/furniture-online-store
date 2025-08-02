@@ -49,25 +49,34 @@
                         <li class="nav-item">
                             <a class="nav-link  text-white" href="#">Cart</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link  text-white" href="{% url 'users:login' %}">Login</a>
-                        </li>
-                        <li class="nav-item dropdown ">
-                            <a class="nav-link dropdown-toggle text-white" href="{% url 'users:profile' %}" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                My Profile
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item  text-white" href="#">Cart</a></li>
-                                <li><a class="dropdown-item  text-white" href="{% url 'users:profile' %}">Personal Account</a>
-                                </li>   
-                                <li><a class="dropdown-item  text-white" href="{% url 'admin:index' %}">Admin Panel</a></li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li><a class="dropdown-item  text-white" href="{% url 'users:logout' %}">Logout</a></li>
-                            </ul>
-                        </li>
+                        {% if user.is_authenticated %}
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-white" href="{% url 'users:profile' %}" role="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fas fa-user me-1"></i>Hi, {{ user.first_name|default:user.username }}
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item text-white" href="#">Cart</a></li>
+                                    <li><a class="dropdown-item text-white" href="{% url 'users:profile' %}">Personal Account</a></li>   
+                                    {% if user.is_staff %}
+                                        <li><a class="dropdown-item text-white" href="{% url 'admin:index' %}">Admin Panel</a></li>
+                                    {% endif %}
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item text-white" href="{% url 'users:logout' %}">Logout</a></li>
+                                </ul>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link text-white" href="{% url 'users:login' %}">
+                                    <i class="fas fa-sign-in-alt me-1"></i>Login
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" href="{% url 'users:registration' %}">
+                                    <i class="fas fa-user-plus me-1"></i>Register
+                                </a>
+                            </li>
+                        {% endif %}
                     </ul>
                     <form class="d-flex" role="search" action="{% url 'goods:search' %}" method="get">
                         <input class="form-control me-2" type="search" name="q" placeholder="Search" aria-label="Search">

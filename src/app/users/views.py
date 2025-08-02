@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from django.contrib import auth
-from users.forms import UserLoginForm
+from django.contrib import auth, messages
+from users.forms import UserLoginForm, UserRegistrationForm
 
 # Create your views here.
 
@@ -35,10 +35,20 @@ def logout(request):
 
 def registration(request):
     
-    context = {
-        'title': 'Home - Registration'
-    }
+    if request.method == 'POST':
+        form = UserRegistrationForm(data=request.POST)
+        if form.is_valid():
+            user = form.save()
+            messages.success(request, f'Account created successfully for {user.username}! You can now log in.')
+            return redirect('users:login')
+    else:
+        form = UserRegistrationForm()
     
+    context = {
+        'title': 'Home - Registration',
+        'form': form
+    }
+
     return render(request, 'users/registration.html', context)
 
 def profile(request):
