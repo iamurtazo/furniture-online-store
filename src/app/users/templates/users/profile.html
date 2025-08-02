@@ -121,6 +121,19 @@
             font-size: 0.8rem;
             font-weight: 500;
         }
+        
+        /* Image upload styling */
+        .input-group .form-control[type="file"] {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+        
+        .input-group .btn {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+            height: auto;
+            white-space: nowrap;
+        }
 
         .status-processing {
             background-color: #fff3cd;
@@ -200,17 +213,23 @@
     </style>
 {% endblock %}
 
-{% block content %}
+{% block content %} 
     <div class="container mt-4">
-        <div class="row">
+    <div class="row">
             <!-- Sidebar Navigation -->
             <div class="col-lg-3 col-md-4 mb-4">
                 <div class="profile-sidebar">
                     <!-- User Info -->
                     <div class="text-center mb-4">
-                        <img src="{% static 'deps/images/baseavatar.jpg' %}" 
-                            alt="User Avatar" 
-                            class="img-fluid rounded-circle profile-avatar">
+                        {% if user.image %}
+                            <img src="{{ user.image.url }}" 
+                                 alt="User Avatar" 
+                                 class="img-fluid rounded-circle profile-avatar">
+                        {% else %}
+                            <img src="{% static 'deps/images/baseavatar.jpg' %}" 
+                                 alt="Default Avatar" 
+                                 class="img-fluid rounded-circle profile-avatar">
+                        {% endif %}
                         <h5 class="mt-3 user-name">
                             {{ user.first_name|default:user.username }}
                         </h5>
@@ -242,8 +261,7 @@
                                     role="tab" 
                                     aria-controls="cart" 
                                     aria-selected="false">
-                                <i class="fas fa-shopping-cart"></i>My Cart
-                                <span class="badge-custom">3</span>
+                                <i class="fas fa-shopping-cart"></i>My Cart 
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
@@ -256,7 +274,6 @@
                                     aria-controls="orders" 
                                     aria-selected="false">
                                 <i class="fas fa-box"></i>My Orders
-                                <span class="badge-custom">2</span>
                             </button>
                         </li>
                     </ul>
@@ -280,20 +297,44 @@
                                 <!-- Avatar Upload Section -->
                                 <div class="row mb-4">
                                     <div class="col-12 text-center">
-                                        <img src="{% static 'deps/images/baseavatar.jpg' %}"
+                                        {% if user.image %}
+                                            <img src="{{ user.image.url }}"
                                             alt="User Avatar" 
                                             class="img-fluid rounded-circle profile-avatar mb-3">
-                                        <div>
-                                            <label for="avatar" class="btn btn-outline-dark btn-sm">
-                                                <i class="fas fa-camera me-2"></i>Change Photo
-                                            </label>
-                                            <input type="file" class="d-none" id="avatar" accept="image/*">
+                                        {% else %}
+                                            <img src="{% static 'deps/images/baseavatar.jpg' %}"
+                                            alt="Default Avatar" 
+                                            class="img-fluid rounded-circle profile-avatar mb-3">
+                                        {% endif %}
+                                        
+                                        <div class="mb-3">
+                                            <div class="input-group">
+                                                <input type="file" name="image" class="form-control" accept="image/*" aria-describedby="id_image_helptext" id="id_image">
+                                                <label for="id_image" class="btn btn-outline-dark">
+                                                    <i class="fas fa-camera me-1"></i>Change
+                                                </label>
+                                            </div>
                                         </div>
+
+                                        
+                                        {% if form.image.errors %}
+                                            <div class="text-danger small">
+                                                <i class="fas fa-exclamation-triangle me-1"></i>
+                                                {{ form.image.errors.0 }}
+                                            </div>
+                                        {% endif %}
+                                        
+                                        {% if form.image.help_text %}
+                                            <div class="form-text small">
+                                                <i class="fas fa-info-circle text-muted me-1"></i>
+                                                {{ form.image.help_text }}
+                                            </div>
+                                        {% endif %}
                                     </div>
                                 </div>
                                 
-                                                                <!-- Personal Information -->
-                                <div class="row">
+                                <!-- Personal Information -->
+            <div class="row">
                                     <div class="col-md-6 mb-3">
                                         <label for="{{ form.first_name.id_for_label }}" class="form-label">{{ form.first_name.label }} *</label>
                                         {{ form.first_name }}
@@ -308,10 +349,9 @@
                                         {{ form.last_name }}
                                         {% if form.last_name.errors %}
                                             <div class="text-danger small mt-1">
-                                                {{ form.last_name.errors.0 }}
-                                            </div>
-                                        {% endif %}
-                                    </div>
+                                            {{ form.last_name.errors.0 }}
+                                        </div>
+                                    {% endif %}
                                 </div>
                                 
                                 <!-- Username -->
@@ -327,7 +367,7 @@
                                         <div class="form-text" id="username-feedback">
                                             <i class="fas fa-info-circle text-muted me-1"></i>
                                             {{ form.username.help_text }}
-                                        </div>
+                                </div>
                                     {% endif %}
                                 </div>
                                 
@@ -339,7 +379,7 @@
                                         <div class="text-danger small mt-1">
                                             <i class="fas fa-exclamation-triangle me-1"></i>
                                             {{ form.email.errors.0 }}
-                                        </div>
+                                </div>
                                     {% endif %}
                                 </div>
                                 
@@ -348,13 +388,14 @@
                                     <button type="submit" class="btn btn-dark">
                                         <i class="fas fa-save me-2"></i>Save Changes
                                     </button>
-                                    <a href="{% url 'users:profile' %}" class="btn btn-outline-secondary">
+                                    <a href="{% url 'main:index' %}" class="btn btn-outline-secondary">
                                         <i class="fas fa-times me-2"></i>Cancel
                                     </a>
                                 </div>
-                            </form>
-                        </div>
+                            </div>
+                        </form>
                     </div>
+                </div>
 
                     <!-- Cart Tab Content -->
                     <div class="tab-pane fade" id="cart" role="tabpanel" aria-labelledby="cart-tab">
@@ -409,9 +450,9 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
                         </div>
                     </div>
+                </div>
 
                     <!-- Orders Tab Content -->
                     <div class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="orders-tab">
@@ -449,26 +490,26 @@
                                             <div class="table-responsive">
                                                 <table class="table table-hover">
                                                     <thead class="table-dark">
-                                                        <tr>
-                                                            <th>Product</th>
-                                                            <th>Quantity</th>
-                                                            <th>Price</th>
+                                                    <tr>
+                                                        <th>Product</th>
+                                                        <th>Quantity</th>
+                                                        <th>Price</th>
                                                             <th>Total</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
                                                             <td>
                                                                 <a href="#" class="text-decoration-none">
                                                                     Table and Three Chairs Set
                                                                 </a>
                                                             </td>
-                                                            <td>1</td>
+                                                        <td>1</td>
                                                             <td>$255.00</td>
                                                             <td><strong>$255.00</strong></td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
                                             </div>
                                             <div class="d-flex justify-content-between align-items-center mt-3">
                                                 <div>
@@ -515,26 +556,26 @@
                                             <div class="table-responsive">
                                                 <table class="table table-hover">
                                                     <thead class="table-dark">
-                                                        <tr>
-                                                            <th>Product</th>
-                                                            <th>Quantity</th>
-                                                            <th>Price</th>
+                                                    <tr>
+                                                        <th>Product</th>
+                                                        <th>Quantity</th>
+                                                        <th>Price</th>
                                                             <th>Total</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
                                                             <td>
                                                                 <a href="#" class="text-decoration-none">
                                                                     Office Chair
                                                                 </a>
                                                             </td>
-                                                            <td>2</td>
+                                                        <td>2</td>
                                                             <td>$30.00</td>
                                                             <td><strong>$60.00</strong></td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
                                             </div>
                                             <div class="d-flex justify-content-between align-items-center mt-3">
                                                 <div>
@@ -561,6 +602,52 @@
     </div>
 
     <script>
+    // Image preview functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const imageInput = document.querySelector('input[type="file"][name="image"]');
+        const profileImages = document.querySelectorAll('.profile-avatar');
+        const changePhotoBtn = document.querySelector('label[for="id_image"]');
+        
+        // Handle label click to trigger file input
+        if (changePhotoBtn && imageInput) {
+            changePhotoBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                imageInput.click();
+            });
+        }
+        
+        if (imageInput) {
+            imageInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    // Validate file size (5MB)
+                    if (file.size > 5 * 1024 * 1024) {
+                        alert('File size too large. Please keep it under 5MB.');
+                        e.target.value = '';
+                        return;
+                    }
+                    
+                    // Validate file type
+                    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+                    if (!validTypes.includes(file.type)) {
+                        alert('Invalid file type. Please use JPG, PNG, or GIF.');
+                        e.target.value = '';
+                        return;
+                    }
+                    
+                    // Show preview
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        profileImages.forEach(img => {
+                            img.src = e.target.result;
+                        });
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+    });
+    
     // Tab state management
     document.addEventListener('DOMContentLoaded', function() {
         // Get active tab from URL hash or default to profile

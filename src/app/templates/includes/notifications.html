@@ -1,31 +1,87 @@
 {% load static %}
 
-<!-- Success Messages -->
+<!-- Auto-Disappearing Toast Notifications -->
 {% if messages %}
-    <div class="container mt-4">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                {% for message in messages %}
-                    <div class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %} alert-dismissible fade show custom-shadow" role="alert">
-                        {{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                {% endfor %}
-            </div>
+    {% for message in messages %}
+        <div id="notification-{{ forloop.counter }}" 
+             class="notification-toast position-fixed start-50 translate-middle-x alert 
+             {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' or message.tags == 'warning' %}alert-danger{% elif message.tags == 'info' %}alert-info{% else %}alert-primary{% endif %} 
+             alert-dismissible fade show custom-shadow" 
+             style="top: 20px; z-index: 1050; min-width: 300px; max-width: 500px;" 
+             role="alert">
+            
+            <!-- Icon based on message type -->
+            {% if message.tags == 'success' %}
+                <i class="fas fa-check-circle me-2"></i>
+            {% elif message.tags == 'error' or message.tags == 'warning' %}
+                <i class="fas fa-exclamation-triangle me-2"></i>
+            {% elif message.tags == 'info' %}
+                <i class="fas fa-info-circle me-2"></i>
+            {% else %}
+                <i class="fas fa-bell me-2"></i>
+            {% endif %}
+            
+            {{ message }}
+            
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
+    {% endfor %}
+{% endif %}
+
+<!-- Form Error Notifications -->
+{% if form.non_field_errors %}
+    <div id="form-error-notification" 
+         class="notification-toast position-fixed start-50 translate-middle-x alert alert-danger alert-dismissible fade show custom-shadow" 
+         style="top: 20px; z-index: 1050; min-width: 300px; max-width: 500px;" 
+         role="alert">
+        <i class="fas fa-exclamation-triangle me-2"></i>
+        {{ form.non_field_errors }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 {% endif %}
 
-<!-- Form Errors -->
-{% if form.non_field_errors %}
-    <div class="container mt-4">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="alert alert-danger alert-dismissible fade show custom-shadow" role="alert">
-                    {{ form.non_field_errors }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            </div>
-        </div>
-    </div>
-{% endif %}
+<!-- Dynamic Notification Container (for AJAX/JS notifications) -->
+<div id="jq-notification" 
+     class="notification-toast position-fixed start-50 translate-middle-x alert alert-success alert-dismissible fade custom-shadow" 
+     style="top: 20px; z-index: 1050; min-width: 300px; max-width: 500px; display: none;" 
+     role="alert">
+    <i class="fas fa-check-circle me-2"></i>
+    <span id="jq-notification-message"></span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+
+<style>
+.custom-shadow {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.notification-toast {
+    animation: slideInDown 0.5s ease-out;
+}
+
+@keyframes slideInDown {
+    from {
+        transform: translateX(-50%) translateY(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+    }
+}
+
+.notification-toast.fade:not(.show) {
+    animation: slideOutUp 0.5s ease-in;
+}
+
+@keyframes slideOutUp {
+    from {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(-50%) translateY(-100%);
+        opacity: 0;
+    }
+}
+</style>

@@ -27,7 +27,7 @@ def login(request):
     }
     
     return render(request, 'users/login.html', context)
-
+@login_required
 def logout(request):
     if request.user.is_authenticated:
         username = request.user.first_name or request.user.username
@@ -61,21 +61,29 @@ def registration(request):
 @login_required
 def profile(request):
     if request.method == 'POST':
-        form = UserProfileForm(request.POST, instance=request.user)
+        form = UserProfileForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
-            # Check if username changed
+            # Check what changed
             old_username = request.user.username
             new_username = form.cleaned_data.get('username')
+            image_changed = 'image' in request.FILES
             
             # Save the form
             user = form.save()
             
             # Provide appropriate success message
+            success_parts = []
             if old_username != new_username:
-                messages.success(request, f'Profile updated successfully! Your username is now "{new_username}".')
-            else:
-                messages.success(request, 'Profile updated successfully!')
+                success_parts.append(f'username updated to "{new_username}"')
+            if image_changed:
+                success_parts.append('profile photo updated')
             
+            if success_parts:
+                message = f'Profile updated successfully! {", ".join(success_parts).capitalize()}.'
+            else:
+                message = 'Profile updated successfully!'
+            
+            messages.success(request, message)
             return redirect('users:profile')
         else:
             # Form has validation errors - they'll be displayed in the template

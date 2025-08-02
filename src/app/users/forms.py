@@ -41,7 +41,7 @@ class UserRegistrationForm(UserCreationForm):
         max_length=30,
         widget=forms.TextInput(attrs={
             "class": "form-control", 
-            "placeholder": "Enter your first name"
+            # "placeholder": "Enter your first name"
         })
     )
     
@@ -49,7 +49,7 @@ class UserRegistrationForm(UserCreationForm):
         max_length=30,
         widget=forms.TextInput(attrs={
             "class": "form-control", 
-            "placeholder": "Enter your last name"
+            # "placeholder": "Enter your last name"
         })
     )
     
@@ -57,14 +57,14 @@ class UserRegistrationForm(UserCreationForm):
         widget=forms.TextInput(attrs={
             "autofocus": True, 
             "class": "form-control", 
-            "placeholder": "Enter your username"
+            # "placeholder": "Enter your username"
         })
     )
     
     email = forms.EmailField(
         widget=forms.EmailInput(attrs={
             "class": "form-control", 
-            "placeholder": "Enter your email"
+            # "placeholder": "Enter your email"
         })
     )
     
@@ -72,7 +72,7 @@ class UserRegistrationForm(UserCreationForm):
         widget=forms.PasswordInput(attrs={
             "autocomplete": "new-password", 
             "class": "form-control", 
-            "placeholder": "Enter password"
+            # "placeholder": "Enter password"
         })
     )
     
@@ -80,7 +80,7 @@ class UserRegistrationForm(UserCreationForm):
         widget=forms.PasswordInput(attrs={
             "autocomplete": "new-password", 
             "class": "form-control", 
-            "placeholder": "Confirm password"
+            # "placeholder": "Confirm password"
         })
     )
     
@@ -105,7 +105,7 @@ class UserProfileForm(UserChangeForm):
         max_length=30,
         widget=forms.TextInput(attrs={
             "class": "form-control", 
-            "placeholder": "Enter your first name"
+            # "placeholder": "Enter your first name"
         }),
         required=True
     )
@@ -114,7 +114,7 @@ class UserProfileForm(UserChangeForm):
         max_length=30,
         widget=forms.TextInput(attrs={
             "class": "form-control", 
-            "placeholder": "Enter your last name"
+            # "placeholder": "Enter your last name"
         }),
         required=True
     )
@@ -123,7 +123,7 @@ class UserProfileForm(UserChangeForm):
         max_length=150,
         widget=forms.TextInput(attrs={
             "class": "form-control", 
-            "placeholder": "Enter your username"
+            # "placeholder": "Enter your username"
         }),
         required=True,
         help_text="Choose a unique username. This will be your login identifier."
@@ -132,9 +132,18 @@ class UserProfileForm(UserChangeForm):
     email = forms.EmailField(
         widget=forms.EmailInput(attrs={
             "class": "form-control", 
-            "placeholder": "Enter your email"
+            # "placeholder": "Enter your email"
         }),
         required=True
+    )
+    
+    image = forms.ImageField(
+        widget=forms.FileInput(attrs={
+            "class": "form-control",
+            "accept": "image/*"
+        }),
+        required=False,
+        help_text="Upload a profile picture (JPG, PNG, GIF - Max 5MB)"
     )
     
     # Remove password field from profile editing
@@ -142,7 +151,7 @@ class UserProfileForm(UserChangeForm):
     
     class Meta:
         model = Users
-        fields = ['first_name', 'last_name', 'username', 'email']
+        fields = ['first_name', 'last_name', 'username', 'email', 'image']
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -196,3 +205,21 @@ class UserProfileForm(UserChangeForm):
                 raise forms.ValidationError(f'Email "{email}" is already registered. Please use a different email.')
         
         return email
+    
+    def clean_image(self):
+        """
+        Validate uploaded image for size and format.
+        """
+        image = self.cleaned_data.get('image')
+        
+        if image:
+            # Check file size (5MB limit)
+            if image.size > 5 * 1024 * 1024:  # 5MB in bytes
+                raise forms.ValidationError("Image file too large. Please keep it under 5MB.")
+            
+            # Check file type
+            valid_types = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif']
+            if hasattr(image, 'content_type') and image.content_type not in valid_types:
+                raise forms.ValidationError("Invalid image format. Please use JPG, PNG, or GIF.")
+        
+        return image
