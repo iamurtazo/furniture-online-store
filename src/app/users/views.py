@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import auth, messages
+from django.contrib.auth.decorators import login_required
 from users.forms import UserLoginForm, UserRegistrationForm
 
 # Create your views here.
@@ -57,7 +58,39 @@ def registration(request):
 
     return render(request, 'users/registration.html', context)
 
+@login_required
 def profile(request):
+    if request.method == 'POST':
+        # Update user profile
+        user = request.user
+        new_username = request.POST.get('username', '').strip()
+        
+        # Validate username changes
+        if new_username and new_username != user.username:
+            # Check if username already exists
+            from django.contrib.auth import get_user_model
+            User = get_user_model()
+            if User.objects.filter(username=new_username).exclude(pk=user.pk).exists():
+                messages.error(request, f'Username "{new_username}" is already taken. Please choose a different one.')
+                return redirect('users:profile')
+        
+        # Update user fields
+        user.first_name = request.POST.get('first_name', '')
+        user.last_name = request.POST.get('last_name', '')
+        user.email = request.POST.get('email', '')
+        if new_username:
+            user.username = new_username
+        
+        try:
+            user.save()
+            success_msg = 'Profile updated successfully!'
+            if new_username and new_username != request.POST.get('old_username', ''):
+                success_msg = f'Profile updated successfully! Your username is now "{new_username}".'
+            messages.success(request, success_msg)
+        except Exception as e:
+            messages.error(request, 'Error updating profile. Please try again.')
+        
+        return redirect('users:profile')
     
     context = {
         'title': 'Home - Profile'
