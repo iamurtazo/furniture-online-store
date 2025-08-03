@@ -1,418 +1,157 @@
-{% extends "base.html" %}
-{% load static %}
-
-{% block footer_css %}
-    <link rel="stylesheet" href="{% static 'deps/css/my_footer_css.css' %}">
-    <style>
-        /* Profile Sidebar Styles */
-        .profile-sidebar {
-            background: #f8f9fa;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            padding: 2rem;
-        }
-
-        .profile-avatar {
-            width: 120px;
-            height: 120px;
-            object-fit: cover;
-            border: 4px solid #dee2e6;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .user-name {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: #2c3e50;
-        }
-
-        .user-email {
-            font-size: 0.9rem;
-            color: #6c757d;
-            word-break: break-word;
-            max-width: 100%;
-        }
-
-        /* Navigation Pills */
-        .nav-pills .nav-link {
-            color: #6c757d;
-            font-weight: 500;
-            padding: 1rem 1.25rem;
-            margin-bottom: 0.5rem;
-            border-radius: 10px;
-            transition: all 0.3s ease;
-            border: none;
-        }
-
-        .nav-pills .nav-link:hover {
-            background-color: #e9ecef;
-            color: #495057;
-            transform: translateX(5px);
-        }
-
-        .nav-pills .nav-link.active {
-            background-color: #212529;
-            color: white;
-            box-shadow: 0 2px 10px rgba(33, 37, 41, 0.3);
-        }
-
-        .nav-pills .nav-link i {
-            margin-right: 0.75rem;
-            width: 20px;
-            text-align: center;
-        }
-
-        /* Badge Styles */
-        .badge-custom {
-            background-color: #dc3545;
-            color: white;
-            border-radius: 50%;
-            padding: 0.25rem 0.5rem;
-            font-size: 0.75rem;
-            margin-left: 0.5rem;
-        }
-
-        /* Content Section */
-        .content-section {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            padding: 2.5rem;
-        }
-
-        .section-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 2rem;
-            color: #2c3e50;
-            display: flex;
-            align-items: center;
-        }
-
-        .section-title i {
-            margin-right: 0.75rem;
-            color: #6c757d;
-        }
-
-        /* Form Styles */
-        .form-label {
-            font-weight: 500;
-            color: #495057;
-            margin-bottom: 0.5rem;
-        }
-
-        .form-control {
-            border-radius: 8px;
-            border: 2px solid #e9ecef;
-            padding: 0.75rem 1rem;
-            transition: all 0.3s ease;
-        }
-
-        .form-control:focus {
-            border-color: #212529;
-            box-shadow: 0 0 0 0.2rem rgba(33, 37, 41, 0.1);
-        }
-
-        /* Order Status Badges */
-        .order-status-badge {
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 500;
-        }
-        
-        /* Image upload styling */
-        .input-group .form-control[type="file"] {
-            border-top-right-radius: 0;
-            border-bottom-right-radius: 0;
-        }
-        
-        .input-group .btn {
-            border-top-left-radius: 0;
-            border-bottom-left-radius: 0;
-            height: auto;
-            white-space: nowrap;
-        }
-
-        .status-processing {
-            background-color: #fff3cd;
-            color: #856404;
-        }
-
-        .status-received {
-            background-color: #d1ecf1;
-            color: #0c5460;
-        }
-
-        .status-delivered {
-            background-color: #d4edda;
-            color: #155724;
-        }
-
-        /* Card Styles */
-        .card {
-            border: none;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            transition: all 0.3s ease;
-        }
-
-        .card:hover {
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-
-        /* Button Styles */
-        .btn {
-            border-radius: 8px;
-            font-weight: 500;
-            padding: 0.75rem 1.5rem;
-            transition: all 0.3s ease;
-        }
-
-        .btn-dark {
-            background-color: #212529;
-            border-color: #212529;
-        }
-
-        .btn-dark:hover {
-            background-color: #1a1e21;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(33, 37, 41, 0.3);
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .profile-sidebar {
-                margin-bottom: 1.5rem;
-                padding: 1.5rem;
-            }
-
-            .nav-pills {
-                display: flex;
-                flex-wrap: nowrap;
-                overflow-x: auto;
-                padding-bottom: 0.75rem;
-            }
-
-            .nav-pills .nav-link {
-                flex: 0 0 auto;
-                white-space: nowrap;
-                margin-right: 0.75rem;
-            }
-
-            .content-section {
-                padding: 1.5rem;
-            }
-
-            .profile-avatar {
-                width: 100px;
-                height: 100px;
-            }
-        }
-    </style>
-{% endblock %}
-
-{% block content %} 
-    <div class="container mt-4">
+{% extends "base.html" %} 
+{% load static %} 
+{% block content %}
+<div class="container mt-4">
     <div class="row">
-            <!-- Sidebar Navigation -->
-            <div class="col-lg-3 col-md-4 mb-4">
-                <div class="profile-sidebar">
-                    <!-- User Info -->
-                    <div class="text-center mb-4">
-                        {% if user.image %}
-                            <img src="{{ user.image.url }}" 
-                                 alt="User Avatar" 
-                                 class="img-fluid rounded-circle profile-avatar">
-                        {% else %}
-                            <img src="{% static 'deps/images/baseavatar.jpg' %}" 
-                                 alt="Default Avatar" 
-                                 class="img-fluid rounded-circle profile-avatar">
-                        {% endif %}
-                        <h5 class="mt-3 user-name">
-                            {{ user.first_name|default:user.username }}
-                        </h5>
-                        <p class="user-email" title="{{ user.email }}">
-                            {{ user.email }}
-                        </p>
-                    </div>
-                    
-                    <!-- Navigation Tabs -->
-                    <ul class="nav nav-pills flex-column" id="profile-tabs" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link active w-100 text-start" 
-                                    id="profile-tab" 
-                                    data-bs-toggle="pill" 
-                                    data-bs-target="#profile" 
-                                    type="button" 
-                                    role="tab" 
-                                    aria-controls="profile" 
-                                    aria-selected="true">
-                                <i class="fas fa-user"></i>My Profile
-                            </button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link w-100 text-start" 
-                                    id="cart-tab" 
-                                    data-bs-toggle="pill" 
-                                    data-bs-target="#cart" 
-                                    type="button" 
-                                    role="tab" 
-                                    aria-controls="cart" 
-                                    aria-selected="false">
-                                <i class="fas fa-shopping-cart"></i>My Cart 
-                            </button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link w-100 text-start" 
-                                    id="orders-tab" 
-                                    data-bs-toggle="pill" 
-                                    data-bs-target="#orders" 
-                                    type="button" 
-                                    role="tab" 
-                                    aria-controls="orders" 
-                                    aria-selected="false">
-                                <i class="fas fa-box"></i>My Orders
-                            </button>
-                        </li>
-                    </ul>
+        <!-- Sidebar Navigation -->
+        <div class="col-lg-3 col-md-4 mb-4">
+            <div class="profile-sidebar">
+                <!-- User Info -->
+                <div class="text-center mb-4">
+                    {% if user.image %}
+                    <img src="{{ user.image.url }}" alt="User Avatar" class="img-fluid rounded-circle profile-avatar" />
+                    {% else %}
+                    <img src="{% static 'deps/images/baseavatar.jpg' %}" alt="Default Avatar" class="img-fluid rounded-circle profile-avatar" />
+                    {% endif %}
+                    <h5 class="mt-3 user-name">{{ user.first_name|default:user.username }}</h5>
+                    <p class="user-email" title="{{ user.email }}">{{ user.email }}</p>
                 </div>
+
+                <!-- Navigation Tabs -->
+                <ul class="nav nav-pills flex-column" id="profile-tabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button
+                            class="nav-link active w-100 text-start"
+                            id="profile-tab"
+                            data-bs-toggle="pill"
+                            data-bs-target="#profile"
+                            type="button"
+                            role="tab"
+                            aria-controls="profile"
+                            aria-selected="true"
+                        >
+                            <i class="fas fa-user"></i>My Profile
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link w-100 text-start" id="cart-tab" data-bs-toggle="pill" data-bs-target="#cart" type="button" role="tab" aria-controls="cart" aria-selected="false">
+                            <i class="fas fa-shopping-cart"></i>My Cart
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link w-100 text-start" id="orders-tab" data-bs-toggle="pill" data-bs-target="#orders" type="button" role="tab" aria-controls="orders" aria-selected="false">
+                            <i class="fas fa-box"></i>My Orders
+                        </button>
+                    </li>
+                </ul>
             </div>
+        </div>
 
-            <!-- Main Content -->
-            <div class="col-lg-9 col-md-8">
-                <div class="tab-content" id="profile-tabs-content">
-                    
-                    <!-- Profile Tab Content -->
-                    <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                        <div class="content-section">
-                            <h3 class="section-title">
-                                <i class="fas fa-user"></i>Profile Information
-                            </h3>
-                            
-                            <form method="POST" enctype="multipart/form-data">
-                                {% csrf_token %}
-                                
-                                <!-- Avatar Upload Section -->
-                                <div class="row mb-4">
-                                    <div class="col-12 text-center">
-                                        {% if user.image %}
-                                            <img src="{{ user.image.url }}"
-                                            alt="User Avatar" 
-                                            class="img-fluid rounded-circle profile-avatar mb-3">
-                                        {% else %}
-                                            <img src="{% static 'deps/images/baseavatar.jpg' %}"
-                                            alt="Default Avatar" 
-                                            class="img-fluid rounded-circle profile-avatar mb-3">
-                                        {% endif %}
-                                        
-                                        <div class="mb-3">
-                                            <div class="input-group">
-                                                <input type="file" name="image" class="form-control" accept="image/*" aria-describedby="id_image_helptext" id="id_image">
-                                                <label for="id_image" class="btn btn-outline-dark">
-                                                    <i class="fas fa-camera me-1"></i>Change
-                                                </label>
-                                            </div>
-                                        </div>
+        <!-- Main Content -->
+        <div class="col-lg-9 col-md-8">
+            <div class="tab-content" id="profile-tabs-content">
+                <!-- Profile Tab Content -->
+                <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                    <div class="content-section">
+                        <h3 class="section-title"><i class="fas fa-user"></i>Profile Information</h3>
 
-                                        
-                                        {% if form.image.errors %}
-                                            <div class="text-danger small">
-                                                <i class="fas fa-exclamation-triangle me-1"></i>
-                                                {{ form.image.errors.0 }}
-                                            </div>
-                                        {% endif %}
-                                        
-                                        {% if form.image.help_text %}
-                                            <div class="form-text small">
-                                                <i class="fas fa-info-circle text-muted me-1"></i>
-                                                {{ form.image.help_text }}
-                                            </div>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                                
-                                <!-- Personal Information -->
-            <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label for="{{ form.first_name.id_for_label }}" class="form-label">{{ form.first_name.label }} *</label>
-                                        {{ form.first_name }}
-                                        {% if form.first_name.errors %}
-                                            <div class="text-danger small mt-1">
-                                                {{ form.first_name.errors.0 }}
-                                            </div>
-                                        {% endif %}
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label for="{{ form.last_name.id_for_label }}" class="form-label">{{ form.last_name.label }} *</label>
-                                        {{ form.last_name }}
-                                        {% if form.last_name.errors %}
-                                            <div class="text-danger small mt-1">
-                                            {{ form.last_name.errors.0 }}
+                        <form method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+
+                            <!-- Avatar Upload Section -->
+                            <div class="row mb-4">
+                                <div class="col-12 text-center">
+                                    {% if user.image %}
+                                    <img src="{{ user.image.url }}" alt="User Avatar" class="img-fluid rounded-circle profile-avatar mb-3" />
+                                    {% else %}
+                                    <img src="{% static 'deps/images/baseavatar.jpg' %}" alt="Default Avatar" class="img-fluid rounded-circle profile-avatar mb-3" />
+                                    {% endif %}
+
+                                    <div class="mb-3">
+                                        <div class="input-group">
+                                            <input type="file" name="image" class="form-control" accept="image/*" aria-describedby="id_image_helptext" id="id_image" />
+                                            <label for="id_image" class="btn btn-outline-dark"> <i class="fas fa-camera me-1"></i>Change </label>
                                         </div>
+                                    </div>
+
+                                    {% if form.image.errors %}
+                                    <div class="text-danger small">
+                                        <i class="fas fa-exclamation-triangle me-1"></i>
+                                        {{ form.image.errors.0 }}
+                                    </div>
+                                    {% endif %} {% if form.image.help_text %}
+                                    <div class="form-text small">
+                                        <i class="fas fa-info-circle text-muted me-1"></i>
+                                        {{ form.image.help_text }}
+                                    </div>
                                     {% endif %}
                                 </div>
-                                
+                            </div>
+
+                            <!-- Personal Information -->
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ form.first_name.id_for_label }}" class="form-label">{{ form.first_name.label }} *</label>
+                                    {{ form.first_name }} {% if form.first_name.errors %}
+                                    <div class="text-danger small mt-1">{{ form.first_name.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ form.last_name.id_for_label }}" class="form-label">{{ form.last_name.label }} *</label>
+                                    {{ form.last_name }} {% if form.last_name.errors %}
+                                    <div class="text-danger small mt-1">{{ form.last_name.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+
                                 <!-- Username -->
                                 <div class="mb-3">
                                     <label for="{{ form.username.id_for_label }}" class="form-label">{{ form.username.label }} *</label>
-                                    {{ form.username }}
-                                    {% if form.username.errors %}
-                                        <div class="text-danger small mt-1">
-                                            <i class="fas fa-exclamation-triangle me-1"></i>
-                                            {{ form.username.errors.0 }}
-                                        </div>
+                                    {{ form.username }} {% if form.username.errors %}
+                                    <div class="text-danger small mt-1">
+                                        <i class="fas fa-exclamation-triangle me-1"></i>
+                                        {{ form.username.errors.0 }}
+                                    </div>
                                     {% else %}
-                                        <div class="form-text" id="username-feedback">
-                                            <i class="fas fa-info-circle text-muted me-1"></i>
-                                            {{ form.username.help_text }}
-                                </div>
+                                    <div class="form-text" id="username-feedback">
+                                        <i class="fas fa-info-circle text-muted me-1"></i>
+                                        {{ form.username.help_text }}
+                                    </div>
                                     {% endif %}
                                 </div>
-                                
+
                                 <!-- Email -->
                                 <div class="mb-4">
                                     <label for="{{ form.email.id_for_label }}" class="form-label">{{ form.email.label }} *</label>
-                                    {{ form.email }}
-                                    {% if form.email.errors %}
-                                        <div class="text-danger small mt-1">
-                                            <i class="fas fa-exclamation-triangle me-1"></i>
-                                            {{ form.email.errors.0 }}
-                                </div>
+                                    {{ form.email }} {% if form.email.errors %}
+                                    <div class="text-danger small mt-1">
+                                        <i class="fas fa-exclamation-triangle me-1"></i>
+                                        {{ form.email.errors.0 }}
+                                    </div>
                                     {% endif %}
                                 </div>
-                                
+
                                 <!-- Action Buttons -->
                                 <div class="d-flex gap-2">
-                                    <button type="submit" class="btn btn-dark">
-                                        <i class="fas fa-save me-2"></i>Save Changes
-                                    </button>
-                                    <a href="{% url 'main:index' %}" class="btn btn-outline-secondary">
-                                        <i class="fas fa-times me-2"></i>Cancel
-                                    </a>
+                                    <button type="submit" class="btn btn-dark"><i class="fas fa-save me-2"></i>Save Changes</button>
+                                    <a href="{% url 'main:index' %}" class="btn btn-outline-secondary"> <i class="fas fa-times me-2"></i>Cancel </a>
                                 </div>
                             </div>
                         </form>
                     </div>
-                </div>
 
                     <!-- Cart Tab Content -->
                     <div class="tab-pane fade" id="cart" role="tabpanel" aria-labelledby="cart-tab">
                         <div class="content-section">
-                            <h3 class="section-title">
-                                <i class="fas fa-shopping-cart"></i>Shopping Cart
-                            </h3>
-                            
+                            <h3 class="section-title"><i class="fas fa-shopping-cart"></i>Shopping Cart</h3>
+
                             <div id="cart-items-container">
                                 <!-- Cart Item -->
                                 <div class="card mb-3">
                                     <div class="card-body">
                                         <div class="row align-items-center">
                                             <div class="col-md-2">
-                                                <img src="{% static 'deps/images/baseavatar.jpg' %}"
-                                                    class="img-fluid rounded" 
-                                                    alt="Product Image">
+                                                <img src="{% static 'deps/images/baseavatar.jpg' %}" class="img-fluid rounded" alt="Product Image" />
                                             </div>
                                             <div class="col-md-4">
                                                 <h6 class="card-title mb-1">Table and Three Chairs Set</h6>
@@ -421,7 +160,7 @@
                                             <div class="col-md-2">
                                                 <div class="input-group input-group-sm">
                                                     <button class="btn btn-outline-secondary" type="button">-</button>
-                                                    <input type="text" class="form-control text-center" value="1" readonly>
+                                                    <input type="text" class="form-control text-center" value="1" readonly />
                                                     <button class="btn btn-outline-secondary" type="button">+</button>
                                                 </div>
                                             </div>
@@ -436,92 +175,76 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <!-- Cart Total -->
                                 <div class="card bg-light">
                                     <div class="card-body">
                                         <div class="d-flex justify-content-between align-items-center">
                                             <h5 class="mb-0">
-                                                Total: <strong class="text-primary">$255.00</strong>
+                                                Total:
+                                                <strong class="text-primary">$255.00</strong>
                                             </h5>
-                                            <a href="#" class="btn btn-dark">
-                                                <i class="fas fa-credit-card me-2"></i>Proceed to Checkout
-                                            </a>
+                                            <a href="#" class="btn btn-dark"> <i class="fas fa-credit-card me-2"></i>Proceed to Checkout </a>
                                         </div>
                                     </div>
                                 </div>
+                            </div>
                         </div>
                     </div>
-                </div>
 
                     <!-- Orders Tab Content -->
                     <div class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="orders-tab">
                         <div class="content-section">
-                            <h3 class="section-title">
-                                <i class="fas fa-box"></i>Order History
-                            </h3>
-                            
+                            <h3 class="section-title"><i class="fas fa-box"></i>Order History</h3>
+
                             <div class="accordion" id="ordersAccordion">
                                 <!-- Order 1 -->
                                 <div class="accordion-item mb-3">
                                     <h2 class="accordion-header" id="order1">
-                                        <button class="accordion-button" 
-                                                type="button" 
-                                                data-bs-toggle="collapse" 
-                                                data-bs-target="#collapse1" 
-                                                aria-expanded="true" 
-                                                aria-controls="collapse1">
+                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1" aria-expanded="true" aria-controls="collapse1">
                                             <div class="w-100 d-flex justify-content-between align-items-center pe-3">
                                                 <div>
                                                     <strong>Order #256</strong>
                                                     <small class="text-muted ms-3">September 09, 2023</small>
                                                 </div>
-                                                <span class="order-status-badge status-processing">
-                                                    In Processing
-                                                </span>
+                                                <span class="order-status-badge status-processing"> In Processing </span>
                                             </div>
                                         </button>
                                     </h2>
-                                    <div id="collapse1" 
-                                        class="accordion-collapse collapse show" 
-                                        aria-labelledby="order1" 
-                                        data-bs-parent="#ordersAccordion">
+                                    <div id="collapse1" class="accordion-collapse collapse show" aria-labelledby="order1" data-bs-parent="#ordersAccordion">
                                         <div class="accordion-body">
                                             <div class="table-responsive">
                                                 <table class="table table-hover">
                                                     <thead class="table-dark">
-                                                    <tr>
-                                                        <th>Product</th>
-                                                        <th>Quantity</th>
-                                                        <th>Price</th>
+                                                        <tr>
+                                                            <th>Product</th>
+                                                            <th>Quantity</th>
+                                                            <th>Price</th>
                                                             <th>Total</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
                                                             <td>
-                                                                <a href="#" class="text-decoration-none">
-                                                                    Table and Three Chairs Set
-                                                                </a>
+                                                                <a href="#" class="text-decoration-none"> Table and Three Chairs Set </a>
                                                             </td>
-                                                        <td>1</td>
+                                                            <td>1</td>
                                                             <td>$255.00</td>
-                                                            <td><strong>$255.00</strong></td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
+                                                            <td>
+                                                                <strong>$255.00</strong>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
                                             </div>
                                             <div class="d-flex justify-content-between align-items-center mt-3">
                                                 <div>
-                                                    <button class="btn btn-outline-primary btn-sm me-2">
-                                                        <i class="fas fa-eye me-1"></i>Track Order
-                                                    </button>
-                                                    <button class="btn btn-outline-secondary btn-sm">
-                                                        <i class="fas fa-download me-1"></i>Invoice
-                                                    </button>
+                                                    <button class="btn btn-outline-primary btn-sm me-2"><i class="fas fa-eye me-1"></i>Track Order</button>
+                                                    <button class="btn btn-outline-secondary btn-sm"><i class="fas fa-download me-1"></i>Invoice</button>
                                                 </div>
                                                 <h5 class="mb-0">
-                                                    Total: <strong class="text-primary">$255.00</strong>
+                                                    Total:
+                                                    <strong class="text-primary">$255.00</strong>
                                                 </h5>
                                             </div>
                                         </div>
@@ -531,63 +254,50 @@
                                 <!-- Order 2 -->
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="order2">
-                                        <button class="accordion-button collapsed" 
-                                                type="button" 
-                                                data-bs-toggle="collapse" 
-                                                data-bs-target="#collapse2" 
-                                                aria-expanded="false" 
-                                                aria-controls="collapse2">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2" aria-expanded="false" aria-controls="collapse2">
                                             <div class="w-100 d-flex justify-content-between align-items-center pe-3">
                                                 <div>
                                                     <strong>Order #248</strong>
                                                     <small class="text-muted ms-3">August 01, 2023</small>
                                                 </div>
-                                                <span class="order-status-badge status-delivered">
-                                                    Delivered
-                                                </span>
+                                                <span class="order-status-badge status-delivered"> Delivered </span>
                                             </div>
                                         </button>
                                     </h2>
-                                    <div id="collapse2" 
-                                        class="accordion-collapse collapse" 
-                                        aria-labelledby="order2" 
-                                        data-bs-parent="#ordersAccordion">
+                                    <div id="collapse2" class="accordion-collapse collapse" aria-labelledby="order2" data-bs-parent="#ordersAccordion">
                                         <div class="accordion-body">
                                             <div class="table-responsive">
                                                 <table class="table table-hover">
                                                     <thead class="table-dark">
-                                                    <tr>
-                                                        <th>Product</th>
-                                                        <th>Quantity</th>
-                                                        <th>Price</th>
+                                                        <tr>
+                                                            <th>Product</th>
+                                                            <th>Quantity</th>
+                                                            <th>Price</th>
                                                             <th>Total</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
                                                             <td>
-                                                                <a href="#" class="text-decoration-none">
-                                                                    Office Chair
-                                                                </a>
+                                                                <a href="#" class="text-decoration-none"> Office Chair </a>
                                                             </td>
-                                                        <td>2</td>
+                                                            <td>2</td>
                                                             <td>$30.00</td>
-                                                            <td><strong>$60.00</strong></td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
+                                                            <td>
+                                                                <strong>$60.00</strong>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
                                             </div>
                                             <div class="d-flex justify-content-between align-items-center mt-3">
                                                 <div>
-                                                    <button class="btn btn-outline-success btn-sm me-2">
-                                                        <i class="fas fa-redo me-1"></i>Reorder
-                                                    </button>
-                                                    <button class="btn btn-outline-secondary btn-sm">
-                                                        <i class="fas fa-download me-1"></i>Invoice
-                                                    </button>
+                                                    <button class="btn btn-outline-success btn-sm me-2"><i class="fas fa-redo me-1"></i>Reorder</button>
+                                                    <button class="btn btn-outline-secondary btn-sm"><i class="fas fa-download me-1"></i>Invoice</button>
                                                 </div>
                                                 <h5 class="mb-0">
-                                                    Total: <strong class="text-primary">$60.00</strong>
+                                                    Total:
+                                                    <strong class="text-primary">$60.00</strong>
                                                 </h5>
                                             </div>
                                         </div>
@@ -602,96 +312,97 @@
     </div>
 
     <script>
-    // Image preview functionality
-    document.addEventListener('DOMContentLoaded', function() {
-        const imageInput = document.querySelector('input[type="file"][name="image"]');
-        const profileImages = document.querySelectorAll('.profile-avatar');
-        const changePhotoBtn = document.querySelector('label[for="id_image"]');
-        
-        // Handle label click to trigger file input
-        if (changePhotoBtn && imageInput) {
-            changePhotoBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                imageInput.click();
-            });
-        }
-        
-        if (imageInput) {
-            imageInput.addEventListener('change', function(e) {
-                const file = e.target.files[0];
-                if (file) {
-                    // Validate file size (5MB)
-                    if (file.size > 5 * 1024 * 1024) {
-                        alert('File size too large. Please keep it under 5MB.');
-                        e.target.value = '';
-                        return;
-                    }
-                    
-                    // Validate file type
-                    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
-                    if (!validTypes.includes(file.type)) {
-                        alert('Invalid file type. Please use JPG, PNG, or GIF.');
-                        e.target.value = '';
-                        return;
-                    }
-                    
-                    // Show preview
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        profileImages.forEach(img => {
-                            img.src = e.target.result;
-                        });
-                    };
-                    reader.readAsDataURL(file);
-                }
-            });
-        }
-    });
-    
-    // Tab state management
-    document.addEventListener('DOMContentLoaded', function() {
-        // Get active tab from URL hash or default to profile
-        const hash = window.location.hash;
-        const activeTab = hash ? hash.substring(1) : 'profile';
-        
-        // Activate the correct tab
-        const tabButton = document.getElementById(activeTab + '-tab');
-        const tabContent = document.getElementById(activeTab);
-        
-        if (tabButton && tabContent) {
-            // Remove active classes
-            document.querySelectorAll('.nav-link').forEach(link => {
-                link.classList.remove('active');
-                link.setAttribute('aria-selected', 'false');
-            });
-            document.querySelectorAll('.tab-pane').forEach(pane => {
-                pane.classList.remove('show', 'active');
-            });
-            
-            // Activate selected tab
-            tabButton.classList.add('active');
-            tabButton.setAttribute('aria-selected', 'true');
-            tabContent.classList.add('show', 'active');
-        }
-        
-        // Update URL hash when tab changes
-        document.querySelectorAll('[data-bs-toggle="pill"]').forEach(tab => {
-            tab.addEventListener('shown.bs.tab', function(e) {
-                const targetId = e.target.getAttribute('data-bs-target').substring(1);
-                history.replaceState(null, null, '#' + targetId);
-            });
-        });
-    });
+        // Image preview functionality
+        document.addEventListener("DOMContentLoaded", function () {
+            const imageInput = document.querySelector('input[type="file"][name="image"]');
+            const profileImages = document.querySelectorAll(".profile-avatar");
+            const changePhotoBtn = document.querySelector('label[for="id_image"]');
 
-    // Smooth animations for interactive elements
-    document.querySelectorAll('.btn').forEach(button => {
-        button.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-2px)';
+            // Handle label click to trigger file input
+            if (changePhotoBtn && imageInput) {
+                changePhotoBtn.addEventListener("click", function (e) {
+                    e.preventDefault();
+                    imageInput.click();
+                });
+            }
+
+            if (imageInput) {
+                imageInput.addEventListener("change", function (e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        // Validate file size (5MB)
+                        if (file.size > 5 * 1024 * 1024) {
+                            alert("File size too large. Please keep it under 5MB.");
+                            e.target.value = "";
+                            return;
+                        }
+
+                        // Validate file type
+                        const validTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif"];
+                        if (!validTypes.includes(file.type)) {
+                            alert("Invalid file type. Please use JPG, PNG, or GIF.");
+                            e.target.value = "";
+                            return;
+                        }
+
+                        // Show preview
+                        const reader = new FileReader();
+                        reader.onload = function (e) {
+                            profileImages.forEach((img) => {
+                                img.src = e.target.result;
+                            });
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
         });
-        
-        button.addEventListener('mouseleave', function() {
-            this.style.transform = 'translateY(0)';
+
+        // Tab state management
+        document.addEventListener("DOMContentLoaded", function () {
+            // Get active tab from URL hash or default to profile
+            const hash = window.location.hash;
+            const activeTab = hash ? hash.substring(1) : "profile";
+
+            // Activate the correct tab
+            const tabButton = document.getElementById(activeTab + "-tab");
+            const tabContent = document.getElementById(activeTab);
+
+            if (tabButton && tabContent) {
+                // Remove active classes
+                document.querySelectorAll(".nav-link").forEach((link) => {
+                    link.classList.remove("active");
+                    link.setAttribute("aria-selected", "false");
+                });
+                document.querySelectorAll(".tab-pane").forEach((pane) => {
+                    pane.classList.remove("show", "active");
+                });
+
+                // Activate selected tab
+                tabButton.classList.add("active");
+                tabButton.setAttribute("aria-selected", "true");
+                tabContent.classList.add("show", "active");
+            }
+
+            // Update URL hash when tab changes
+            document.querySelectorAll('[data-bs-toggle="pill"]').forEach((tab) => {
+                tab.addEventListener("shown.bs.tab", function (e) {
+                    const targetId = e.target.getAttribute("data-bs-target").substring(1);
+                    history.replaceState(null, null, "#" + targetId);
+                });
+            });
         });
-    });
+
+        // Smooth animations for interactive elements
+        document.querySelectorAll(".btn").forEach((button) => {
+            button.addEventListener("mouseenter", function () {
+                this.style.transform = "translateY(-2px)";
+            });
+
+            button.addEventListener("mouseleave", function () {
+                this.style.transform = "translateY(0)";
+            });
+        });
     </script>
+</div>
 {% endblock %}
