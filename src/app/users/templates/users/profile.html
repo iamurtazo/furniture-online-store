@@ -148,8 +148,14 @@
                                     <div class="card mb-3">
                                         <div class="card-body">
                                             <div class="row align-items-center">
-                                                <div class="col-md-2">
-                                                    <img src="{% static 'deps/images/baseavatar.jpg' %}" class="img-fluid rounded" alt="Product Image" />
+                                                <div class="col-md-2 text-center">
+                                                    <div class="avatar-container">
+                                                        {% if user.image %}
+                                                        <img src="{{ user.image.url }}" alt="User Avatar" class="img-fluid rounded-circle profile-avatar" />
+                                                        {% else %}
+                                                        <img src="{% static 'deps/images/baseavatar.jpg' %}" alt="Default Avatar" class="img-fluid rounded-circle profile-avatar" />
+                                                        {% endif %}
+                                                    </div>
                                                 </div>
                                                 <div class="col-md-4">
                                                     <h6 class="card-title mb-1">Table and Three Chairs Set</h6>
@@ -173,6 +179,7 @@
                                             </div>
                                         </div>
                                     </div>
+
 
                                     <!-- Cart Total -->
                                     <div class="card bg-light">
