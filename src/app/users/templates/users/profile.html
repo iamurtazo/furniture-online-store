@@ -1,5 +1,7 @@
 {% extends "base.html" %} 
 {% load static %} 
+{% load carts_tags %}
+{% user_carts request as carts %}
 
 {% block content %}
     <div class="container mt-4">
@@ -144,55 +146,111 @@
                                 <h3 class="section-title"><i class="fas fa-shopping-cart"></i>Shopping Cart</h3>
 
                                 <div id="cart-items-container">
-                                    <!-- Cart Item -->
-                                    <div class="card mb-3">
-                                        <div class="card-body">
-                                            <div class="row align-items-center">
-                                                <div class="col-md-2 text-center">
-                                                    <div class="avatar-container">
-                                                        {% if user.image %}
-                                                        <img src="{{ user.image.url }}" alt="User Avatar" class="img-fluid rounded-circle profile-avatar" />
+                                    {% if carts %}
+                                        <!-- Dynamic Cart Items -->
+                                        {% for cart in carts %}
+                                        <div class="card mb-3 shadow-sm">
+                                            <div class="card-body">
+                                                <div class="row align-items-center">
+                                                    <!-- Product Image -->
+                                                    <div class="col-md-2 text-center">
+                                                        {% if cart.product.image %}
+                                                            <img src="{{ cart.product.image.url }}" 
+                                                                 alt="{{ cart.product.name }}" 
+                                                                 class="img-fluid rounded" 
+                                                                 style="max-width: 80px; max-height: 80px; object-fit: cover;">
                                                         {% else %}
-                                                        <img src="{% static 'deps/images/baseavatar.jpg' %}" alt="Default Avatar" class="img-fluid rounded-circle profile-avatar" />
+                                                            <img src="{% static 'deps/images/Not found image.png' %}" 
+                                                                 alt="No Image" 
+                                                                 class="img-fluid rounded" 
+                                                                 style="max-width: 80px; max-height: 80px; object-fit: cover;">
                                                         {% endif %}
                                                     </div>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <h6 class="card-title mb-1">Table and Three Chairs Set</h6>
-                                                    <p class="text-muted small mb-0">Modern dining furniture</p>
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <div class="input-group input-group-sm">
-                                                        <button class="btn btn-outline-secondary" type="button">-</button>
-                                                        <input type="text" class="form-control text-center" value="1" readonly />
-                                                        <button class="btn btn-outline-secondary" type="button">+</button>
+                                                    
+                                                    <!-- Product Info -->
+                                                    <div class="col-md-4">
+                                                        <h6 class="card-title mb-1">{{ cart.product.name }}</h6>
+                                                        <p class="text-muted small mb-0">{{ cart.product.description|truncatewords:8 }}</p>
+                                                        {% if cart.product.discount > 0 %}
+                                                            <span class="badge bg-danger small">-{{ cart.product.discount }}%</span>
+                                                        {% endif %}
+                                                    </div>
+                                                    
+                                                    <!-- Quantity Controls -->
+                                                    <div class="col-md-2">
+                                                        <div class="input-group input-group-sm">
+                                                            <button class="btn btn-outline-dark btn-sm" type="button">-</button>
+                                                            <input type="text" class="form-control text-center" 
+                                                                   value="{{ cart.quantity }}" readonly 
+                                                                   style="max-width: 60px;">
+                                                            <button class="btn btn-outline-dark btn-sm" type="button">+</button>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <!-- Unit Price -->
+                                                    <div class="col-md-2 text-center">
+                                                        {% if cart.product.discount > 0 %}
+                                                            <div>
+                                                                <small class="text-muted text-decoration-line-through">${{ cart.product.price }}</small>
+                                                            </div>
+                                                            <strong class="text-success">${{ cart.product.calculate_discount }}</strong>
+                                                        {% else %}
+                                                            <strong class="text-primary">${{ cart.product.price }}</strong>
+                                                        {% endif %}
+                                                    </div>
+                                                    
+                                                    <!-- Total Price & Remove -->
+                                                    <div class="col-md-2 text-center">
+                                                        <div class="mb-2">
+                                                            <strong class="text-dark">${{ cart.products_price }}</strong>
+                                                        </div>
+                                                        <a href="{% url 'carts:cart_remove' cart.product.slug %}" 
+                                                           class="btn btn-outline-danger btn-sm">
+                                                            <i class="fas fa-trash"></i>
+                                                        </a>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-2 text-center">
-                                                    <strong class="text-primary">$255.00</strong>
-                                                </div>
-                                                <div class="col-md-2 text-center">
-                                                    <button class="btn btn-outline-danger btn-sm">
-                                                        <i class="fas fa-trash"></i>
-                                                    </button>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+
+                                        <!-- Cart Total -->
+                                        <div class="card bg-light border-0 shadow-sm">
+                                            <div class="card-body">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div>
+                                                        <h5 class="mb-0">
+                                                            Total: <strong>{{ carts.total_quantity }}</strong>
+                                                            {% if carts.total_quantity == 1 %}
+                                                                item
+                                                            {% else %}
+                                                                items
+                                                            {% endif %}
+                                                        </h5>
+                                                        <p class="text-muted mb-0">Ready for checkout</p>
+                                                    </div>
+                                                    <div class="text-end">
+                                                        <h3 class="text-primary mb-2">${{ carts.total_price }}</h3>
+                                                        <a href="#" class="btn btn-dark btn-lg">
+                                                            <i class="fas fa-credit-card me-2"></i>Proceed to Checkout
+                                                        </a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-
-
-                                    <!-- Cart Total -->
-                                    <div class="card bg-light">
-                                        <div class="card-body">
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <h5 class="mb-0">
-                                                    Total:
-                                                    <strong class="text-primary">$255.00</strong>
-                                                </h5>
-                                                <a href="#" class="btn btn-dark"> <i class="fas fa-credit-card me-2"></i>Proceed to Checkout </a>
+                                    {% else %}
+                                        <!-- Empty Cart Message -->
+                                        <div class="text-center py-5">
+                                            <div class="mb-4">
+                                                <i class="fas fa-shopping-cart text-muted" style="font-size: 4rem;"></i>
                                             </div>
+                                            <h4 class="text-muted mb-3">Your cart is empty</h4>
+                                            <p class="text-muted mb-4">Start shopping to add items to your cart</p>
+                                            <a href="{% url 'goods:catalog' %}" class="btn btn-dark">
+                                                <i class="fas fa-shopping-bag me-2"></i>Browse Products
+                                            </a>
                                         </div>
-                                    </div>
+                                    {% endif %}
                                 </div>
                             </div>
                     </div>

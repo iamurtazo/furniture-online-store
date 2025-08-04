@@ -102,3 +102,7 @@ def profile(request):
     }
     
     return render(request, 'users/profile.html', context)
+
+@login_required
+def users_cart(request):
+    return render(request, 'users/users_cart.html')
