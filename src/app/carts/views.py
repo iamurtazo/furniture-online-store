@@ -26,8 +26,17 @@ def cart_add(request, product_slug):
 def cart_change(request, product_slug):
     pass
 
-def cart_remove(request, product_slug):
-    pass
+def cart_remove(request, cart_id):
+    
+    cart = Cart.objects.get(id=cart_id)
+    cart.delete()
+    
+    # Check if request came from profile page and preserve cart tab
+    referer = request.META.get('HTTP_REFERER', '')
+    if '/user/profile/' in referer:
+        return redirect('/user/profile/#cart')
+    
+    return redirect(request.META['HTTP_REFERER'])
 
 
 

@@ -26,9 +26,11 @@
                     {% include 'carts/includes/included_cart.html' %}
                     <!-- End of cart markup -->
                 </div>
-                <a class="btn btn-dark" href="orders/create_order.html">
-                    Place Order
-                </a>
+                {% if carts.total_quantity > 0 %}
+                    <a class="btn btn-dark" href="orders/create_order.html">
+                        Place Order
+                    </a>
+                {% endif %}
             </div>
         </div>
     </div>

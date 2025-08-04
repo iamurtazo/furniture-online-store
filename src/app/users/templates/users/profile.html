@@ -190,10 +190,13 @@
                                                 <!-- Unit Price -->
                                                 <div class="col-md-2 text-center">
                                                     {% if cart.product.discount > 0 %}
-                                                        <div>
-                                                            <small class="text-muted text-decoration-line-through">${{ cart.product.price }}</small>
+                                                        <div class="mb-1">
+                                                            <small class="text-muted text-decoration-line-through d-block">${{ cart.product.price }}</small>
                                                         </div>
-                                                        <strong class="text-success">${{ cart.product.calculate_discount }}</strong>
+                                                        <div>
+                                                            <strong class="text-success">${{ cart.product.get_discounted_price }}</strong>
+                                                            <small class="text-success d-block">(-{{ cart.product.discount }}%)</small>
+                                                        </div>
                                                     {% else %}
                                                         <strong class="text-primary">${{ cart.product.price }}</strong>
                                                     {% endif %}
@@ -204,7 +207,7 @@
                                                     <div class="mb-2">
                                                         <strong class="text-dark">${{ cart.products_price }}</strong>
                                                     </div>
-                                                    <a href="{% url 'carts:cart_remove' cart.product.slug %}" 
+                                                    <a href="{% url 'carts:cart_remove' cart.id %}" 
                                                         class="btn btn-outline-danger btn-sm">
                                                         <i class="fas fa-trash"></i>
                                                     </a>

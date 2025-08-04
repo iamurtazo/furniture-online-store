@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load carts_tags %}
 
 {% block content %}
 <div class="row">
@@ -12,9 +13,12 @@
                     {% include 'carts/includes/included_cart.html' %}
                     <!-- End of cart markup -->
                 </div>
-                <a class="btn btn-dark" href="{% url 'carts:cart_add' 'armchair' %}">
-                    Place Order
-                </a>
+                {% user_carts request as carts %}
+                {% if carts.total_quantity > 0 %}
+                    <a class="btn btn-dark" href="{% url 'carts:cart_add' 'armchair' %}">
+                        Place Order
+                    </a>
+                {% endif %}
             </div>
         </div>
     </div>
