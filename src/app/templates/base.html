@@ -1,5 +1,7 @@
 {% load static %}
 {% load goods_tags %}
+{% load carts_tags %}
+{% user_carts request as carts %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -47,7 +49,7 @@
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link  text-white" href="#">Cart</a>
+                            <a class="nav-link  text-white" href="{% url 'users:users_cart' %}">Cart</a>
                         </li>
                         {% if user.is_authenticated %}
                             <li class="nav-item dropdown">
@@ -111,7 +113,7 @@
                         aria-expanded="false">
                         <img class="mx-1" src="{% static 'deps/icons/basket2-fill.svg' %}" alt="Catalog Icon" width="24"
                             height="24">
-                        <span id="goods-in-cart-count">0</span>
+                        <span id="goods-in-cart-count">{{ carts.total_quantity }}</span>
                     </button>
                 </div>
                 <!-- Cart modal window markup -->

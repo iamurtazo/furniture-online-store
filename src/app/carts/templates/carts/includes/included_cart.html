@@ -1,42 +1,53 @@
 {% comment %} 
-    This template is used to display the cart items in the cart modal window.
-    It is included in the base.html template.
-{% endcomment %}
-{% load static %}       
+    This template is used to display the cart items in the cart modal window. It is included in the base.html template. 
+{% endcomment %} 
 
+{% load static %} 
+{% load carts_tags %} 
+{% user_carts request as carts %}
 
 <div class="card mb-3 text-bg-light shadow-lg">
+    {% for cart in carts %}
     <div class="card-header">
-        <h5 class="card-title">Product</h5>
+        <h5 class="card-title">{{ cart.product.name }}</h5>
     </div>
     <ul class="list-group list-group-flush">
         <li class="list-group-item">
-            <div class="row text-center align-items-center"> 
-                <div class="col-auto p-0"> 
-                    <div class="input-group input-group-sm"> 
-                    <button type="button" class="btn btn-dark btn-sm decrement" data-cart-id="" data-cart-change-url="">-</button>
-                    <input type="text" class="form-control text-center" value="1" readonly style="max-width: 60px; border-radius: 0;">
-                    <button type="button" class="btn btn-dark btn-sm increment" data-cart-id="" data-cart-change-url="">+</button>
-                    </div> 
-                </div> 
-                <div class="col p-0"> 
-                    <p class="mb-0">x 100.00 = </p> 
-                </div> 
+            <div class="row text-center align-items-center">
+                <div class="col-auto p-0">
+                    <div class="input-group input-group-sm">
+                        <button type="button" class="btn btn-dark btn-sm decrement" data-cart-id="" data-cart-change-url="">-</button>
+                        <input type="text" class="form-control text-center" value="{{ cart.quantity }}" readonly style="max-width: 60px; border-radius: 0" />
+                        <button type="button" class="btn btn-dark btn-sm increment" data-cart-id="" data-cart-change-url="">+</button>
+                    </div>
+                </div>
                 <div class="col p-0">
-                    <strong>100.00 $</strong>
-                </div> 
-                <div class="col-auto p-0"> 
-                    <a href="#" class="remove-from-cart" data-cart-id=""> 
-                    <img class="mx-1" src="{% static 'deps/icons/trash3-fill.svg' %}" alt="Catalog Icon" width="16" height="16"> 
-                    </a> 
-                </div> 
+                    <p class="mb-0">x {{ cart.product.get_discounted_price }} =</p>
+                </div>
+                <div class="col p-0">
+                    <strong>{{ cart.product.price }} $</strong>
+                </div>
+                <div class="col-auto p-0">
+                    <a href="{% url 'carts:cart_remove' cart.product.slug %}" class="remove-from-cart" data-cart-id="">
+                        <img class="mx-1" src="{% static 'deps/icons/trash3-fill.svg' %}" alt="Catalog Icon" width="16" height="16" />
+                    </a>
+                </div>
             </div>
         </li>
     </ul>
+    {% endfor %}
 </div>
 <div class="card mb-3 shadow-lg">
-    <div class="card-footer">
-        <p class="float-left">Total <strong>1</strong> product(s) for amount</p>
-        <h4 class="float-left"><strong>100.00 $</strong></h4>
+    <div class="card-footer d-flex justify-content-between align-items-center">
+        <p class="mb-0">
+            Total <strong>{{ carts.total_quantity }}</strong>
+            {% if carts.total_quantity == 1 %} 
+                product
+            {% else %}
+                products
+            {% endif %} 
+            for amount
+        </p>
+        <h4 class="mb-0"><strong>{{ carts.total_price }} $</strong></h4>
     </div>
 </div>
