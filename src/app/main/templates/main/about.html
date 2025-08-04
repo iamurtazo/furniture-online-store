@@ -9,6 +9,10 @@ then remove the footer style insertion from the about page, and it will release 
     <link rel="stylesheet" href="{% static 'deps/css/my_footer_css.css' %}">
 {% endblock %}
 
+{% block modal_cart %}
+    {% include 'includes/cart_button.html' %}
+{% endblock %}
+
 
 {% block content %}
     <div class="my-5 pt-5 px-2 pb-2 bg-white custom-shadow rounded">    

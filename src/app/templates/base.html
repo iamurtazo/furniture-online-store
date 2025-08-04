@@ -1,7 +1,6 @@
 {% load static %}
 {% load goods_tags %}
-{% load carts_tags %}
-{% user_carts request as carts %}
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -108,37 +107,9 @@
                     </ul>
                 </div>
                 <!-- Cart icon, opens modal window -->
-                <div>
-                    <button type="button" class="btn btn-dark btn-secondary d-flex" id="modalButton"
-                        aria-expanded="false">
-                        <img class="mx-1" src="{% static 'deps/icons/basket2-fill.svg' %}" alt="Catalog Icon" width="24"
-                            height="24">
-                        <span id="goods-in-cart-count">{{ carts.total_quantity }}</span>
-                    </button>
-                </div>
-                <!-- Cart modal window markup -->
-                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                    aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-scrollable">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <h3 class="text-center mb-4">Cart</h3>
-                                <div class="container" id="cart-items-container">
-                                    <!-- Cart markup -->
-                                    {% include 'carts/includes/included_cart.html' %}
-                                    <!-- End of cart markup -->
-                                </div>
-                                <a class="btn btn-dark" href="orders/create_order.html">
-                                    Place Order
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                {% block modal_cart %}
+                    {% comment %} {% include 'includes/cart_button.html' %} {% endcomment %}
+                {% endblock %}
                 <!-- End of modal window markup -->
             </div>
         </div>

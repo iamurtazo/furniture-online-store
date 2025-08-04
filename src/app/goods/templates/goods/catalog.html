@@ -1,4 +1,13 @@
-{% extends "base.html" %} {% load static %} {% load goods_tags %} {% block content %}
+{% extends "base.html" %} 
+{% load static %} 
+{% load goods_tags %} 
+
+{% block modal_cart %}
+    {% include 'includes/cart_button.html' %}
+{% endblock %}
+
+{% block content %}
+
 <!-- Search Results Header -->
 {% if is_search %} {% if has_results %}
 <div class="alert alert-info mb-4">
