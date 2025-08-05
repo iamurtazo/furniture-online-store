@@ -14,8 +14,8 @@
                     <!-- End of cart markup -->
                 </div>
                 {% user_carts request as carts %}
-                {% if carts.total_quantity > 0 %}
-                    <a class="btn btn-dark" href="{% url 'carts:cart_add' 'armchair' %}">
+                {% if carts %}
+                    <a class="btn btn-dark" href="#">
                         Place Order
                     </a>
                 {% endif %}

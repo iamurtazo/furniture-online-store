@@ -41,7 +41,7 @@
     <div class="card-footer d-flex justify-content-between align-items-center">
         <p class="mb-0">
             Total <strong>{{ carts.total_quantity }}</strong>
-            {% if carts.total_quantity == 1 %} 
+            {% if carts.total_quantity == 0 %} 
                 product
             {% else %}
                 products
