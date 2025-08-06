@@ -169,7 +169,11 @@
                                                 
                                                 <!-- Product Info -->
                                                 <div class="col-md-4">
-                                                    <h6 class="card-title mb-1">{{ cart.product.name }}</h6>
+                                                    <h6 class="card-title mb-1">
+                                                        <a href="{% url 'goods:product' cart.product.id %}" class="text-decoration-none text-dark" style="transition: color 0.3s ease;" onmouseover="this.style.color='#007bff'" onmouseout="this.style.color='#212529'">
+                                                            {{ cart.product.name }}
+                                                        </a>
+                                                    </h6>
                                                     <p class="text-muted small mb-0">{{ cart.product.description|truncatewords:8 }}</p>
                                                     {% if cart.product.discount > 0 %}
                                                         <span class="badge bg-danger small">-{{ cart.product.discount }}%</span>
@@ -207,7 +211,7 @@
                                                     <div class="mb-2">
                                                         <strong class="text-dark">${{ cart.products_price }}</strong>
                                                     </div>
-                                                    <a href="{% url 'carts:cart_remove' cart.id %}" 
+                                                    <a href="{% url 'carts:cart_remove' %}" 
                                                         class="btn btn-outline-danger btn-sm">
                                                         <i class="fas fa-trash"></i>
                                                     </a>
