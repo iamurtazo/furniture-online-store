@@ -62,17 +62,67 @@ def cart_add(request):
 def cart_change(request, product_slug):
     pass
 
-def cart_remove(request, cart_id):
+def cart_remove(request):
+    if request.method == 'POST':
+        cart_id = request.POST.get('cart_id')
+        
+        if not cart_id:
+            return JsonResponse({
+                'error': 'Cart ID is required'
+            }, status=400)
+        
+        try:
+            cart = Cart.objects.get(id=cart_id)
+            
+            # Check if cart belongs to the current user (security check)
+            if request.user.is_authenticated and cart.user != request.user:
+                return JsonResponse({
+                    'error': 'Unauthorized access to cart item'
+                }, status=403)
+            
+            quantity = cart.quantity
+            cart.delete()
+            
+            user_cart = get_user_cart(request)
+            
+            # Detect which page the request is coming from and use appropriate template
+            referer = request.META.get('HTTP_REFERER', '')
+            
+            if '/user/profile/' in referer:
+                # Use profile-specific template
+                template_name = 'carts/includes/profile_cart_items.html'
+            elif '/users-cart/' in referer:
+                # Use users_cart page-specific template  
+                template_name = 'carts/includes/users_cart_items.html'
+            else:
+                # Default to modal template for other cases
+                template_name = 'carts/includes/included_cart.html'
+            
+            cart_items_html = render_to_string(
+                template_name,
+                {'carts': user_cart},
+                request=request,
+            )
+            
+            response_data = {
+                "message": "Product removed from cart successfully!",
+                "cart_items_html": cart_items_html,
+                "quantity_deleted": quantity,
+                "cart_total_quantity": user_cart.total_quantity() if user_cart.exists() else 0,
+            }
+            
+            return JsonResponse(response_data)
+            
+        except Cart.DoesNotExist:
+            return JsonResponse({
+                'error': 'Cart item not found'
+            }, status=404)
     
-    cart = Cart.objects.get(id=cart_id)
-    cart.delete()
+    return JsonResponse({
+        'error': 'Invalid request method'
+    }, status=405)
     
-    # Check if request came from profile page and preserve cart tab
-    referer = request.META.get('HTTP_REFERER', '')
-    if '/user/profile/' in referer:
-        return redirect('/user/profile/#cart')
     
-    return redirect(request.META['HTTP_REFERER'])
 
 
 

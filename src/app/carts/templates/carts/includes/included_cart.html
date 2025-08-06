@@ -1,7 +1,4 @@
-{% comment %} 
-    This template is used to display the cart items in the cart modal window. It is included in the base.html template. 
-{% endcomment %} 
-
+{% comment %} This template is used to display the cart items in the cart modal window. It is included in the base.html template. {% endcomment %} 
 {% load static %} 
 {% load carts_tags %} 
 {% user_carts request as carts %}
@@ -27,11 +24,11 @@
                 <div class="col p-0">
                     <strong>{{ cart.product.price }} $</strong>
                 </div>
-                {% comment %} <div class="col-auto p-0">
-                    <a href="{% url 'carts:cart_remove' %}" class="remove-from-cart" data-cart-id="{{ cart.product.id }}">
-                        <img class="mx-1" src="{% static 'deps/icons/trash3-fill.svg' %}" alt="Catalog Icon" width="16" height="16" />
+                <div class="col-auto p-0">
+                    <a href="{% url 'carts:cart_remove' %}" class="remove-from-cart" data-cart-id="{{ cart.id }}">
+                        <img class="mx-1" src="{% static 'deps/icons/trash3-fill.svg' %}" alt="Remove Item" width="16" height="16" />
                     </a>
-                </div> {% endcomment %}
+                </div>
             </div>
         </li>
     </ul>
@@ -41,12 +38,7 @@
     <div class="card-footer d-flex justify-content-between align-items-center">
         <p class="mb-0">
             Total <strong>{{ carts.total_quantity }}</strong>
-            {% if carts.total_quantity == 0 %} 
-                product
-            {% else %}
-                products
-            {% endif %} 
-            for amount
+            {% if carts.total_quantity == 0 %} product {% else %} products {% endif %} for amount
         </p>
         <h4 class="mb-0"><strong>{{ carts.total_price }} $</strong></h4>
     </div>
