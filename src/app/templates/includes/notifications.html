@@ -1,87 +1,88 @@
 {% load static %}
 
 <!-- Auto-Disappearing Toast Notifications -->
-{% if messages %}
-    {% for message in messages %}
-        <div id="notification-{{ forloop.counter }}" 
-             class="notification-toast position-fixed start-50 translate-middle-x alert 
-             {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' or message.tags == 'warning' %}alert-danger{% elif message.tags == 'info' %}alert-info{% else %}alert-primary{% endif %} 
-             alert-dismissible fade show custom-shadow" 
-             style="top: 20px; z-index: 1050; min-width: 300px; max-width: 500px;" 
-             role="alert">
-            
-            <!-- Icon based on message type -->
-            {% if message.tags == 'success' %}
-                <i class="fas fa-check-circle me-2"></i>
-            {% elif message.tags == 'error' or message.tags == 'warning' %}
-                <i class="fas fa-exclamation-triangle me-2"></i>
-            {% elif message.tags == 'info' %}
-                <i class="fas fa-info-circle me-2"></i>
-            {% else %}
-                <i class="fas fa-bell me-2"></i>
-            {% endif %}
-            
-            {{ message }}
-            
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    {% endfor %}
-{% endif %}
+{% if messages %} {% for message in messages %}
+<div
+    id="notification-{{ forloop.counter }}"
+    class="notification-toast position-fixed start-50 translate-middle-x alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' or message.tags == 'warning' %}alert-danger{% elif message.tags == 'info' %}alert-info{% else %}alert-primary{% endif %} alert-dismissible fade show custom-shadow"
+    style="top: 20px; z-index: 1050; min-width: 300px; max-width: 500px"
+    role="alert"
+>
+    <!-- Icon based on message type -->
+    {% if message.tags == 'success' %}
+    <i class="fas fa-check-circle me-2"></i>
+    {% elif message.tags == 'error' or message.tags == 'warning' %}
+    <i class="fas fa-exclamation-triangle me-2"></i>
+    {% elif message.tags == 'info' %}
+    <i class="fas fa-info-circle me-2"></i>
+    {% else %}
+    <i class="fas fa-bell me-2"></i>
+    {% endif %} {{ message }}
+
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endfor %} {% endif %}
 
 <!-- Form Error Notifications -->
 {% if form.non_field_errors %}
-    <div id="form-error-notification" 
-         class="notification-toast position-fixed start-50 translate-middle-x alert alert-danger alert-dismissible fade show custom-shadow" 
-         style="top: 20px; z-index: 1050; min-width: 300px; max-width: 500px;" 
-         role="alert">
-        <i class="fas fa-exclamation-triangle me-2"></i>
-        {{ form.non_field_errors }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
+<div
+    id="form-error-notification"
+    class="notification-toast position-fixed start-50 translate-middle-x alert alert-danger alert-dismissible fade show custom-shadow"
+    style="top: 20px; z-index: 1050; min-width: 300px; max-width: 500px"
+    role="alert"
+>
+    <i class="fas fa-exclamation-triangle me-2"></i>
+    {{ form.non_field_errors }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
 {% endif %}
 
 <!-- Dynamic Notification Container (for AJAX/JS notifications) -->
-<div id="jq-notification" 
-     class="notification-toast position-fixed start-50 translate-middle-x alert alert-success alert-dismissible fade custom-shadow" 
-     style="top: 20px; z-index: 1050; min-width: 300px; max-width: 500px; display: none;" 
-     role="alert">
+<div
+    id="jq-notification"
+    class="position-fixed start-50 translate-middle-x alert alert-success alert-dismissible fade custom-shadow ajax-notification"
+    style="top: 20px; z-index: 1050; min-width: 300px; max-width: 500px; display: none"
+    role="alert"
+>
     <i class="fas fa-check-circle me-2"></i>
     <span id="jq-notification-message"></span>
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 
 <style>
-.custom-shadow {
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
-}
-
-.notification-toast {
-    animation: slideInDown 0.5s ease-out;
-}
-
-@keyframes slideInDown {
-    from {
-        transform: translateX(-50%) translateY(-100%);
-        opacity: 0;
+    .custom-shadow {
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
     }
-    to {
-        transform: translateX(-50%) translateY(0);
-        opacity: 1;
-    }
-}
 
-.notification-toast.fade:not(.show) {
-    animation: slideOutUp 0.5s ease-in;
-}
+    .notification-toast,
+    .ajax-notification {
+        animation: slideInDown 0.5s ease-out;
+    }
 
-@keyframes slideOutUp {
-    from {
-        transform: translateX(-50%) translateY(0);
-        opacity: 1;
+    @keyframes slideInDown {
+        from {
+            transform: translateX(-50%) translateY(-100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
     }
-    to {
-        transform: translateX(-50%) translateY(-100%);
-        opacity: 0;
+
+    .notification-toast.fade:not(.show),
+    .ajax-notification.fade:not(.show) {
+        animation: slideOutUp 0.5s ease-in;
     }
-}
+
+    @keyframes slideOutUp {
+        from {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+        to {
+            transform: translateX(-50%) translateY(-100%);
+            opacity: 0;
+        }
+    }
 </style>

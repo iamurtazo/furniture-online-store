@@ -1,42 +1,78 @@
 {% extends "base.html" %} 
 {% load static %} 
-{% block content %}
+
 
 {% block modal_cart %}
     {% include 'includes/cart_button.html' %}
 {% endblock %}
 
+{% block content %}
 <div class="container mt-5">
-    <div class="card mb-4 custom-shadow">
-        <div class="row">
-            <!-- Thumbnails -->
-            <div class="col-md-4">
-                <img src="{{ product.image.url }}" class="img-thumbnail" data-bs-toggle="modal" data-bs-target="#imageModal1" />
+    <div class="card mb-4 shadow-sm border-0">
+        <div class="row g-0">
+            <!-- Product Image -->
+            <div class="col-md-6">
+                <img 
+                    src="{{ product.image.url }}" 
+                    class="img-fluid rounded-start h-100 w-100" 
+                    data-bs-toggle="modal" 
+                    data-bs-target="#imageModal1" 
+                    alt="{{ product.name }}"
+                    style="cursor: pointer; object-fit: cover; min-height: 300px;"
+                />
             </div>
-            <div class="col-md-4">
-                <p class="product_id mt-3">id: {{ product.display_id }}</p>
-            </div>
-            <!-- Enlarge image in modal window -->
-            <div class="modal fade" id="imageModal1" tabindex="-1" aria-labelledby="imageModal1Label" aria-hidden="true">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="imageModal1Label">{{ product.name }}</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <img src="{{ product.image.url }}" class="img-fluid" alt="{{ product.name }}" />
-                        </div>
+            
+            <!-- Product Details -->
+            <div class="col-md-6">
+                <div class="card-body p-4 h-100 d-flex flex-column">
+                    <!-- Product ID -->
+                    <div class="mb-2">
+                        <span class="badge bg-light text-dark">ID: {{ product.display_id }}</span>
+                    </div>
+                    
+                    <!-- Product Name -->
+                    <h3 class="card-title mb-3 text-dark fw-bold">{{ product.name }}</h3>
+                    
+                    <!-- Price -->
+                    <div class="mb-3">
+                        <h4 class="text-primary mb-0">
+                            <span class="fw-bold">${{ product.get_discounted_price|floatformat:2 }}</span>
+                        </h4>
+                        {% if product.discount_percent > 0 %}
+                            <small class="text-muted text-decoration-line-through">
+                                ${{ product.price|floatformat:2 }}
+                            </small>
+                            <span class="badge bg-danger ms-2">{{ product.discount_percent }}% OFF</span>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Description -->
+                    <p class="card-text text-muted mb-4 flex-grow-1">{{ product.description }}</p>
+                    
+                    <!-- Add to Cart Button -->
+                    <div class="mt-auto">
+                        <a href="{% url 'carts:cart_add' %}" class="btn btn-primary btn-lg w-100 add-to-cart" data-good-id="{{ product.id }}">
+                            <i class="fas fa-cart-plus me-2"></i>
+                            Add to Cart
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- Product description -->
-        <div class="card-body">
-            <p class="card-text">Price: <strong>{{ product.get_discounted_price }} $</strong></p>
-            <h5 class="card-title">{{ product.name }}</h5>
-            <p class="card-text">{{ product.description }}</p>
-            <a href="{% url 'carts:cart_add' product.slug %}" class="btn btn-dark add-to-cart">Add to Cart</a>
+    </div>
+
+    <!-- Image Modal -->
+    <div class="modal fade" id="imageModal1" tabindex="-1" aria-labelledby="imageModal1Label" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fw-bold" id="imageModal1Label">{{ product.name }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center p-0">
+                    <img src="{{ product.image.url }}" class="img-fluid" alt="{{ product.name }}" />
+                </div>
+            </div>
         </div>
     </div>
 </div>
