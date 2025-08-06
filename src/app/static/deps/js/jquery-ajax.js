@@ -133,79 +133,99 @@ $(document).ready(function () {
         });
     });
 
-    // // Теперь + - количества товара
-    // // Обработчик события для уменьшения значения
-    // $(document).on("click", ".decrement", function () {
-    //     // Берем ссылку на контроллер django из атрибута data-cart-change-url
-    //     var url = $(this).data("cart-change-url");
-    //     // Берем id корзины из атрибута data-cart-id
-    //     var cartID = $(this).data("cart-id");
-    //     // Ищем ближайшеий input с количеством
-    //     var $input = $(this).closest('.input-group').find('.number');
-    //     // Берем значение количества товара
-    //     var currentValue = parseInt($input.val());
-    //     // Если количества больше одного, то только тогда делаем -1
-    //     if (currentValue > 1) {
-    //         $input.val(currentValue - 1);
-    //         // Запускаем функцию определенную ниже
-    //         // с аргументами (id карты, новое количество, количество уменьшилось или прибавилось, url)
-    //         updateCart(cartID, currentValue - 1, -1, url);
-    //     }
-    // });
+    // Количество товара - обработчики для увеличения/уменьшения
+    // Обработчик события для уменьшения значения
+    $(document).on("click", ".decrement", function () {
+        // Берем ссылку на контроллер django из атрибута data-cart-change-url
+        var url = $(this).data("cart-change-url");
+        // Берем id корзины из атрибута data-cart-id
+        var cartID = $(this).data("cart-id");
+        // Ищем ближайший input с количеством
+        var $input = $(this).closest(".input-group").find('input[type="text"]');
+        // Берем значение количества товара
+        var currentValue = parseInt($input.val());
+        // Если количества больше одного, то только тогда делаем -1
+        if (currentValue > 1) {
+            $input.val(currentValue - 1);
+            // Запускаем функцию определенную ниже
+            // с аргументами (id карты, новое количество, количество уменьшилось или прибавилось, url)
+            updateCart(cartID, currentValue - 1, -1, url);
+        }
+    });
 
-    // // Обработчик события для увеличения значения
-    // $(document).on("click", ".increment", function () {
-    //     // Берем ссылку на контроллер django из атрибута data-cart-change-url
-    //     var url = $(this).data("cart-change-url");
-    //     // Берем id корзины из атрибута data-cart-id
-    //     var cartID = $(this).data("cart-id");
-    //     // Ищем ближайшеий input с количеством
-    //     var $input = $(this).closest('.input-group').find('.number');
-    //     // Берем значение количества товара
-    //     var currentValue = parseInt($input.val());
+    // Обработчик события для увеличения значения
+    $(document).on("click", ".increment", function () {
+        // Берем ссылку на контроллер django из атрибута data-cart-change-url
+        var url = $(this).data("cart-change-url");
+        // Берем id корзины из атрибута data-cart-id
+        var cartID = $(this).data("cart-id");
+        // Ищем ближайший input с количеством
+        var $input = $(this).closest(".input-group").find('input[type="text"]');
+        // Берем значение количества товара
+        var currentValue = parseInt($input.val());
 
-    //     $input.val(currentValue + 1);
+        $input.val(currentValue + 1);
 
-    //     // Запускаем функцию определенную ниже
-    //     // с аргументами (id карты, новое количество, количество уменьшилось или прибавилось, url)
-    //     updateCart(cartID, currentValue + 1, 1, url);
-    // });
+        // Запускаем функцию определенную ниже
+        // с аргументами (id карты, новое количество, количество уменьшилось или прибавилось, url)
+        updateCart(cartID, currentValue + 1, 1, url);
+    });
 
-    // function updateCart(cartID, quantity, change, url) {
-    //     $.ajax({
-    //         type: "POST",
-    //         url: url,
-    //         data: {
-    //             cart_id: cartID,
-    //             quantity: quantity,
-    //             csrfmiddlewaretoken: $("[name=csrfmiddlewaretoken]").val(),
-    //         },
+    function updateCart(cartID, quantity, change, url) {
+        $.ajax({
+            type: "POST",
+            url: url,
+            headers: {
+                "X-Requested-With": "XMLHttpRequest",
+            },
+            data: {
+                cart_id: cartID,
+                quantity: quantity,
+                csrfmiddlewaretoken: $("[name=csrfmiddlewaretoken]").val(),
+            },
 
-    //         success: function (data) {
-    //              // Сообщение
-    //             successMessage.html(data.message);
-    //             successMessage.fadeIn(400);
-    //              // Через 7сек убираем сообщение
-    //             setTimeout(function () {
-    //                  successMessage.fadeOut(400);
-    //             }, 7000);
+            success: function (data) {
+                // Сообщение
+                successMessage.html(data.message);
+                successMessage.addClass("show").fadeIn(400);
+                // Через 3сек убираем сообщение
+                setTimeout(function () {
+                    successMessage.removeClass("show").fadeOut(400);
+                }, 3000);
 
-    //             // Изменяем количество товаров в корзине
-    //             var goodsInCartCount = $("#goods-in-cart-count");
-    //             var cartCount = parseInt(goodsInCartCount.text() || 0);
-    //             cartCount += change;
-    //             goodsInCartCount.text(cartCount);
+                // Обновляем количество товаров в корзине из ответа сервера
+                if (data.cart_total_quantity !== undefined) {
+                    var goodsInCartCount = $("#goods-in-cart-count");
+                    goodsInCartCount.text(data.cart_total_quantity);
+                } else {
+                    // Fallback: manual calculation
+                    var goodsInCartCount = $("#goods-in-cart-count");
+                    var cartCount = parseInt(goodsInCartCount.text() || 0);
+                    cartCount += change;
+                    goodsInCartCount.text(Math.max(0, cartCount));
+                }
 
-    //             // Меняем содержимое корзины
-    //             var cartItemsContainer = $("#cart-items-container");
-    //             cartItemsContainer.html(data.cart_items_html);
+                // Меняем содержимое корзины
+                var cartItemsContainer = $("#cart-items-container");
+                cartItemsContainer.html(data.cart_items_html);
+            },
+            error: function (xhr, status, error) {
+                console.log("Ошибка при изменении количества товара в корзине:", error);
+                console.log("Response:", xhr.responseText);
 
-    //         },
-    //         error: function (data) {
-    //             console.log("Ошибка при добавлении товара в корзину");
-    //         },
-    //     });
-    // }
+                // Show error message to user
+                if (xhr.responseJSON && xhr.responseJSON.error) {
+                    successMessage.html(xhr.responseJSON.error);
+                    successMessage.removeClass("alert-success").addClass("alert-danger").addClass("show");
+                    successMessage.fadeIn(400);
+                    setTimeout(function () {
+                        successMessage.removeClass("show").fadeOut(400);
+                        successMessage.removeClass("alert-danger").addClass("alert-success");
+                    }, 3000);
+                }
+            },
+        });
+    }
 
     // Auto-hide notifications after 2 seconds
     $(".notification-toast").each(function (index) {
