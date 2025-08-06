@@ -1,0 +1,120 @@
+{% load static %} {% load carts_tags %}
+
+<!-- Users Cart Page Specific Template -->
+{% user_carts request as carts %} {% if carts.exists %}
+<!-- Cart Items -->
+{% for cart in carts %}
+<div class="card mb-3 shadow-sm border-0">
+    <div class="card-body">
+        <div class="row align-items-center">
+            <!-- Product Image -->
+            <div class="col-md-2 text-center">
+                {% if cart.product.image %}
+                <img src="{{ cart.product.image.url }}" alt="{{ cart.product.name }}" class="img-fluid rounded shadow-sm" style="max-width: 80px; max-height: 80px; object-fit: cover" />
+                {% else %}
+                <img src="{% static 'deps/images/Not found image.png' %}" alt="No Image" class="img-fluid rounded shadow-sm" style="max-width: 80px; max-height: 80px; object-fit: cover" />
+                {% endif %}
+            </div>
+
+            <!-- Product Info -->
+            <div class="col-md-4">
+                <h6 class="card-title mb-1">
+                    <a
+                        href="{% url 'goods:product' cart.product.id %}"
+                        class="text-decoration-none text-dark fw-bold"
+                        style="transition: color 0.3s ease"
+                        onmouseover="this.style.color='#007bff'"
+                        onmouseout="this.style.color='#212529'"
+                    >
+                        {{ cart.product.name }}
+                    </a>
+                </h6>
+                <p class="text-muted small mb-1">{{ cart.product.description|truncatewords:10 }}</p>
+                {% if cart.product.discount > 0 %}
+                <span class="badge bg-danger small"> <i class="fas fa-percent me-1"></i>{{ cart.product.discount }}% OFF </span>
+                {% endif %}
+            </div>
+
+            <!-- Quantity Controls -->
+            <div class="col-md-2">
+                <label class="form-label small text-muted">Quantity</label>
+                <div class="input-group input-group-sm">
+                    <button class="btn btn-outline-secondary btn-sm decrement" type="button" data-cart-id="{{ cart.id }}" data-cart-change-url="{% url 'carts:cart_change' %}">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                    <input type="text" class="form-control text-center fw-bold" value="{{ cart.quantity }}" readonly style="max-width: 60px" />
+                    <button class="btn btn-outline-secondary btn-sm increment" type="button" data-cart-id="{{ cart.id }}" data-cart-change-url="{% url 'carts:cart_change' %}">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Unit Price -->
+            <div class="col-md-2 text-center">
+                <label class="form-label small text-muted">Unit Price</label>
+                {% if cart.product.discount > 0 %}
+                <div class="mb-1">
+                    <small class="text-muted text-decoration-line-through d-block">${{ cart.product.price }}</small>
+                </div>
+                <div>
+                    <strong class="text-success">${{ cart.product.get_discounted_price }}</strong>
+                </div>
+                {% else %}
+                <strong class="text-primary">${{ cart.product.price }}</strong>
+                {% endif %}
+            </div>
+
+            <!-- Total Price & Remove -->
+            <div class="col-md-2 text-center">
+                <label class="form-label small text-muted">Total</label>
+                <div class="mb-2">
+                    <strong class="text-dark h5">${{ cart.products_price }}</strong>
+                </div>
+                <a href="{% url 'carts:cart_remove' %}" class="btn btn-outline-danger btn-sm remove-from-cart" data-cart-id="{{ cart.id }}"> <i class="fas fa-trash me-1"></i>Remove </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+<!-- Cart Summary -->
+<div class="card bg-light border-0 shadow-sm mt-4">
+    <div class="card-body p-4">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h4 class="mb-2"><i class="fas fa-calculator me-2 text-primary"></i>Cart Summary</h4>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <p class="mb-1"><strong>Total Items:</strong> {{ carts.total_quantity }}</p>
+                        <p class="text-muted small mb-0">All items are ready for checkout</p>
+                    </div>
+                    <div class="col-sm-6">
+                        <p class="mb-1"><strong>Subtotal:</strong> ${{ carts.total_price }}</p>
+                        <p class="text-muted small mb-0">Shipping calculated at checkout</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 text-center">
+                <h3 class="text-primary mb-3"><i class="fas fa-dollar-sign"></i>{{ carts.total_price }}</h3>
+                <div class="d-grid gap-2">
+                    <a href="#" class="btn btn-dark btn-lg"> <i class="fas fa-credit-card me-2"></i>Proceed to Checkout </a>
+                    <a href="{% url 'goods:index' category_slug='all-categories' %}" class="btn btn-outline-secondary"> <i class="fas fa-shopping-bag me-2"></i>Continue Shopping </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% else %}
+<!-- Empty Cart Message -->
+<div class="text-center py-5">
+    <div class="mb-4">
+        <i class="fas fa-shopping-cart text-muted" style="font-size: 5rem"></i>
+    </div>
+    <h3 class="text-muted mb-3">Your cart is empty</h3>
+    <p class="text-muted mb-4 lead">Discover amazing furniture and start building your perfect space!</p>
+    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+        <a href="{% url 'goods:index' category_slug='all-categories' %}" class="btn btn-dark btn-lg"> <i class="fas fa-shopping-bag me-2"></i>Browse Products </a>
+        <a href="{% url 'main:index' %}" class="btn btn-outline-primary btn-lg"> <i class="fas fa-home me-2"></i>Back to Home </a>
+    </div>
+</div>
+{% endif %}
