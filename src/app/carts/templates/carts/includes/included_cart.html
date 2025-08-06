@@ -1,5 +1,7 @@
-{% comment %} This template is used to display the cart items in the cart modal window. It is included in the base.html template. {% endcomment %} {% load static %} {% load carts_tags %} {% user_carts
-request as carts %}
+{% comment %} This template is used to display the cart items in the cart modal window. It is included in the base.html template. {% endcomment %} 
+{% load static %} 
+{% load carts_tags %} 
+{% user_carts request as carts %}
 
 <div class="card mb-3 text-bg-light shadow-lg">
     {% for cart in carts %}
