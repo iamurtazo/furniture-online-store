@@ -1,7 +1,5 @@
-{% comment %} This template is used to display the cart items in the cart modal window. It is included in the base.html template. {% endcomment %} 
-{% load static %} 
-{% load carts_tags %} 
-{% user_carts request as carts %}
+{% comment %} This template is used to display the cart items in the cart modal window. It is included in the base.html template. {% endcomment %} {% load static %} {% load carts_tags %} {% user_carts
+request as carts %}
 
 <div class="card mb-3 text-bg-light shadow-lg">
     {% for cart in carts %}
@@ -13,9 +11,13 @@
             <div class="row text-center align-items-center">
                 <div class="col-auto p-0">
                     <div class="input-group input-group-sm">
-                        <button type="button" class="btn btn-dark btn-sm decrement" data-cart-id="" data-cart-change-url="">-</button>
+                        <button type="button" class="btn btn-dark btn-sm decrement" data-cart-id="{{ cart.id }}" data-cart-change-url="{% url 'carts:cart_change' %}">
+                            <i class="fas fa-minus"></i>
+                        </button>
                         <input type="text" class="form-control text-center" value="{{ cart.quantity }}" readonly style="max-width: 60px; border-radius: 0" />
-                        <button type="button" class="btn btn-dark btn-sm increment" data-cart-id="" data-cart-change-url="">+</button>
+                        <button type="button" class="btn btn-dark btn-sm increment" data-cart-id="{{ cart.id }}" data-cart-change-url="{% url 'carts:cart_change' %}">
+                            <i class="fas fa-plus"></i>
+                        </button>
                     </div>
                 </div>
                 <div class="col p-0">

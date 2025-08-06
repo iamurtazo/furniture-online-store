@@ -38,9 +38,13 @@
             <!-- Quantity Controls -->
             <div class="col-md-2">
                 <div class="input-group input-group-sm">
-                    <button class="btn btn-outline-dark btn-sm" type="button">-</button>
+                    <button class="btn btn-outline-dark btn-sm decrement" type="button" data-cart-id="{{ cart.id }}" data-cart-change-url="{% url 'carts:cart_change' %}">
+                        <i class="fas fa-minus"></i>
+                    </button>
                     <input type="text" class="form-control text-center" value="{{ cart.quantity }}" readonly style="max-width: 60px" />
-                    <button class="btn btn-outline-dark btn-sm" type="button">+</button>
+                    <button class="btn btn-outline-dark btn-sm increment" type="button" data-cart-id="{{ cart.id }}" data-cart-change-url="{% url 'carts:cart_change' %}">
+                        <i class="fas fa-plus"></i>
+                    </button>
                 </div>
             </div>
 
