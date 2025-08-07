@@ -1,0 +1,120 @@
+{% extends "base.html" %} {% load static %} {% block footer_css %}
+<link rel="stylesheet" href="{% static 'deps/css/my_footer_css.css' %}" />
+{% endblock %} {% block modal_cart %} {% include 'includes/cart_button.html' %} {% endblock %} {% block content %}
+<div class="my-5 pt-5 px-2 pb-2 bg-white custom-shadow rounded">
+    <h2 class="m-2"><strong>{{ title }}</strong></h2>
+    <p class="m-2 mb-4" style="font-size: 1.2rem">{{ description }}</p>
+
+    <div class="row">
+        <!-- Delivery Information -->
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-dark text-white">
+                    <h4 class="mb-0"><i class="fas fa-truck me-2"></i>Delivery Options</h4>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <h5 class="text-primary">Standard Delivery</h5>
+                        <p class="mb-2"><strong>Timeline:</strong> 5-7 business days</p>
+                        <p class="mb-2"><strong>Cost:</strong> $15 - $25 (based on location)</p>
+                        <p class="text-muted">Perfect for most furniture items</p>
+                    </div>
+
+                    <div class="mb-3">
+                        <h5 class="text-primary">Express Delivery</h5>
+                        <p class="mb-2"><strong>Timeline:</strong> 2-3 business days</p>
+                        <p class="mb-2"><strong>Cost:</strong> $35 - $50 (based on location)</p>
+                        <p class="text-muted">For urgent furniture needs</p>
+                    </div>
+
+                    <div class="mb-3">
+                        <h5 class="text-primary">White Glove Service</h5>
+                        <p class="mb-2"><strong>Timeline:</strong> Scheduled appointment</p>
+                        <p class="mb-2"><strong>Cost:</strong> $75 - $150 (based on item size)</p>
+                        <p class="text-muted">Includes assembly and placement in your home</p>
+                    </div>
+
+                    <div class="alert alert-info"><strong>Free Delivery</strong> on orders over $500!</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment Information -->
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-dark text-white">
+                    <h4 class="mb-0"><i class="fas fa-credit-card me-2"></i>Payment Methods</h4>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <h5 class="text-success">Accepted Cards</h5>
+                        <div class="d-flex flex-wrap gap-2 mb-2">
+                            <span class="badge bg-primary">Visa</span>
+                            <span class="badge bg-warning text-dark">Mastercard</span>
+                            <span class="badge bg-info">American Express</span>
+                            <span class="badge bg-secondary">Discover</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <h5 class="text-success">Digital Payments</h5>
+                        <div class="d-flex flex-wrap gap-2 mb-2">
+                            <span class="badge bg-dark">PayPal</span>
+                            <span class="badge bg-success">Apple Pay</span>
+                            <span class="badge bg-primary">Google Pay</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <h5 class="text-success">Financing Options</h5>
+                        <p class="mb-2"><strong>0% APR</strong> for 12 months on purchases over $1000</p>
+                        <p class="mb-2"><strong>Extended Financing</strong> up to 24 months available</p>
+                        <p class="text-muted">Subject to credit approval</p>
+                    </div>
+
+                    <div class="alert alert-success"><strong>Secure Checkout</strong> - All transactions are encrypted and secure</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Additional Information -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-light">
+                    <h4 class="mb-0"><i class="fas fa-info-circle me-2"></i>Important Information</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Delivery Notes</h5>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-check text-success me-2"></i>Delivery to ground floor included</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Two-person delivery team</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Call ahead scheduling</li>
+                                <li><i class="fas fa-exclamation-triangle text-warning me-2"></i>Additional fees for stairs/elevators</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Return Policy</h5>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-check text-success me-2"></i>30-day return window</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Free return pickup</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Full refund on original payment method</li>
+                                <li><i class="fas fa-exclamation-triangle text-warning me-2"></i>Item must be in original condition</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} {% block footer %}
+<footer class="py-4 bg-dark">
+    <div class="container">
+        <p class="m-0 text-center text-white">Copyright &copy; IAMURTAZO 2025</p>
+    </div>
+</footer>
+{% endblock %}
