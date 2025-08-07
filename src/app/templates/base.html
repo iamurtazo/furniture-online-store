@@ -42,8 +42,8 @@
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"> Information </a>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item text-white" href="#">Delivery and Payment</a></li>
-                                    <li><a class="dropdown-item text-white" href="#">Contact Information</a></li>
+                                    <li><a class="dropdown-item text-white" href="{% url 'main:delivery_payment' %}">Delivery and Payment</a></li>
+                                    <li><a class="dropdown-item text-white" href="{% url 'main:contact_info' %}">Contact Information</a></li>
                                     <li><a class="dropdown-item text-white" href="{% url 'main:about' %}">About Us</a></li>
                                 </ul>
                             </li>

@@ -12,6 +12,20 @@ def index(request):
 def about(request):
     context = {
         'title': 'About Us',
-        'description': 'Text about how great this online store is.'
+        'description': 'Welcome to our premium furniture store! We are dedicated to providing high-quality, stylish furniture that transforms your house into a home. With years of experience in the furniture industry, we carefully curate each piece to ensure it meets our standards of quality, comfort, and design.'
     }
     return render(request, 'main/about.html', context=context)
+
+def delivery_payment(request):
+    context = {
+        'title': 'Delivery and Payment',
+        'description': 'Learn about our delivery options and payment methods.'
+    }
+    return render(request, 'main/delivery_payment.html', context=context)
+
+def contact_info(request):
+    context = {
+        'title': 'Contact Information',
+        'description': 'Get in touch with us for any questions or support.'
+    }
+    return render(request, 'main/contact_info.html', context=context)
