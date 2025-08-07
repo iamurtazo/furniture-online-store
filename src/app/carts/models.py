@@ -52,7 +52,11 @@ class Cart(models.Model):
     objects = CartQuerySet.as_manager()
         
     def __str__(self):
-        return f'Cart {self.user.username} | Product {self.product.name} | Quantity {self.quantity}'
+        if self.user:
+            identifier = f'User: {self.user.username}'
+        else:
+            identifier = f'Session: {self.session_key[:8] if self.session_key else "Unknown"}'
+        return f'Cart {identifier} | Product {self.product.name} | Quantity {self.quantity}'
 
     def products_price(self):
         return round(self.product.get_discounted_price() * self.quantity, 2)

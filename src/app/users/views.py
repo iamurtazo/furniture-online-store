@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib import auth, messages
 from django.contrib.auth.decorators import login_required
+from carts.models import Cart
+from carts.merge_utils import merge_carts
 from users.forms import UserLoginForm, UserRegistrationForm, UserProfileForm
 
 # Create your views here.
@@ -13,10 +15,20 @@ def login(request):
             username = request.POST['username']
             password = request.POST['password']
             user = auth.authenticate(username=username, password=password)
+            
+            session_key = request.session.session_key
+            
             if user:
                 auth.login(request, user)
                 welcome_name = user.first_name or user.username
                 messages.success(request, f'Welcome back, {welcome_name}! You have successfully logged in.')
+                
+                # Merge anonymous cart with user's existing cart
+                if session_key:
+                    merged_items = merge_carts(user, session_key)
+                    if merged_items > 0:
+                        messages.info(request, f'{merged_items} item(s) from your cart have been saved.')
+                        
                 return redirect('main:index')
     else:
         form = UserLoginForm()
@@ -46,7 +58,15 @@ def registration(request):
         form = UserRegistrationForm(data=request.POST)
         if form.is_valid():
             user = form.save()
+            
+            # Transfer anonymous cart to the new user
+            if request.session.session_key:
+                merged_items = merge_carts(user, request.session.session_key)
+                if merged_items > 0:
+                    messages.info(request, f'{merged_items} item(s) have been added to your cart.')
+                    
             messages.success(request, f'Account created successfully for {user.username}! You can now log in.')
+            
             return redirect('users:login')
     else:
         form = UserRegistrationForm()
