@@ -60,6 +60,7 @@ def catalog(request, category_slug=None):
         'search_query': search_query,
         'has_results': has_results,
     }
+    
     return render(request, 'goods/catalog.html', context)
 
 
@@ -72,13 +73,3 @@ def product(request, product_id):
         'product': product,
     }
     return render(request, 'goods/product.html', context)
-
-# def product(request, product_slug):
-    
-#     product = Products.objects.get(slug=product_slug)
-    
-#     context = {
-#         'title': 'Product - Home',
-#         'product': product,
-#     }
-#     return render(request, 'goods/product.html', context)
