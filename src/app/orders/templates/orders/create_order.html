@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class=" bg-white p-4 mb-4 mx-2 rounded custom-shadow">
+    <div class="container">
+        <h3 class="text-center mb-4">Selected Products</h3>
+        <div class="container" id="cart-items-container">
+            <!-- Cart markup -->
+            <div class="card mb-3 text-bg-light shadow-lg">
+                <div class="card-header">
+                    <h5 class="card-title">Product</h5>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <div class="row text-center">
+                            <div class="col p-0">
+                                <div class="input-group">
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-dark btn-sm decrement"
+                                            data-cart-id="" data-cart-change-url="{% url 'carts:cart_change' %}">-</button>
+                                    </span>
+                                    <input type="text" class="form-control number" value="1"
+                                        readonly>
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-dark btn-sm increment"
+                                            data-cart-id="" data-cart-change-url="{% url 'carts:cart_change' %}">+</button>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col p-0">
+                                <p>x {{ cart.product.price }} = </p>
+                            </div>
+                            <div class="col p-0"><strong>{{ cart.product.price }} $</strong></div>
+                            <div class="col p-0">
+                                <a href="{% url 'carts:cart_remove' %}" class="remove-from-cart" data-cart-id="">
+                                    <img class="mx-1" src="{% static 'deps/icons/trash3-fill.svg' %}"
+                                        alt="Catalog Icon" width="16" height="16">
+                                </a>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="card mb-3 shadow-lg">
+                <div class="card-footer">
+                    <p class="float-left">Total <strong>1</strong> product(s) for amount</p>
+                    <h4 class="float-left"><strong>100.00 $</strong></h4>
+                </div>
+            </div>
+            <!-- End of cart markup -->
+        </div>
+    </div>
+    <!-- Order details -->
+    <div class="container">
+        <h3 class="text-center">Order Details</h3>
+        <div class="card mb-3">
+            <div class="card-body">
+                <form>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="id_first_name" class="form-label">First Name*:</label>
+                            <input type="text" class="form-control" id="id_first_name"
+                                name="first_name" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="id_last_name" class="form-label">Last Name*:</label>
+                            <input type="text" class="form-control" id="id_last_name" name="last_name" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="id_phone_number" class="form-label">Phone Number*:</label>
+                            <input type="text" class="form-control" id="id_phone_number" name="phone_number"
+                                placeholder="In format: XXX-XXX-XX-XX"
+                                required>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <label for="delivery" class="form-label">Delivery Method: </label>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="requires_delivery"
+                                    id="id_requires_delivery" value="1" checked>
+                                <label class="form-check-label" for="id_requires_delivery">Delivery
+                                    needed</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="requires_delivery"
+                                    id="id_requires_delivery" value="0">
+                                <label class="form-check-label" for="id_requires_delivery">Self-pickup</label>
+                            </div>
+                        </div>
+                        <div class="mb-3" id="deliveryAddressField">
+                            <label for="id_delivery_address" class="form-label">Delivery
+                                Address*:</label>
+                            <textarea class="form-control" id="id_delivery_address"
+                                name="delivery_address" rows="2"></textarea>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label">Payment Method: </label>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="payment_on_get"
+                                    id="id_payment_on_get" value="0" checked>
+                                <label class="form-check-label" for="id_payment_on_get">Card
+                                    payment</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="payment_on_get"
+                                    id="id_payment_on_get" value="1">
+                                <label class="form-check-label" for="id_payment_on_get">Cash/card
+                                    upon receipt</label>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-dark">Place Order</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

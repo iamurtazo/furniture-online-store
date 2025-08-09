@@ -1,0 +1,370 @@
+{% extends 'base.html' %} 
+{% load static %} 
+
+{% block content %}
+<style>
+    .order-step {
+        position: relative;
+        padding: 1.5rem;
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-radius: 15px;
+        border: 1px solid #dee2e6;
+        margin-bottom: 2rem;
+    }
+
+    .step-number {
+        position: absolute;
+        top: -15px;
+        left: 20px;
+        background: #212529;
+        color: white;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 0.9rem;
+    }
+
+    .product-item {
+        background: white;
+        border-radius: 10px;
+        border: 1px solid #e9ecef;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .product-item:hover {
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        transform: translateY(-2px);
+    }
+
+    .quantity-controls {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .quantity-btn {
+        width: 32px;
+        height: 32px;
+        border-radius: 6px;
+        border: 1px solid #dee2e6;
+        background: #f8f9fa;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .quantity-btn:hover {
+        background: #212529;
+        color: white;
+        border-color: #212529;
+    }
+
+    .order-summary {
+        background: linear-gradient(135deg, #212529 0%, #343a40 100%);
+        color: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        position: sticky;
+        top: 20px;
+    }
+
+    .form-floating .form-control {
+        border-radius: 10px;
+        border: 2px solid #e9ecef;
+        transition: all 0.3s ease;
+    }
+
+    .form-floating .form-control:focus {
+        border-color: #212529;
+        box-shadow: 0 0 0 0.2rem rgba(33, 37, 41, 0.1);
+    }
+
+    .payment-option,
+    .delivery-option {
+        background: white;
+        border: 2px solid #e9ecef;
+        border-radius: 10px;
+        padding: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: center;
+    }
+
+    .payment-option:hover,
+    .delivery-option:hover {
+        border-color: #212529;
+        background: #f8f9fa;
+    }
+
+    .payment-option.active,
+    .delivery-option.active {
+        border-color: #212529;
+        background: #212529;
+        color: white;
+    }
+
+    .btn-place-order {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        border: none;
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-place-order:hover {
+        background: linear-gradient(135deg, #218838 0%, #1abc9c 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+    }
+</style>
+
+<!-- Breadcrumb -->
+<div class="container mb-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb bg-light p-3 rounded">
+            <li class="breadcrumb-item"><a href="{% url 'main:index' %}" class="text-decoration-none">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'users:users_cart' %}" class="text-decoration-none">Cart</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Checkout</li>
+        </ol>
+    </nav>
+</div>
+
+<div class="container mb-5">
+    <!-- Header -->
+    <div class="text-center mb-5">
+        <h1 class="display-5 fw-bold text-dark mb-3"><i class="fas fa-shopping-cart me-3 text-primary"></i>Complete Your Order</h1>
+        <p class="lead text-muted">Review your items and provide delivery details</p>
+    </div>
+
+    <div class="row">
+        <!-- Left Column - Order Steps -->
+        <div class="col-lg-8">
+            <!-- Step 1: Review Items -->
+            <div class="order-step">
+                <div class="step-number">1</div>
+                <h4 class="mb-4 mt-2"><i class="fas fa-list me-2 text-primary"></i>Review Your Items</h4>
+
+                <div id="cart-items-container">
+                    <!-- Sample Product Item -->
+                    <div class="product-item">
+                        <div class="row align-items-center">
+                            <div class="col-md-2">
+                                <img src="{% static 'deps/images/goods/sofa.jpg' %}" class="img-fluid rounded" alt="Product" style="max-height: 80px; object-fit: cover" />
+                            </div>
+                            <div class="col-md-4">
+                                <h6 class="mb-1 fw-bold">{{ cart.product.name }}</h6>
+                                <small class="text-muted">ID: #{{ cart.product.id }}</small>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="quantity-controls">
+                                    <button class="quantity-btn decrement" type="button">-</button>
+                                    <input type="text" class="form-control text-center" value="1" readonly style="max-width: 50px" />
+                                    <button class="quantity-btn increment" type="button">+</button>
+                                </div>
+                            </div>
+                            <div class="col-md-2 text-center">
+                                <div class="text-muted small">Price</div>
+                                <div class="fw-bold">${{ cart.product.price }}</div>
+                            </div>
+                            <div class="col-md-2 text-center">
+                                <div class="text-muted small">Total</div>
+                                <div class="fw-bold text-success">${{ cart.product.price }}</div>
+                                <button class="btn btn-sm btn-outline-danger mt-1">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2: Delivery Information -->
+            <div class="order-step">
+                <div class="step-number">2</div>
+                <h4 class="mb-4 mt-2"><i class="fas fa-shipping-fast me-2 text-primary"></i>Delivery Information</h4>
+
+                <form id="orderForm">
+                    {% csrf_token %}
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="firstName" name="first_name" placeholder="First Name" required />
+                                <label for="firstName">First Name *</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="lastName" name="last_name" placeholder="Last Name" required />
+                                <label for="lastName">Last Name *</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="tel" class="form-control" id="phone" name="phone_number" placeholder="Phone Number" required />
+                                <label for="phone">Phone Number *</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="email" class="form-control" id="email" name="email" placeholder="Email Address" />
+                                <label for="email">Email Address (Optional)</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Delivery Options -->
+                    <div class="mt-4">
+                        <h6 class="mb-3">Delivery Method</h6>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="delivery-option active" data-delivery="delivery">
+                                    <i class="fas fa-truck fa-2x mb-2 text-primary"></i>
+                                    <h6>Home Delivery</h6>
+                                    <p class="small mb-0 text-muted">Delivered to your address</p>
+                                    <input type="radio" name="requires_delivery" value="1" checked class="d-none" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="delivery-option" data-delivery="pickup">
+                                    <i class="fas fa-store fa-2x mb-2 text-primary"></i>
+                                    <h6>Store Pickup</h6>
+                                    <p class="small mb-0 text-muted">Pick up from our store</p>
+                                    <input type="radio" name="requires_delivery" value="0" class="d-none" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Delivery Address -->
+                    <div class="mt-4" id="deliveryAddress">
+                        <div class="form-floating">
+                            <textarea class="form-control" id="address" name="delivery_address" placeholder="Delivery Address" style="height: 100px" required></textarea>
+                            <label for="address">Delivery Address *</label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Step 3: Payment Method -->
+            <div class="order-step">
+                <div class="step-number">3</div>
+                <h4 class="mb-4 mt-2"><i class="fas fa-credit-card me-2 text-primary"></i>Payment Method</h4>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="payment-option active" data-payment="card">
+                            <i class="fas fa-credit-card fa-2x mb-2 text-primary"></i>
+                            <h6>Card Payment</h6>
+                            <p class="small mb-0 text-muted">Pay securely online</p>
+                            <input type="radio" name="payment_on_get" value="0" checked class="d-none" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="payment-option" data-payment="cash">
+                            <i class="fas fa-money-bill-wave fa-2x mb-2 text-primary"></i>
+                            <h6>Cash on Delivery</h6>
+                            <p class="small mb-0 text-muted">Pay when you receive</p>
+                            <input type="radio" name="payment_on_get" value="1" class="d-none" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column - Order Summary -->
+        <div class="col-lg-4">
+            <div class="order-summary">
+                <h5 class="mb-4"><i class="fas fa-receipt me-2"></i>Order Summary</h5>
+
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Subtotal (1 item):</span>
+                    <span>${{ cart.product.price }}</span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Delivery Fee:</span>
+                    <span id="deliveryFee">$5.00</span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Tax:</span>
+                    <span>${{ cart.product.price }}</span>
+                </div>
+                <hr class="border-white" />
+                <div class="d-flex justify-content-between mb-4">
+                    <span class="h5">Total:</span>
+                    {% comment %} <span class="h5 text-warning">${{ cart.product.price + cart.product.price }}</span> {% endcomment %}
+                </div>
+
+                <button type="submit" form="orderForm" class="btn btn-place-order w-100"><i class="fas fa-lock me-2"></i>Place Secure Order</button>
+
+                <div class="text-center mt-3">
+                    <small class="text-white-50">
+                        <i class="fas fa-shield-alt me-1"></i>
+                        Your payment information is secure
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Delivery method selection
+        document.querySelectorAll(".delivery-option").forEach((option) => {
+            option.addEventListener("click", function () {
+                document.querySelectorAll(".delivery-option").forEach((opt) => opt.classList.remove("active"));
+                this.classList.add("active");
+                this.querySelector('input[type="radio"]').checked = true;
+
+                const deliveryAddress = document.getElementById("deliveryAddress");
+                const deliveryFee = document.getElementById("deliveryFee");
+
+                if (this.dataset.delivery === "pickup") {
+                    deliveryAddress.style.display = "none";
+                    deliveryFee.textContent = "Free";
+                } else {
+                    deliveryAddress.style.display = "block";
+                    deliveryFee.textContent = "$5.00";
+                }
+            });
+        });
+
+        // Payment method selection
+        document.querySelectorAll(".payment-option").forEach((option) => {
+            option.addEventListener("click", function () {
+                document.querySelectorAll(".payment-option").forEach((opt) => opt.classList.remove("active"));
+                this.classList.add("active");
+                this.querySelector('input[type="radio"]').checked = true;
+            });
+        });
+
+        // Quantity controls
+        document.querySelectorAll(".quantity-btn").forEach((btn) => {
+            btn.addEventListener("click", function () {
+                const input = this.parentElement.querySelector("input");
+                let value = parseInt(input.value);
+
+                if (this.classList.contains("increment")) {
+                    value++;
+                } else if (this.classList.contains("decrement") && value > 1) {
+                    value--;
+                }
+
+                input.value = value;
+            });
+        });
+    });
+</script>
+
+{% endblock %}
