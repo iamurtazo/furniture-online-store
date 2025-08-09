@@ -27,7 +27,7 @@
                     <!-- End of cart markup -->
                 </div>
                 {% if carts %}
-                    <a class="btn btn-dark" href="orders/create_order.html">
+                    <a class="btn btn-dark" href="{% url 'orders:create_order' %}">
                         Place Order
                     </a>
                 {% endif %}
