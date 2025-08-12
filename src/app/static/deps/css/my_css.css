@@ -7,6 +7,25 @@ body {
     height: 100%;
 }
 
+/* Stock status styles */
+.grayscale {
+    filter: grayscale(100%);
+    transition: filter 0.3s ease;
+}
+
+.opacity-75 {
+    opacity: 0.75;
+}
+
+.out-of-stock-card {
+    pointer-events: none;
+}
+
+.stock-badge {
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
 .dropdown-toggle::after {
     content: none;
 }

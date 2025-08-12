@@ -25,9 +25,16 @@
             <!-- Product Details -->
             <div class="col-md-6">
                 <div class="card-body p-4 h-100 d-flex flex-column">
-                    <!-- Product ID -->
-                    <div class="mb-2">
+                    <!-- Product ID and Stock Status -->
+                    <div class="mb-2 d-flex justify-content-between align-items-center">
                         <span class="badge bg-light text-dark">ID: {{ product.display_id }}</span>
+                        {% if product.is_out_of_stock %}
+                        <span class="badge bg-secondary">Out of Stock</span>
+                        {% elif product.is_low_stock %}
+                        <span class="badge bg-warning text-dark">Only {{ product.quantity }} left</span>
+                        {% else %}
+                        <span class="badge bg-success">{{ product.quantity }} available</span>
+                        {% endif %}
                     </div>
                     
                     <!-- Product Name -->
@@ -38,12 +45,26 @@
                         <h4 class="text-primary mb-0">
                             <span class="fw-bold">${{ product.get_discounted_price|floatformat:2 }}</span>
                         </h4>
-                        {% if product.discount_percent > 0 %}
+                        {% if product.discount > 0 %}
                             <small class="text-muted text-decoration-line-through">
                                 ${{ product.price|floatformat:2 }}
                             </small>
-                            <span class="badge bg-danger ms-2">{{ product.discount_percent }}% OFF</span>
+                            <span class="badge bg-danger ms-2">{{ product.discount }}% OFF</span>
                         {% endif %}
+                    </div>
+                    
+                    <!-- Stock Information -->
+                    <div class="mb-3">
+                        <div class="d-flex align-items-center">
+                            <strong class="me-2">Availability:</strong>
+                            {% if product.is_out_of_stock %}
+                            <span class="text-danger"><i class="fas fa-times-circle me-1"></i>Out of Stock</span>
+                            {% elif product.is_low_stock %}
+                            <span class="text-warning"><i class="fas fa-exclamation-triangle me-1"></i>Limited Stock ({{ product.quantity }} remaining)</span>
+                            {% else %}
+                            <span class="text-success"><i class="fas fa-check-circle me-1"></i>In Stock ({{ product.quantity }} available)</span>
+                            {% endif %}
+                        </div>
                     </div>
                     
                     <!-- Description -->
@@ -51,10 +72,17 @@
                     
                     <!-- Add to Cart Button -->
                     <div class="mt-auto">
+                        {% if product.is_out_of_stock %}
+                        <button class="btn btn-secondary btn-lg w-100" disabled>
+                            <i class="fas fa-times me-2"></i>
+                            Out of Stock
+                        </button>
+                        {% else %}
                         <a href="{% url 'carts:cart_add' %}" class="btn btn-primary btn-lg w-100 add-to-cart" data-good-id="{{ product.id }}">
                             <i class="fas fa-cart-plus me-2"></i>
                             Add to Cart
                         </a>
+                        {% endif %}
                     </div>
                 </div>
             </div>
