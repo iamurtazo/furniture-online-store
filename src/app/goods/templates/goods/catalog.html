@@ -53,14 +53,23 @@
         {% for good in goods %}
         <!-- Product card -->
         <div class="col-lg-4 col-md-6 p-4">
-            <div class="card border-primary rounded custom-shadow position-relative">
+            <div class="card border-primary rounded custom-shadow position-relative {% if good.is_out_of_stock %}opacity-75{% endif %}">
+                <!-- Stock status badges -->
+                {% if good.is_out_of_stock %}
+                <span class="position-absolute top-0 start-0 badge bg-secondary text-white m-2 px-2 py-1 rounded-pill shadow" style="z-index: 10">Out of Stock</span>
+                {% elif good.is_low_stock %}
+                <span class="position-absolute top-0 start-0 badge bg-warning text-dark m-2 px-2 py-1 rounded-pill shadow" style="z-index: 10">Only {{ good.quantity }} left</span>
+                {% endif %}
+                
                 <!-- Discount badge in top-right corner -->
                 {% if good.discount > 0 %}
                 <span class="position-absolute top-0 end-0 badge bg-danger text-white m-2 px-2 py-1 rounded-pill shadow" style="z-index: 10"> -{{ good.discount }}% </span>
-                {% endif %} {% if good.image %}
-                <img src="{{ good.image.url }}" class="card-img-top" alt="..." />
+                {% endif %} 
+                
+                {% if good.image %}
+                <img src="{{ good.image.url }}" class="card-img-top {% if good.is_out_of_stock %}grayscale{% endif %}" alt="..." />
                 {% else %}
-                <img src="{% static 'deps/images/Not found image.png' %}" class="card-img-top" alt="..." />
+                <img src="{% static 'deps/images/Not found image.png' %}" class="card-img-top {% if good.is_out_of_stock %}grayscale{% endif %}" alt="..." />
                 {% endif %}
                 <div class="card-body">
                     <a href="{% url 'goods:product' good.id %}">
@@ -76,6 +85,18 @@
                     <p class="card-text">{{ good.description|truncatechars:50 }}</p>
                     {% endif %}
                     <p class="product_id">id: {{ good.display_id }}</p>
+                    
+                    <!-- Stock information -->
+                    <div class="mb-2">
+                        {% if good.is_out_of_stock %}
+                        <span class="badge bg-secondary">Out of Stock</span>
+                        {% elif good.is_low_stock %}
+                        <span class="badge bg-warning text-dark">{{ good.quantity }} available</span>
+                        {% else %}
+                        <span class="badge bg-success">{{ good.quantity }} available</span>
+                        {% endif %}
+                    </div>
+                    
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="price-section">
                             {% if good.discount > 0 %}
@@ -91,10 +112,16 @@
                             </p>
                             {% endif %}
                         </div>
+                        {% if good.is_out_of_stock %}
+                        <button class="btn btn-secondary" disabled>
+                            <img class="mx-1" src="{% static "deps/icons/cart-plus.svg" %}" alt="Catalog Icon" width="32" height="32">
+                        </button>
+                        {% else %}
                         <a href="{% url 'carts:cart_add' %}" class="btn add-to-cart" data-good-id="{{ good.id }}">
                             {% csrf_token %}
                             <img class="mx-1" src="{% static "deps/icons/cart-plus.svg" %}" alt="Catalog Icon" width="32" height="32">
                         </a>
+                        {% endif %}
                     </div>
                 </div>
             </div>

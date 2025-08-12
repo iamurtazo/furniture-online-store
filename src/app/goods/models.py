@@ -45,4 +45,18 @@ class Products(models.Model):
         if self.discount > 0:
             return self.price * (1 - self.discount / 100)
         return self.price
+    
+    def is_out_of_stock(self):
+        return self.quantity == 0
+    
+    def is_low_stock(self, threshold=5):
+        return 0 < self.quantity <= threshold
+    
+    def get_stock_status(self):
+        if self.is_out_of_stock():
+            return 'out_of_stock'
+        elif self.is_low_stock():
+            return 'low_stock'
+        else:
+            return 'in_stock'
 

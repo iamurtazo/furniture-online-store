@@ -37,6 +37,25 @@ class Order(models.Model):
     def get_absolute_url(self):
         return reverse('orders:order_detail', kwargs={'pk': self.pk})
     
+    def get_total_quantity(self):
+        return sum(item.quantity for item in self.orderitem_set.all())
+    
+    def get_total_price(self):
+        return sum(item.quantity * item.price for item in self.orderitem_set.all())
+    
+    def display_id(self):
+        return f'{self.id:05d}'
+    
+    def get_status_badge_class(self):
+        status_classes = {
+            'In Progress': 'bg-warning text-dark',
+            'Processing': 'bg-info text-white',
+            'Shipped': 'bg-primary text-white',
+            'Delivered': 'bg-success text-white',
+            'Cancelled': 'bg-danger text-white',
+        }
+        return status_classes.get(self.status, 'bg-secondary text-white')
+    
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     product = models.ForeignKey(Products, on_delete=models.SET_DEFAULT, null=True, default=None)

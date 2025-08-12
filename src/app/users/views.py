@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from carts.models import Cart
 from carts.merge_utils import merge_carts
 from users.forms import UserLoginForm, UserRegistrationForm, UserProfileForm
+from orders.models import Order, OrderItem
 
 # Create your views here.
 
@@ -116,9 +117,15 @@ def profile(request):
         # GET request - create form with current user data
         form = UserProfileForm(instance=request.user)
     
+    # Get user's orders with related items
+    orders = Order.objects.filter(user=request.user).prefetch_related(
+        'orderitem_set__product'
+    ).order_by('-created_at')
+    
     context = {
         'title': 'Home - Profile',
-        'form': form
+        'form': form,
+        'orders': orders,
     }
     
     return render(request, 'users/profile.html', context)

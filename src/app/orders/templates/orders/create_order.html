@@ -61,22 +61,21 @@
                             <label for="delivery" class="form-label">Delivery Method: </label>
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="requires_delivery"
-                                    id="id_requires_delivery" value="1" checked>
-                                <label class="form-check-label" for="id_requires_delivery">Delivery
+                                    id="id_requires_delivery_yes" value="1" checked onchange="toggleDeliveryAddress()">
+                                <label class="form-check-label" for="id_requires_delivery_yes">Delivery
                                     needed</label>
                             </div>
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="requires_delivery"
-                                    id="id_requires_delivery" value="0">
-                                <label class="form-check-label" for="id_requires_delivery">Self-pickup</label>
+                                    id="id_requires_delivery_no" value="0" onchange="toggleDeliveryAddress()">
+                                <label class="form-check-label" for="id_requires_delivery_no">Self-pickup</label>
                             </div>
                         </div>
                         <div class="mb-3" id="deliveryAddressField">
                             <label for="id_delivery_address" class="form-label">Delivery
                                 Address*:</label>
                             <textarea class="form-control" id="id_delivery_address"
-                                value="{% if form.delivery_address.value %}{{ form.delivery_address.value }}{% endif %}"
-                                name="delivery_address" rows="2"></textarea>
+                                name="delivery_address" rows="2" placeholder="Enter your delivery address">{% if form.delivery_address.value %}{{ form.delivery_address.value }}{% endif %}</textarea>
                             {% if form.delivery_address.errors %}
                                 <div class="alert alert-danger alert-dismissible fade show">
                                     {{ form.delivery_address.errors }}
@@ -96,6 +95,11 @@
                                     id="id_payment_on_get" value="1">
                                 <label class="form-check-label" for="id_payment_on_get">Cash/card
                                     upon receipt</label>
+                                {% if form.payment_on_get.errors %}
+                                    <div class="alert alert-danger alert-dismissible fade show">
+                                        {{ form.payment_on_get.errors }}
+                                    </div>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -107,3 +111,25 @@
 </div>
 
 {% endblock %}
+
+<script>
+function toggleDeliveryAddress() {
+    const deliveryYes = document.getElementById('id_requires_delivery_yes');
+    const deliveryAddressField = document.getElementById('deliveryAddressField');
+    const deliveryAddressInput = document.getElementById('id_delivery_address');
+    
+    if (deliveryYes.checked) {
+        deliveryAddressField.style.display = 'block';
+        deliveryAddressInput.required = true;
+    } else {
+        deliveryAddressField.style.display = 'none';
+        deliveryAddressInput.required = false;
+        deliveryAddressInput.value = '';
+    }
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+    toggleDeliveryAddress();
+});
+</script>
