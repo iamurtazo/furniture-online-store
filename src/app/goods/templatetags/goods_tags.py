@@ -70,3 +70,23 @@ def truncate_html(value, length=100):
             result_parts.append(remaining_text)
     
     return mark_safe(''.join(result_parts))
+
+@register.filter(name='mul')
+def multiply(value, arg):
+    """
+    Multiplies the value by the argument.
+    """
+    try:
+        return float(value) * float(arg)
+    except (ValueError, TypeError):
+        return 0
+
+@register.filter(name='add_tax')
+def add_tax(value, tax_rate=0.08):
+    """
+    Adds tax to the value.
+    """
+    try:
+        return float(value) * (1 + float(tax_rate))
+    except (ValueError, TypeError):
+        return 0

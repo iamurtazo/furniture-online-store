@@ -1,135 +1,459 @@
-{% extends 'base.html' %}
-{% load static %}
+{% extends 'base.html' %} 
+{% load static %} 
 {% load carts_tags %}
+{% load goods_tags %}
 
 {% block content %}
+<style>
+    .order-step {
+        position: relative;
+        padding: 1.5rem;
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-radius: 15px;
+        border: 1px solid #dee2e6;
+        margin-bottom: 2rem;
+    }
 
-<div class=" bg-white p-4 mb-4 mx-2 rounded custom-shadow">
-    <div class="container">
-        <h3 class="text-center mb-4">Selected Products</h3>
-        <div class="container" id="cart-items-container">
-            <!-- Cart markup -->
-            {% user_carts request as carts %}
-            
-            {% include 'carts/includes/included_cart.html' %}
-            <!-- End of cart markup -->
-        </div>
+    .step-number {
+        position: absolute;
+        top: -15px;
+        left: 20px;
+        background: #212529;
+        color: white;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 0.9rem;
+    }
+
+    .product-item {
+        background: white;
+        border-radius: 10px;
+        border: 1px solid #e9ecef;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .product-item:hover {
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        transform: translateY(-2px);
+    }
+
+    .order-summary {
+        background: linear-gradient(135deg, #212529 0%, #343a40 100%);
+        color: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        position: sticky;
+        top: 20px;
+    }
+
+    .form-floating .form-control {
+        border-radius: 10px;
+        border: 2px solid #e9ecef;
+        transition: all 0.3s ease;
+    }
+
+    .form-floating .form-control:focus {
+        border-color: #212529;
+        box-shadow: 0 0 0 0.2rem rgba(33, 37, 41, 0.1);
+    }
+
+    .payment-option,
+    .delivery-option {
+        background: white;
+        border: 2px solid #e9ecef;
+        border-radius: 10px;
+        padding: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: center;
+    }
+
+    .payment-option:hover,
+    .delivery-option:hover {
+        border-color: #212529;
+        background: #f8f9fa;
+    }
+
+    .payment-option.active,
+    .delivery-option.active {
+        border-color: #212529;
+        background: #212529;
+        color: white;
+    }
+
+    .btn-place-order {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        border: none;
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-place-order:hover {
+        background: linear-gradient(135deg, #218838 0%, #1abc9c 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+    }
+
+    .error-message {
+        background: #f8d7da;
+        border: 1px solid #f5c6cb;
+        color: #721c24;
+        padding: 0.75rem;
+        border-radius: 8px;
+        margin-top: 0.5rem;
+        font-size: 0.9rem;
+    }
+</style>
+
+<!-- Breadcrumb -->
+<div class="container mb-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb bg-light p-3 rounded">
+            <li class="breadcrumb-item"><a href="{% url 'main:index' %}" class="text-decoration-none">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'users:users_cart' %}" class="text-decoration-none">Cart</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Checkout</li>
+        </ol>
+    </nav>
+</div>
+
+<div class="container mb-5">
+    <!-- Header -->
+    <div class="text-center mb-5">
+        <h1 class="display-5 fw-bold text-dark mb-3"><i class="fas fa-shopping-cart me-3 text-primary"></i>Complete Your Order</h1>
+        <p class="lead text-muted">Review your items and provide delivery details</p>
     </div>
-    <!-- Order details -->
-    <div class="container">
-        <h3 class="text-center">Order Details</h3>
-        <div class="card mb-3">
-            <div class="card-body">
-                <form action="{% url 'orders:create_order' %}" method="post">
+
+    <div class="row">
+        <!-- Left Column - Order Steps -->
+        <div class="col-lg-8">
+            <!-- Step 1: Review Items -->
+            <div class="order-step">
+                <div class="step-number">1</div>
+                <h4 class="mb-4 mt-2"><i class="fas fa-list me-2 text-primary"></i>Review Your Items</h4>
+
+                <div id="cart-items-container">
+                    {% user_carts request as carts %}
+                    {% if carts %}
+                        {% for cart in carts %}
+                        <div class="product-item">
+                            <div class="row align-items-center">
+                                <div class="col-md-2">
+                                    {% if cart.product.image %}
+                                    <img src="{{ cart.product.image.url }}" class="img-fluid rounded" alt="{{ cart.product.name }}" style="max-height: 80px; object-fit: cover" />
+                                    {% else %}
+                                    <img src="{% static 'deps/images/Not found image.png' %}" class="img-fluid rounded" alt="No image" style="max-height: 80px; object-fit: cover" />
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-4">
+                                    <h6 class="mb-1 fw-bold">{{ cart.product.name }}</h6>
+                                    <small class="text-muted">ID: #{{ cart.product.display_id }}</small>
+                                    {% if cart.product.is_out_of_stock %}
+                                    <br><small class="text-danger"><i class="fas fa-exclamation-triangle"></i> Out of Stock</small>
+                                    {% elif cart.product.is_low_stock %}
+                                    <br><small class="text-warning"><i class="fas fa-exclamation-triangle"></i> Only {{ cart.product.quantity }} left</small>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-2 text-center">
+                                    <div class="text-muted small">Quantity</div>
+                                    <div class="fw-bold">{{ cart.quantity }}</div>
+                                </div>
+                                <div class="col-md-2 text-center">
+                                    <div class="text-muted small">Price</div>
+                                    <div class="fw-bold">${{ cart.product.get_discounted_price|floatformat:2 }}</div>
+                                </div>
+                                <div class="col-md-2 text-center">
+                                    <div class="text-muted small">Total</div>
+                                    <div class="fw-bold text-success">${{ cart.products_price|floatformat:2 }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="text-center py-5">
+                            <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
+                            <h5>Your cart is empty</h5>
+                            <p class="text-muted">Add some items to your cart before placing an order.</p>
+                            <a href="{% url 'goods:index' 'all-categories' %}" class="btn btn-primary">
+                                <i class="fas fa-shopping-cart me-2"></i>Continue Shopping
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Step 2: Delivery Information -->
+            <div class="order-step">
+                <div class="step-number">2</div>
+                <h4 class="mb-4 mt-2"><i class="fas fa-shipping-fast me-2 text-primary"></i>Delivery Information</h4>
+
+                <form id="orderForm" action="{% url 'orders:create_order' %}" method="post">
                     {% csrf_token %}
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="id_first_name" class="form-label">First Name*:</label>
-                            <input type="text" class="form-control" id="id_first_name"
-                                value="{% if form.first_name.value %}{{ form.first_name.value }}{% endif %}"
-                                name="first_name" required>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="firstName" name="first_name" 
+                                       value="{% if form.first_name.value %}{{ form.first_name.value }}{% else %}{{ user.first_name }}{% endif %}" 
+                                       placeholder="First Name" required />
+                                <label for="firstName">First Name *</label>
+                            </div>
                             {% if form.first_name.errors %}
-                                <div class="alert alert-danger alert-dismissible fade show">
-                                    {{ form.first_name.errors }}
-                                </div>
+                                <div class="error-message">{{ form.first_name.errors.0 }}</div>
                             {% endif %}
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="id_last_name" class="form-label">Last Name*:</label>
-                            <input type="text" class="form-control" id="id_last_name" name="last_name"
-                                value="{% if form.last_name.value %}{{ form.last_name.value }}{% endif %}"
-                                required>
-                                {% if form.last_name.errors %}
-                                <div class="alert alert-danger alert-dismissible fade show">
-                                    {{ form.last_name.errors }}
-                                </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="lastName" name="last_name" 
+                                       value="{% if form.last_name.value %}{{ form.last_name.value }}{% else %}{{ user.last_name }}{% endif %}" 
+                                       placeholder="Last Name" required />
+                                <label for="lastName">Last Name *</label>
+                            </div>
+                            {% if form.last_name.errors %}
+                                <div class="error-message">{{ form.last_name.errors.0 }}</div>
                             {% endif %}
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="id_phone_number" class="form-label">Phone Number*:</label>
-                            <input type="text" class="form-control" id="id_phone_number" name="phone_number"
-                                value="{% if form.phone_number.value %}{{ form.phone_number.value }}{% endif %}"
-                                placeholder="In format: XXX-XXX-XX-XX"
-                                required>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="tel" class="form-control" id="phone" name="phone_number" 
+                                       value="{% if form.phone_number.value %}{{ form.phone_number.value }}{% else %}{{ user.phone_number }}{% endif %}" 
+                                       placeholder="Phone Number" required />
+                                <label for="phone">Phone Number *</label>
+                            </div>
                             {% if form.phone_number.errors %}
-                                <div class="alert alert-danger alert-dismissible fade show">
-                                    {{ form.phone_number.errors }}
-                                </div>
+                                <div class="error-message">{{ form.phone_number.errors.0 }}</div>
                             {% endif %}
                         </div>
-                        <div class="col-md-12 mb-3">
-                            <label for="delivery" class="form-label">Delivery Method: </label>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="requires_delivery"
-                                    id="id_requires_delivery_yes" value="1" checked onchange="toggleDeliveryAddress()">
-                                <label class="form-check-label" for="id_requires_delivery_yes">Delivery
-                                    needed</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="requires_delivery"
-                                    id="id_requires_delivery_no" value="0" onchange="toggleDeliveryAddress()">
-                                <label class="form-check-label" for="id_requires_delivery_no">Self-pickup</label>
-                            </div>
-                        </div>
-                        <div class="mb-3" id="deliveryAddressField">
-                            <label for="id_delivery_address" class="form-label">Delivery
-                                Address*:</label>
-                            <textarea class="form-control" id="id_delivery_address"
-                                name="delivery_address" rows="2" placeholder="Enter your delivery address">{% if form.delivery_address.value %}{{ form.delivery_address.value }}{% endif %}</textarea>
-                            {% if form.delivery_address.errors %}
-                                <div class="alert alert-danger alert-dismissible fade show">
-                                    {{ form.delivery_address.errors }}
-                                </div>
-                            {% endif %}
-                        </div>
-                        <div class="col-md-12 mb-3">
-                            <label class="form-label">Payment Method: </label>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="payment_on_get"
-                                    id="id_payment_on_get" value="0" checked>
-                                <label class="form-check-label" for="id_payment_on_get">Card
-                                    payment</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="payment_on_get"
-                                    id="id_payment_on_get" value="1">
-                                <label class="form-check-label" for="id_payment_on_get">Cash/card
-                                    upon receipt</label>
-                                {% if form.payment_on_get.errors %}
-                                    <div class="alert alert-danger alert-dismissible fade show">
-                                        {{ form.payment_on_get.errors }}
-                                    </div>
-                                {% endif %}
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="email" class="form-control" id="email" name="email" 
+                                       value="{{ user.email }}" placeholder="Email Address" readonly />
+                                <label for="email">Email Address</label>
                             </div>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-dark">Place Order</button>
+
+                    <!-- Delivery Options -->
+                    <div class="mt-4">
+                        <h6 class="mb-3">Delivery Method</h6>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="delivery-option active" data-delivery="delivery">
+                                    <i class="fas fa-truck fa-2x mb-2 text-primary"></i>
+                                    <h6>Home Delivery</h6>
+                                    <p class="small mb-0 text-muted">Delivered to your address</p>
+                                    <input type="radio" name="requires_delivery" value="1" checked class="d-none" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="delivery-option" data-delivery="pickup">
+                                    <i class="fas fa-store fa-2x mb-2 text-primary"></i>
+                                    <h6>Store Pickup</h6>
+                                    <p class="small mb-0 text-muted">Pick up from our store</p>
+                                    <input type="radio" name="requires_delivery" value="0" class="d-none" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Delivery Address -->
+                    <div class="mt-4" id="deliveryAddress">
+                        <div class="form-floating">
+                            <textarea class="form-control" id="address" name="delivery_address" placeholder="Delivery Address" style="height: 100px" required>{% if form.delivery_address.value %}{{ form.delivery_address.value }}{% endif %}</textarea>
+                            <label for="address">Delivery Address *</label>
+                        </div>
+                        {% if form.delivery_address.errors %}
+                            <div class="error-message">{{ form.delivery_address.errors.0 }}</div>
+                        {% endif %}
+                    </div>
                 </form>
+            </div>
+
+            <!-- Step 3: Payment Method -->
+            <div class="order-step">
+                <div class="step-number">3</div>
+                <h4 class="mb-4 mt-2"><i class="fas fa-credit-card me-2 text-primary"></i>Payment Method</h4>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="payment-option active" data-payment="card">
+                            <i class="fas fa-credit-card fa-2x mb-2 text-primary"></i>
+                            <h6>Card Payment</h6>
+                            <p class="small mb-0 text-muted">Pay securely online</p>
+                            <input type="radio" name="payment_on_get" value="0" checked class="d-none" form="orderForm" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="payment-option" data-payment="cash">
+                            <i class="fas fa-money-bill-wave fa-2x mb-2 text-primary"></i>
+                            <h6>Cash on Delivery</h6>
+                            <p class="small mb-0 text-muted">Pay when you receive</p>
+                            <input type="radio" name="payment_on_get" value="1" class="d-none" form="orderForm" />
+                        </div>
+                    </div>
+                </div>
+                {% if form.payment_on_get.errors %}
+                    <div class="error-message mt-3">{{ form.payment_on_get.errors.0 }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Right Column - Order Summary -->
+        <div class="col-lg-4">
+            <div class="order-summary">
+                <h5 class="mb-4"><i class="fas fa-receipt me-2"></i>Order Summary</h5>
+
+                {% user_carts request as carts %}
+                {% if carts %}
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Subtotal ({{ carts|length }} item{{ carts|length|pluralize }}):</span>
+                        <span>${{ carts.total_price|floatformat:2 }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Delivery Fee:</span>
+                        <span id="deliveryFee">$5.00</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Tax (8%):</span>
+                        <span id="taxAmount">${{ carts.total_price|mul:"0.08"|floatformat:2 }}</span>
+                    </div>
+                    <hr class="border-white" />
+                    <div class="d-flex justify-content-between mb-4">
+                        <span class="h5">Total:</span>
+                        <span class="h5 text-warning" id="totalAmount">${{ carts.total_price|add_tax|add:"5"|floatformat:2 }}</span>
+                    </div>
+
+                    <button type="submit" form="orderForm" class="btn btn-place-order w-100">
+                        <i class="fas fa-lock me-2"></i>Place Secure Order
+                    </button>
+                {% else %}
+                    <div class="text-center text-white-50">
+                        <i class="fas fa-shopping-cart fa-2x mb-3"></i>
+                        <p>No items in cart</p>
+                    </div>
+                {% endif %}
+
+                <div class="text-center mt-3">
+                    <small class="text-white-50">
+                        <i class="fas fa-shield-alt me-1"></i>
+                        Your payment information is secure
+                    </small>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-{% endblock %}
-
 <script>
-function toggleDeliveryAddress() {
-    const deliveryYes = document.getElementById('id_requires_delivery_yes');
-    const deliveryAddressField = document.getElementById('deliveryAddressField');
-    const deliveryAddressInput = document.getElementById('id_delivery_address');
-    
-    if (deliveryYes.checked) {
-        deliveryAddressField.style.display = 'block';
-        deliveryAddressInput.required = true;
-    } else {
-        deliveryAddressField.style.display = 'none';
-        deliveryAddressInput.required = false;
-        deliveryAddressInput.value = '';
-    }
-}
+    document.addEventListener("DOMContentLoaded", function () {
+        // Check if cart is empty and disable form submission
+        const carts = document.querySelectorAll('.product-item');
+        const orderForm = document.getElementById('orderForm');
+        const submitButton = document.querySelector('.btn-place-order');
+        
+        if (carts.length === 0) {
+            if (submitButton) {
+                submitButton.disabled = true;
+                submitButton.innerHTML = '<i class="fas fa-times me-2"></i>Cart is Empty';
+            }
+        }
 
-// Initialize on page load
-document.addEventListener('DOMContentLoaded', function() {
-    toggleDeliveryAddress();
-});
+        // Delivery method selection
+        document.querySelectorAll(".delivery-option").forEach((option) => {
+            option.addEventListener("click", function () {
+                document.querySelectorAll(".delivery-option").forEach((opt) => opt.classList.remove("active"));
+                this.classList.add("active");
+                this.querySelector('input[type="radio"]').checked = true;
+
+                const deliveryAddress = document.getElementById("deliveryAddress");
+                const deliveryFee = document.getElementById("deliveryFee");
+                const addressInput = document.getElementById("address");
+
+                if (this.dataset.delivery === "pickup") {
+                    deliveryAddress.style.display = "none";
+                    deliveryFee.textContent = "Free";
+                    addressInput.required = false;
+                    addressInput.value = "";
+                } else {
+                    deliveryAddress.style.display = "block";
+                    deliveryFee.textContent = "$5.00";
+                    addressInput.required = true;
+                }
+                
+                // Update total
+                updateTotal();
+            });
+        });
+
+        // Payment method selection
+        document.querySelectorAll(".payment-option").forEach((option) => {
+            option.addEventListener("click", function () {
+                document.querySelectorAll(".payment-option").forEach((opt) => opt.classList.remove("active"));
+                this.classList.add("active");
+                this.querySelector('input[type="radio"]').checked = true;
+            });
+        });
+
+        // Update total calculation
+        function updateTotal() {
+            const subtotalElement = document.querySelector('#cart-items-container');
+            if (!subtotalElement) return;
+            
+            const deliveryFee = document.getElementById("deliveryFee").textContent === "Free" ? 0 : 5;
+            const subtotal = parseFloat('{{ carts.total_price|default:"0" }}');
+            const tax = subtotal * 0.08;
+            const total = subtotal + deliveryFee + tax;
+            
+            const totalElement = document.getElementById("totalAmount");
+            if (totalElement) {
+                totalElement.textContent = `$${total.toFixed(2)}`;
+            }
+        }
+
+        // Form validation before submission
+        if (orderForm) {
+            orderForm.addEventListener('submit', function(e) {
+                const requiredFields = orderForm.querySelectorAll('input[required], textarea[required]');
+                let isValid = true;
+                
+                requiredFields.forEach(field => {
+                    if (!field.value.trim()) {
+                        isValid = false;
+                        field.style.borderColor = '#dc3545';
+                    } else {
+                        field.style.borderColor = '#dee2e6';
+                    }
+                });
+                
+                if (!isValid) {
+                    e.preventDefault();
+                    alert('Please fill in all required fields.');
+                    return false;
+                }
+                
+                // Check if cart has items
+                if (carts.length === 0) {
+                    e.preventDefault();
+                    alert('Your cart is empty. Please add items before placing an order.');
+                    return false;
+                }
+                
+                // Show loading state
+                if (submitButton) {
+                    submitButton.disabled = true;
+                    submitButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Processing...';
+                }
+            });
+        }
+    });
 </script>
+
+{% endblock %}

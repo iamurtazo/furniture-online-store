@@ -90,7 +90,7 @@
             </div>
             <div class="text-end">
                 <h3 class="text-primary mb-2">${{ carts.total_price }}</h3>
-                <a href="#" class="btn btn-dark btn-lg"> <i class="fas fa-credit-card me-2"></i>Proceed to Checkout </a>
+                <a href="{% url 'orders:create_order' %}" class="btn btn-dark btn-lg"> <i class="fas fa-credit-card me-2"></i>Proceed to Checkout </a>
             </div>
         </div>
     </div>

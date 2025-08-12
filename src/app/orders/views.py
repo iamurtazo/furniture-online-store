@@ -82,6 +82,7 @@ def create_order(request):
         initial = {
             'first_name': request.user.first_name,
             'last_name': request.user.last_name,
+            'phone_number': getattr(request.user, 'phone_number', ''),
         }
         
         form = CreateOrderForm(initial=initial)
