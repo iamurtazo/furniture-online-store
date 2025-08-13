@@ -60,17 +60,19 @@
                 {% elif good.is_low_stock %}
                 <span class="position-absolute top-0 start-0 badge bg-warning text-dark m-2 px-2 py-1 rounded-pill shadow" style="z-index: 10">Only {{ good.quantity }} left</span>
                 {% endif %}
-                
+
                 <!-- Discount badge in top-right corner -->
                 {% if good.discount > 0 %}
                 <span class="position-absolute top-0 end-0 badge bg-danger text-white m-2 px-2 py-1 rounded-pill shadow" style="z-index: 10"> -{{ good.discount }}% </span>
-                {% endif %} 
-                
-                {% if good.image %}
-                <img src="{{ good.image.url }}" class="card-img-top {% if good.is_out_of_stock %}grayscale{% endif %}" alt="..." />
-                {% else %}
-                <img src="{% static 'deps/images/Not found image.png' %}" class="card-img-top {% if good.is_out_of_stock %}grayscale{% endif %}" alt="..." />
                 {% endif %}
+
+                <a href="{% url 'goods:product' good.id %}">
+                    {% if good.image %}
+                    <img src="{{ good.image.url }}" class="card-img-top {% if good.is_out_of_stock %}grayscale{% endif %}" alt="{{ good.name }}" />
+                    {% else %}
+                    <img src="{% static 'deps/images/Not found image.png' %}" class="card-img-top {% if good.is_out_of_stock %}grayscale{% endif %}" alt="{{ good.name }}" />
+                    {% endif %}
+                </a>
                 <div class="card-body">
                     <a href="{% url 'goods:product' good.id %}">
                         {% if is_search and good.highlighted_name %}
@@ -85,7 +87,7 @@
                     <p class="card-text">{{ good.description|truncatechars:50 }}</p>
                     {% endif %}
                     <p class="product_id">id: {{ good.display_id }}</p>
-                    
+
                     <!-- Stock information -->
                     <div class="mb-2">
                         {% if good.is_out_of_stock %}
@@ -96,7 +98,7 @@
                         <span class="badge bg-success">{{ good.quantity }} available</span>
                         {% endif %}
                     </div>
-                    
+
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="price-section">
                             {% if good.discount > 0 %}
