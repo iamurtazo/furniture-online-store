@@ -52,6 +52,7 @@ class CustomLoginView(LoginView):
         return response
 class CustomLogoutView(LogoutView):
     template_name = 'users/logout.html'
+    next_page = reverse_lazy('main:index')  # Redirect to home after logout
     
     def dispatch(self, request, *args, **kwargs):
         """Add farewell message before logout."""
