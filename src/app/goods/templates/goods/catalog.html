@@ -115,9 +115,7 @@
                             {% endif %}
                         </div>
                         {% if good.is_out_of_stock %}
-                        <button class="btn btn-secondary" disabled>
-                            <img class="mx-1" src="{% static "deps/icons/cart-plus.svg" %}" alt="Catalog Icon" width="32" height="32">
-                        </button>
+                        <button class="btn btn-secondary" disabled><img class="mx-1" src="{% static "deps/icons/cart-plus.svg" %}" alt="Catalog Icon" width="32" height="32"></button>
                         {% else %}
                         <a href="{% url 'carts:cart_add' %}" class="btn add-to-cart" data-good-id="{{ good.id }}">
                             {% csrf_token %}
