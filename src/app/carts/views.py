@@ -90,16 +90,28 @@ class CartAddView(View):
         }, status=405)
 
 
-def cart_change(request):
-    if request.method == 'POST':
+class CartChangeView(View):
+    """
+    AJAX view for changing cart item quantities.
+    
+    Uses View because:
+    - Handles AJAX POST requests  
+    - Returns JSON responses
+    - Implements security checks for cart ownership
+    """
+    
+    def post(self, request):
+        """Handle cart quantity changes via AJAX POST request."""
         cart_id = request.POST.get('cart_id')
         quantity = request.POST.get('quantity')
         
+        # Validate input parameters
         if not cart_id or not quantity:
             return JsonResponse({
                 'error': 'Cart ID and quantity are required'
             }, status=400)
         
+        # Validate quantity value
         try:
             quantity = int(quantity)
             if quantity < 1:
@@ -111,33 +123,30 @@ def cart_change(request):
                 'error': 'Invalid quantity value'
             }, status=400)
         
+        # Update cart item
         try:
             cart = Cart.objects.get(id=cart_id)
             
-            # Check if cart belongs to the current user (security check)
+            # Security check: ensure cart belongs to current user
             if request.user.is_authenticated and cart.user != request.user:
                 return JsonResponse({
                     'error': 'Unauthorized access to cart item'
                 }, status=403)
             
-            # Update cart quantity
             cart.quantity = quantity
             cart.save()
             
-            user_cart = get_user_cart(request)
-            
-            # Detect which page the request is coming from and use appropriate template
+            # Determine appropriate template based on referrer
             referer = request.META.get('HTTP_REFERER', '')
-            
             if '/user/profile/' in referer:
-                # Use profile-specific template
                 template_name = 'carts/includes/profile_cart_items.html'
             elif '/users-cart/' in referer:
-                # Use users_cart page-specific template  
                 template_name = 'carts/includes/users_cart_items.html'
             else:
-                # Default to modal template for other cases
                 template_name = 'carts/includes/included_cart.html'
+            
+            # Generate response HTML
+            user_cart = get_user_cart(request)
             
             cart_items_html = render_to_string(
                 template_name,
@@ -145,33 +154,42 @@ def cart_change(request):
                 request=request,
             )
             
-            # Also render the cart button HTML to update the "Place Order" button
             cart_button_html = render_to_string(
                 'includes/cart_button.html',
                 {'carts': user_cart},
                 request=request,
             )
             
-            response_data = {
+            return JsonResponse({
                 "message": f"Cart updated to {quantity} items successfully!",
                 "cart_items_html": cart_items_html,
                 "cart_button_html": cart_button_html,
                 "cart_total_quantity": user_cart.total_quantity() if user_cart.exists() else 0,
-            }
-            
-            return JsonResponse(response_data)
+            })
             
         except Cart.DoesNotExist:
             return JsonResponse({
                 'error': 'Cart item not found'
             }, status=404)
     
-    return JsonResponse({
-        'error': 'Invalid request method'
-    }, status=405)
+    def get(self, request):
+        """Return error for GET requests - this is AJAX POST only."""
+        return JsonResponse({
+            'error': 'Only POST method allowed'
+        }, status=405)
 
-def cart_remove(request):
-    if request.method == 'POST':
+class CartRemoveView(View):
+    """
+    AJAX view for removing items from cart.
+    
+    Uses View because:
+    - Handles AJAX POST requests
+    - Returns JSON responses
+    - Implements security checks for cart ownership
+    """
+    
+    def post(self, request):
+        """Handle cart item removal via AJAX POST request."""
         cart_id = request.POST.get('cart_id')
         
         if not cart_id:
@@ -182,7 +200,7 @@ def cart_remove(request):
         try:
             cart = Cart.objects.get(id=cart_id)
             
-            # Check if cart belongs to the current user (security check)
+            # Security check: ensure cart belongs to current user
             if request.user.is_authenticated and cart.user != request.user:
                 return JsonResponse({
                     'error': 'Unauthorized access to cart item'
@@ -191,20 +209,17 @@ def cart_remove(request):
             quantity = cart.quantity
             cart.delete()
             
-            user_cart = get_user_cart(request)
-            
-            # Detect which page the request is coming from and use appropriate template
+            # Determine appropriate template based on referrer
             referer = request.META.get('HTTP_REFERER', '')
-            
             if '/user/profile/' in referer:
-                # Use profile-specific template
                 template_name = 'carts/includes/profile_cart_items.html'
             elif '/users-cart/' in referer:
-                # Use users_cart page-specific template  
                 template_name = 'carts/includes/users_cart_items.html'
             else:
-                # Default to modal template for other cases
                 template_name = 'carts/includes/included_cart.html'
+            
+            # Generate response HTML
+            user_cart = get_user_cart(request)
             
             cart_items_html = render_to_string(
                 template_name,
@@ -212,32 +227,31 @@ def cart_remove(request):
                 request=request,
             )
             
-            # Also render the cart button HTML to update the "Place Order" button
             cart_button_html = render_to_string(
                 'includes/cart_button.html',
                 {'carts': user_cart},
                 request=request,
             )
             
-            response_data = {
+            return JsonResponse({
                 "message": "Product removed from cart successfully!",
                 "cart_items_html": cart_items_html,
                 "cart_button_html": cart_button_html,
                 "quantity_deleted": quantity,
                 "cart_total_quantity": user_cart.total_quantity() if user_cart.exists() else 0,
                 "has_items": user_cart.exists() if user_cart else False,
-            }
-            
-            return JsonResponse(response_data)
+            })
             
         except Cart.DoesNotExist:
             return JsonResponse({
                 'error': 'Cart item not found'
             }, status=404)
     
-    return JsonResponse({
-        'error': 'Invalid request method'
-    }, status=405)
+    def get(self, request):
+        """Return error for GET requests - this is AJAX POST only."""
+        return JsonResponse({
+            'error': 'Only POST method allowed'
+        }, status=405)
     
     
 
