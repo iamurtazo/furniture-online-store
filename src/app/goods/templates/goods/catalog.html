@@ -2,23 +2,27 @@
 {% load static %} 
 {% load goods_tags %} 
 
-{% block modal_cart %}
-    {% include 'includes/cart_button.html' %}
-{% endblock %}
+{% block modal_cart %} 
+{% include 'includes/cart_button.html' %} 
+{% endblock %} 
 
 {% block content %}
 
 <!-- Search Results Header -->
-{% if is_search %} {% if has_results %}
-<div class="alert alert-info mb-4">
-    <h4 class="mb-0">Search results based on "{{ search_query }}"</h4>
-</div>
-{% else %}
-<div class="alert alert-warning mb-4">
-    <h4 class="mb-0">Nothing found on "{{ search_query }}"</h4>
-    <p class="mb-0 mt-2">Try searching with different keywords or browse our categories.</p>
-</div>
-{% endif %} {% endif %} {% if has_results %}
+{% if is_search %} 
+    {% if has_results %}
+    <div class="alert alert-info mb-4">
+        <h4 class="mb-0">Search results based on "{{ search_query }}"</h4>
+    </div>
+    {% else %}
+    <div class="alert alert-warning mb-4">
+        <h4 class="mb-0">Nothing found on "{{ search_query }}"</h4>
+        <p class="mb-0 mt-2">Try searching with different keywords or browse our categories.</p>
+    </div>
+    {% endif %} 
+{% endif %} 
+
+{% if has_results %}
 <div class="row">
     <!-- Filter form -->
     <div class="dropdown mb-2">
@@ -50,7 +54,7 @@
     </div>
 
     <div class="row">
-        {% for good in goods %}
+        {% for good in highlighted_goods|default:goods %}
         <!-- Product card -->
         <div class="col-lg-4 col-md-6 p-4">
             <div class="card border-primary rounded custom-shadow position-relative {% if good.is_out_of_stock %}opacity-75{% endif %}">
@@ -118,8 +122,7 @@
                         <button class="btn btn-secondary" disabled><img class="mx-1" src="{% static "deps/icons/cart-plus.svg" %}" alt="Catalog Icon" width="32" height="32"></button>
                         {% else %}
                         <a href="{% url 'carts:cart_add' %}" class="btn add-to-cart" data-good-id="{{ good.id }}">
-                            {% csrf_token %}
-                            <img class="mx-1" src="{% static "deps/icons/cart-plus.svg" %}" alt="Catalog Icon" width="32" height="32">
+                            {% csrf_token %} <img class="mx-1" src="{% static "deps/icons/cart-plus.svg" %}" alt="Catalog Icon" width="32" height="32">
                         </a>
                         {% endif %}
                     </div>
@@ -129,21 +132,26 @@
         {% endfor %}
     </div>
 </div>
+{% endif %}
+
 <!-- Pagination -->
-<nav aria-label="Page navigation example">
+{% if page_obj.paginator.num_pages > 1 %}
+<nav aria-label="Page navigation">
     <ul class="pagination justify-content-center my-4">
         <div class="custom-shadow d-flex">
-            <li class="page-item {% if not goods.has_previous %}disabled{% endif %}">
+            <!-- Previous button -->
+            <li class="page-item {% if not page_obj.has_previous %}disabled{% endif %}">
                 <a
                     class="page-link"
-                    href="{% if goods.has_previous %}?page={{ goods.previous_page_number }}{% if on_sale %}&on_sale={{ on_sale }}{% endif %}{% if order_by and order_by != 'default' %}&order_by={{ order_by }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}{% else %}#{% endif %}"
+                    href="{% if page_obj.has_previous %}?page={{ page_obj.previous_page_number }}{% if on_sale %}&on_sale={{ on_sale }}{% endif %}{% if order_by and order_by != 'default' %}&order_by={{ order_by }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}{% else %}#{% endif %}"
                 >
-                    Previous</a
-                >
+                    Previous
+                </a>
             </li>
 
-            {% for page in goods.paginator.page_range %} {% if page > goods.number|add:-3 and page < goods.number|add:3 %}
-            <li class="page-item {% if page == goods.number %}active{% endif %}">
+            <!-- Page numbers -->
+            {% for page in page_obj.paginator.page_range %} {% if page >= page_obj.number|add:-2 and page <= page_obj.number|add:2 %}
+            <li class="page-item {% if page == page_obj.number %}active{% endif %}">
                 <a
                     class="page-link"
                     href="?page={{ page }}{% if on_sale %}&on_sale={{ on_sale }}{% endif %}{% if order_by and order_by != 'default' %}&order_by={{ order_by }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}"
@@ -152,13 +160,14 @@
             </li>
             {% endif %} {% endfor %}
 
-            <li class="page-item {% if not goods.has_next %}disabled{% endif %}">
+            <!-- Next button -->
+            <li class="page-item {% if not page_obj.has_next %}disabled{% endif %}">
                 <a
                     class="page-link"
-                    href="{% if goods.has_next %}?page={{ goods.next_page_number }}{% if on_sale %}&on_sale={{ on_sale }}{% endif %}{% if order_by and order_by != 'default' %}&order_by={{ order_by }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}{% else %}#{% endif %}"
+                    href="{% if page_obj.has_next %}?page={{ page_obj.next_page_number }}{% if on_sale %}&on_sale={{ on_sale }}{% endif %}{% if order_by and order_by != 'default' %}&order_by={{ order_by }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}{% else %}#{% endif %}"
                 >
-                    Next</a
-                >
+                    Next
+                </a>
             </li>
         </div>
     </ul>

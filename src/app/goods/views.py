@@ -60,13 +60,13 @@ class CatalogView(ListView):
         # Determine if this is a search
         is_search = bool(query)
         
-        # Apply search highlighting if needed
+        # Apply search highlighting if needed - DON'T modify page_obj directly
         if is_search and context['goods']:
-            # Get the current page object list
+            # Create a new list with highlighted products for template use
             page_obj = context['page_obj']
             highlighted_products = prepare_search_results(page_obj.object_list, query)
-            # Replace the object list with highlighted version
-            page_obj.object_list = highlighted_products
+            # Add as separate context variable instead of modifying page_obj
+            context['highlighted_goods'] = highlighted_products
         
         # Add custom context
         context.update({
@@ -77,7 +77,8 @@ class CatalogView(ListView):
             'current_filters': self.request.GET.urlencode(),
             'is_search': is_search,
             'search_query': query,
-            'has_results': context['goods'].exists() if hasattr(context['goods'], 'exists') else len(context['goods']) > 0,
+            # Fix this line - use page_obj instead of goods for pagination
+            'has_results': len(context['page_obj'].object_list) > 0 if context.get('page_obj') else len(context.get('object_list', [])) > 0,
         })
         
         return context
