@@ -1,7 +1,9 @@
-{% load static %} {% load carts_tags %}
+{% load static %} 
+{% load carts_tags %}
 
 <!-- Profile Page Cart Section Template -->
-{% user_carts request as carts %} {% if carts.exists %}
+{% user_carts request as carts %} 
+{% if carts.exists %}
 <!-- Dynamic Cart Items -->
 {% for cart in carts %}
 <div class="card mb-3 shadow-sm">

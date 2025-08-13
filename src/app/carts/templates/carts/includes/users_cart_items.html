@@ -1,7 +1,9 @@
-{% load static %} {% load carts_tags %}
+{% load static %} 
+{% load carts_tags %}
 
 <!-- Users Cart Page Specific Template -->
-{% user_carts request as carts %} {% if carts.exists %}
+{% user_carts request as carts %} 
+{% if carts.exists %}
 <!-- Cart Items -->
 {% for cart in carts %}
 <div class="card mb-3 shadow-sm border-0">
