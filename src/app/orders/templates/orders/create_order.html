@@ -1,9 +1,4 @@
-{% extends 'base.html' %} 
-{% load static %} 
-{% load carts_tags %}
-{% load goods_tags %}
-
-{% block content %}
+{% extends 'base.html' %} {% load static %} {% load carts_tags %} {% load goods_tags %} {% block content %}
 <style>
     .order-step {
         position: relative;
@@ -142,51 +137,46 @@
                 <h4 class="mb-4 mt-2"><i class="fas fa-list me-2 text-primary"></i>Review Your Items</h4>
 
                 <div id="cart-items-container">
-                    {% user_carts request as carts %}
-                    {% if carts %}
-                        {% for cart in carts %}
-                        <div class="product-item">
-                            <div class="row align-items-center">
-                                <div class="col-md-2">
-                                    {% if cart.product.image %}
-                                    <img src="{{ cart.product.image.url }}" class="img-fluid rounded" alt="{{ cart.product.name }}" style="max-height: 80px; object-fit: cover" />
-                                    {% else %}
-                                    <img src="{% static 'deps/images/Not found image.png' %}" class="img-fluid rounded" alt="No image" style="max-height: 80px; object-fit: cover" />
-                                    {% endif %}
-                                </div>
-                                <div class="col-md-4">
-                                    <h6 class="mb-1 fw-bold">{{ cart.product.name }}</h6>
-                                    <small class="text-muted">ID: #{{ cart.product.display_id }}</small>
-                                    {% if cart.product.is_out_of_stock %}
-                                    <br><small class="text-danger"><i class="fas fa-exclamation-triangle"></i> Out of Stock</small>
-                                    {% elif cart.product.is_low_stock %}
-                                    <br><small class="text-warning"><i class="fas fa-exclamation-triangle"></i> Only {{ cart.product.quantity }} left</small>
-                                    {% endif %}
-                                </div>
-                                <div class="col-md-2 text-center">
-                                    <div class="text-muted small">Quantity</div>
-                                    <div class="fw-bold">{{ cart.quantity }}</div>
-                                </div>
-                                <div class="col-md-2 text-center">
-                                    <div class="text-muted small">Price</div>
-                                    <div class="fw-bold">${{ cart.product.get_discounted_price|floatformat:2 }}</div>
-                                </div>
-                                <div class="col-md-2 text-center">
-                                    <div class="text-muted small">Total</div>
-                                    <div class="fw-bold text-success">${{ cart.products_price|floatformat:2 }}</div>
-                                </div>
+                    {% user_carts request as carts %} {% if carts %} {% for cart in carts %}
+                    <div class="product-item">
+                        <div class="row align-items-center">
+                            <div class="col-md-2">
+                                {% if cart.product.image %}
+                                <img src="{{ cart.product.image.url }}" class="img-fluid rounded" alt="{{ cart.product.name }}" style="max-height: 80px; object-fit: cover" />
+                                {% else %}
+                                <img src="{% static 'deps/images/Not found image.png' %}" class="img-fluid rounded" alt="No image" style="max-height: 80px; object-fit: cover" />
+                                {% endif %}
+                            </div>
+                            <div class="col-md-4">
+                                <h6 class="mb-1 fw-bold">{{ cart.product.name }}</h6>
+                                <small class="text-muted">ID: #{{ cart.product.display_id }}</small>
+                                {% if cart.product.is_out_of_stock %}
+                                <br /><small class="text-danger"><i class="fas fa-exclamation-triangle"></i> Out of Stock</small>
+                                {% elif cart.product.is_low_stock %}
+                                <br /><small class="text-warning"><i class="fas fa-exclamation-triangle"></i> Only {{ cart.product.quantity }} left</small>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-2 text-center">
+                                <div class="text-muted small">Quantity</div>
+                                <div class="fw-bold">{{ cart.quantity }}</div>
+                            </div>
+                            <div class="col-md-2 text-center">
+                                <div class="text-muted small">Price</div>
+                                <div class="fw-bold">${{ cart.product.get_discounted_price|floatformat:2 }}</div>
+                            </div>
+                            <div class="col-md-2 text-center">
+                                <div class="text-muted small">Total</div>
+                                <div class="fw-bold text-success">${{ cart.products_price|floatformat:2 }}</div>
                             </div>
                         </div>
-                        {% endfor %}
-                    {% else %}
-                        <div class="text-center py-5">
-                            <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
-                            <h5>Your cart is empty</h5>
-                            <p class="text-muted">Add some items to your cart before placing an order.</p>
-                            <a href="{% url 'goods:index' 'all-categories' %}" class="btn btn-primary">
-                                <i class="fas fa-shopping-cart me-2"></i>Continue Shopping
-                            </a>
-                        </div>
+                    </div>
+                    {% endfor %} {% else %}
+                    <div class="text-center py-5">
+                        <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
+                        <h5>Your cart is empty</h5>
+                        <p class="text-muted">Add some items to your cart before placing an order.</p>
+                        <a href="{% url 'goods:index' 'all-categories' %}" class="btn btn-primary"> <i class="fas fa-shopping-cart me-2"></i>Continue Shopping </a>
+                    </div>
                     {% endif %}
                 </div>
             </div>
@@ -201,41 +191,61 @@
                     <div class="row g-3">
                         <div class="col-md-6">
                             <div class="form-floating">
-                                <input type="text" class="form-control" id="firstName" name="first_name" 
-                                       value="{% if form.first_name.value %}{{ form.first_name.value }}{% else %}{{ user.first_name }}{% endif %}" 
-                                       placeholder="First Name" required />
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    id="firstName"
+                                    name="first_name"
+                                    value="{% if form.first_name.value %}{{ form.first_name.value }}{% else %}{{ user.first_name }}{% endif %}"
+                                    placeholder="First Name"
+                                    required
+                                />
                                 <label for="firstName">First Name *</label>
                             </div>
                             {% if form.first_name.errors %}
-                                <div class="error-message">{{ form.first_name.errors.0 }}</div>
+                            <div class="error-message">{{ form.first_name.errors.0 }}</div>
                             {% endif %}
                         </div>
                         <div class="col-md-6">
                             <div class="form-floating">
-                                <input type="text" class="form-control" id="lastName" name="last_name" 
-                                       value="{% if form.last_name.value %}{{ form.last_name.value }}{% else %}{{ user.last_name }}{% endif %}" 
-                                       placeholder="Last Name" required />
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    id="lastName"
+                                    name="last_name"
+                                    value="{% if form.last_name.value %}{{ form.last_name.value }}{% else %}{{ user.last_name }}{% endif %}"
+                                    placeholder="Last Name"
+                                    required
+                                />
                                 <label for="lastName">Last Name *</label>
                             </div>
                             {% if form.last_name.errors %}
-                                <div class="error-message">{{ form.last_name.errors.0 }}</div>
+                            <div class="error-message">{{ form.last_name.errors.0 }}</div>
                             {% endif %}
                         </div>
                         <div class="col-md-6">
                             <div class="form-floating">
-                                <input type="tel" class="form-control" id="phone" name="phone_number" 
-                                       value="{% if form.phone_number.value %}{{ form.phone_number.value }}{% else %}{{ user.phone_number }}{% endif %}" 
-                                       placeholder="Phone Number" required />
+                                <input
+                                    type="tel"
+                                    class="form-control"
+                                    id="phone"
+                                    name="phone_number"
+                                    value="{% if form.phone_number.value %}{{ form.phone_number.value }}{% else %}{{ user.phone_number }}{% endif %}"
+                                    placeholder="Phone Number"
+                                    title="Enter phone number with country code (e.g., +1234567890) or local format"
+                                    pattern="[+]?[\d\s\-\(\)\.]{7,20}"
+                                    required
+                                />
                                 <label for="phone">Phone Number *</label>
                             </div>
+                            <small class="text-muted"> Examples: +1234567890, +998901234567, (123) 456-7890, 123-456-7890 </small>
                             {% if form.phone_number.errors %}
-                                <div class="error-message">{{ form.phone_number.errors.0 }}</div>
+                            <div class="error-message">{{ form.phone_number.errors.0 }}</div>
                             {% endif %}
                         </div>
                         <div class="col-md-6">
                             <div class="form-floating">
-                                <input type="email" class="form-control" id="email" name="email" 
-                                       value="{{ user.email }}" placeholder="Email Address" readonly />
+                                <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" placeholder="Email Address" readonly />
                                 <label for="email">Email Address</label>
                             </div>
                         </div>
@@ -267,11 +277,13 @@
                     <!-- Delivery Address -->
                     <div class="mt-4" id="deliveryAddress">
                         <div class="form-floating">
-                            <textarea class="form-control" id="address" name="delivery_address" placeholder="Delivery Address" style="height: 100px" required>{% if form.delivery_address.value %}{{ form.delivery_address.value }}{% endif %}</textarea>
+                            <textarea class="form-control" id="address" name="delivery_address" placeholder="Delivery Address" style="height: 100px" required>
+{% if form.delivery_address.value %}{{ form.delivery_address.value }}{% endif %}</textarea
+                            >
                             <label for="address">Delivery Address *</label>
                         </div>
                         {% if form.delivery_address.errors %}
-                            <div class="error-message">{{ form.delivery_address.errors.0 }}</div>
+                        <div class="error-message">{{ form.delivery_address.errors.0 }}</div>
                         {% endif %}
                     </div>
                 </form>
@@ -301,7 +313,7 @@
                     </div>
                 </div>
                 {% if form.payment_on_get.errors %}
-                    <div class="error-message mt-3">{{ form.payment_on_get.errors.0 }}</div>
+                <div class="error-message mt-3">{{ form.payment_on_get.errors.0 }}</div>
                 {% endif %}
             </div>
         </div>
@@ -311,34 +323,31 @@
             <div class="order-summary">
                 <h5 class="mb-4"><i class="fas fa-receipt me-2"></i>Order Summary</h5>
 
-                {% user_carts request as carts %}
-                {% if carts %}
-                    <div class="d-flex justify-content-between mb-2">
-                        <span>Subtotal ({{ carts|length }} item{{ carts|length|pluralize }}):</span>
-                        <span>${{ carts.total_price|floatformat:2 }}</span>
-                    </div>
-                    <div class="d-flex justify-content-between mb-2">
-                        <span>Delivery Fee:</span>
-                        <span id="deliveryFee">$5.00</span>
-                    </div>
-                    <div class="d-flex justify-content-between mb-2">
-                        <span>Tax (8%):</span>
-                        <span id="taxAmount">${{ carts.total_price|mul:"0.08"|floatformat:2 }}</span>
-                    </div>
-                    <hr class="border-white" />
-                    <div class="d-flex justify-content-between mb-4">
-                        <span class="h5">Total:</span>
-                        <span class="h5 text-warning" id="totalAmount">${{ carts.total_price|add_tax|add:"5"|floatformat:2 }}</span>
-                    </div>
+                {% user_carts request as carts %} {% if carts %}
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Subtotal ({{ carts|length }} item{{ carts|length|pluralize }}):</span>
+                    <span>${{ carts.total_price|floatformat:2 }}</span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Delivery Fee:</span>
+                    <span id="deliveryFee">$5.00</span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Tax (8%):</span>
+                    <span id="taxAmount">${{ carts.total_price|mul:"0.08"|floatformat:2 }}</span>
+                </div>
+                <hr class="border-white" />
+                <div class="d-flex justify-content-between mb-4">
+                    <span class="h5">Total:</span>
+                    <span class="h5 text-warning" id="totalAmount">${{ carts.total_price|add_tax|add:"5"|floatformat:2 }}</span>
+                </div>
 
-                    <button type="submit" form="orderForm" class="btn btn-place-order w-100">
-                        <i class="fas fa-lock me-2"></i>Place Secure Order
-                    </button>
+                <button type="submit" form="orderForm" class="btn btn-place-order w-100"><i class="fas fa-lock me-2"></i>Place Secure Order</button>
                 {% else %}
-                    <div class="text-center text-white-50">
-                        <i class="fas fa-shopping-cart fa-2x mb-3"></i>
-                        <p>No items in cart</p>
-                    </div>
+                <div class="text-center text-white-50">
+                    <i class="fas fa-shopping-cart fa-2x mb-3"></i>
+                    <p>No items in cart</p>
+                </div>
                 {% endif %}
 
                 <div class="text-center mt-3">
@@ -355,10 +364,10 @@
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         // Check if cart is empty and disable form submission
-        const carts = document.querySelectorAll('.product-item');
-        const orderForm = document.getElementById('orderForm');
-        const submitButton = document.querySelector('.btn-place-order');
-        
+        const carts = document.querySelectorAll(".product-item");
+        const orderForm = document.getElementById("orderForm");
+        const submitButton = document.querySelector(".btn-place-order");
+
         if (carts.length === 0) {
             if (submitButton) {
                 submitButton.disabled = true;
@@ -387,7 +396,7 @@
                     deliveryFee.textContent = "$5.00";
                     addressInput.required = true;
                 }
-                
+
                 // Update total
                 updateTotal();
             });
@@ -404,48 +413,77 @@
 
         // Update total calculation
         function updateTotal() {
-            const subtotalElement = document.querySelector('#cart-items-container');
+            const subtotalElement = document.querySelector("#cart-items-container");
             if (!subtotalElement) return;
-            
+
             const deliveryFee = document.getElementById("deliveryFee").textContent === "Free" ? 0 : 5;
             const subtotal = parseFloat('{{ carts.total_price|default:"0" }}');
             const tax = subtotal * 0.08;
             const total = subtotal + deliveryFee + tax;
-            
+
             const totalElement = document.getElementById("totalAmount");
             if (totalElement) {
                 totalElement.textContent = `$${total.toFixed(2)}`;
             }
         }
 
+        // Phone number validation
+        const phoneInput = document.getElementById("phone");
+        if (phoneInput) {
+            phoneInput.addEventListener("input", function () {
+                const phoneValue = this.value;
+                const phonePattern = /^[+]?[\d\s\-\(\)\.]{7,20}$/;
+
+                if (phoneValue && !phonePattern.test(phoneValue)) {
+                    this.style.borderColor = "#dc3545";
+                    this.setCustomValidity("Please enter a valid phone number format");
+                } else {
+                    this.style.borderColor = "#dee2e6";
+                    this.setCustomValidity("");
+                }
+            });
+        }
+
         // Form validation before submission
         if (orderForm) {
-            orderForm.addEventListener('submit', function(e) {
-                const requiredFields = orderForm.querySelectorAll('input[required], textarea[required]');
+            orderForm.addEventListener("submit", function (e) {
+                const requiredFields = orderForm.querySelectorAll("input[required], textarea[required]");
                 let isValid = true;
-                
-                requiredFields.forEach(field => {
+
+                requiredFields.forEach((field) => {
                     if (!field.value.trim()) {
                         isValid = false;
-                        field.style.borderColor = '#dc3545';
+                        field.style.borderColor = "#dc3545";
                     } else {
-                        field.style.borderColor = '#dee2e6';
+                        field.style.borderColor = "#dee2e6";
                     }
                 });
-                
+
+                // Additional phone number validation
+                const phoneField = document.getElementById("phone");
+                if (phoneField && phoneField.value) {
+                    const phonePattern = /^[+]?[\d\s\-\(\)\.]{7,20}$/;
+                    if (!phonePattern.test(phoneField.value)) {
+                        isValid = false;
+                        phoneField.style.borderColor = "#dc3545";
+                        alert("Please enter a valid phone number format.");
+                        return false;
+                    }
+                }
+
                 if (!isValid) {
                     e.preventDefault();
-                    alert('Please fill in all required fields.');
+                    alert("Please fill in all required fields.");
                     return false;
                 }
-                
+
                 // Check if cart has items
                 if (carts.length === 0) {
                     e.preventDefault();
-                    alert('Your cart is empty. Please add items before placing an order.');
+                    alert("Your cart is empty. Please add items before placing an order.");
                     return false;
                 }
-                
+
                 // Show loading state
                 if (submitButton) {
                     submitButton.disabled = true;

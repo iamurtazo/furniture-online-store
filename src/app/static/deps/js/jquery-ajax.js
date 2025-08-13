@@ -47,6 +47,17 @@ $(document).ready(function () {
                 // Меняем содержимое корзины на ответ от django (новый отрисованный фрагмент разметки корзины)
                 var cartItemsContainer = $("#cart-items-container");
                 cartItemsContainer.html(data.cart_items_html);
+                
+                // Update the cart button HTML (including "Place Order" button)
+                if (data.cart_button_html) {
+                    var cartButtonContainer = $("#modalButton").closest('div');
+                    cartButtonContainer.html(data.cart_button_html);
+                    
+                    // Re-bind the modal button click event since the element was replaced
+                    $("#modalButton").click(function () {
+                        $("#exampleModal").appendTo("body").modal("show");
+                    });
+                }
             },
 
             error: function (xhr, status, error) {
@@ -113,6 +124,17 @@ $(document).ready(function () {
                 // Меняем содержимое корзины на ответ от django (новый отрисованный фрагмент разметки корзины)
                 var cartItemsContainer = $("#cart-items-container");
                 cartItemsContainer.html(data.cart_items_html);
+                
+                // Update the cart button HTML (including "Place Order" button)
+                if (data.cart_button_html) {
+                    var cartButtonContainer = $("#modalButton").closest('div');
+                    cartButtonContainer.html(data.cart_button_html);
+                    
+                    // Re-bind the modal button click event since the element was replaced
+                    $("#modalButton").click(function () {
+                        $("#exampleModal").appendTo("body").modal("show");
+                    });
+                }
             },
 
             error: function (xhr, status, error) {
@@ -208,6 +230,17 @@ $(document).ready(function () {
                 // Меняем содержимое корзины
                 var cartItemsContainer = $("#cart-items-container");
                 cartItemsContainer.html(data.cart_items_html);
+                
+                // Update the cart button HTML (including "Place Order" button)
+                if (data.cart_button_html) {
+                    var cartButtonContainer = $("#modalButton").closest('div');
+                    cartButtonContainer.html(data.cart_button_html);
+                    
+                    // Re-bind the modal button click event since the element was replaced
+                    $("#modalButton").click(function () {
+                        $("#exampleModal").appendTo("body").modal("show");
+                    });
+                }
             },
             error: function (xhr, status, error) {
                 console.log("Ошибка при изменении количества товара в корзине:", error);

@@ -42,10 +42,19 @@ def cart_add(request):
                 request=request,
             )
             
+            # Also render the cart button HTML to update the "Place Order" button
+            cart_button_html = render_to_string(
+                'includes/cart_button.html',
+                {'carts': user_cart},
+                request=request,
+            )
+            
             response_data = {
                 "message": "Product added to cart successfully!",
                 "cart_items_html": cart_items_html,
+                "cart_button_html": cart_button_html,
                 "cart_total_quantity": user_cart.total_quantity() if user_cart else 0,
+                "has_items": user_cart.exists() if user_cart else False,
             }
 
             return JsonResponse(response_data)
@@ -78,10 +87,19 @@ def cart_add(request):
                 request=request,
             )
             
+            # Also render the cart button HTML to update the "Place Order" button
+            cart_button_html = render_to_string(
+                'includes/cart_button.html',
+                {'carts': user_cart},
+                request=request,
+            )
+            
             response_data = {
                 "message": "Product added to cart successfully!",
                 "cart_items_html": cart_items_html,
+                "cart_button_html": cart_button_html,
                 "cart_total_quantity": user_cart.total_quantity() if user_cart else 0,
+                "has_items": user_cart.exists() if user_cart else False,
             }
             
             return JsonResponse(response_data)
@@ -146,9 +164,17 @@ def cart_change(request):
                 request=request,
             )
             
+            # Also render the cart button HTML to update the "Place Order" button
+            cart_button_html = render_to_string(
+                'includes/cart_button.html',
+                {'carts': user_cart},
+                request=request,
+            )
+            
             response_data = {
                 "message": f"Cart updated to {quantity} items successfully!",
                 "cart_items_html": cart_items_html,
+                "cart_button_html": cart_button_html,
                 "cart_total_quantity": user_cart.total_quantity() if user_cart.exists() else 0,
             }
             
@@ -205,11 +231,20 @@ def cart_remove(request):
                 request=request,
             )
             
+            # Also render the cart button HTML to update the "Place Order" button
+            cart_button_html = render_to_string(
+                'includes/cart_button.html',
+                {'carts': user_cart},
+                request=request,
+            )
+            
             response_data = {
                 "message": "Product removed from cart successfully!",
                 "cart_items_html": cart_items_html,
+                "cart_button_html": cart_button_html,
                 "quantity_deleted": quantity,
                 "cart_total_quantity": user_cart.total_quantity() if user_cart.exists() else 0,
+                "has_items": user_cart.exists() if user_cart else False,
             }
             
             return JsonResponse(response_data)
