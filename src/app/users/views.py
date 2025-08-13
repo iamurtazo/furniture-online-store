@@ -1,6 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib import auth, messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import CreateView, UpdateView, TemplateView
+from django.urls import reverse_lazy
+from django.contrib.messages.views import SuccessMessageMixin
 from carts.models import Cart
 from carts.merge_utils import merge_carts
 from users.forms import UserLoginForm, UserRegistrationForm, UserProfileForm
@@ -8,128 +13,182 @@ from orders.models import Order, OrderItem
 
 # Create your views here.
 
-def login(request):
+class CustomLoginView(LoginView):
+    """
+    Custom login view with cart merging functionality.
     
-    if request.method == 'POST':    
-        form = UserLoginForm(data=request.POST)
-        if form.is_valid():
-            username = request.POST['username']
-            password = request.POST['password']
-            user = auth.authenticate(username=username, password=password)
-            
-            session_key = request.session.session_key
-            
-            if user:
-                auth.login(request, user)
-                welcome_name = user.first_name or user.username
-                messages.success(request, f'Welcome back, {welcome_name}! You have successfully logged in.')
-                
-                # Merge anonymous cart with user's existing cart
-                if session_key:
-                    merged_items = merge_carts(user, session_key)
-                    if merged_items > 0:
-                        messages.info(request, f'{merged_items} item(s) from your cart have been saved.')
-                        
-                return redirect('main:index')
-    else:
-        form = UserLoginForm()
+    Uses LoginView because:
+    - Built-in authentication handling
+    - Form validation and security
+    - Session management
+    - Customizable success behavior
+    """
+    form_class = UserLoginForm
+    template_name = 'users/login.html'
+    success_url = reverse_lazy('main:index')
     
-    context = {
-        'title': 'Home - Authorization',
-        'form': form
-    }
+    def get_context_data(self, **kwargs):
+        """Add custom context data."""
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Home - Authorization'
+        return context
     
-    return render(request, 'users/login.html', context)
-@login_required
-def logout(request):
-    if request.user.is_authenticated:
-        username = request.user.first_name or request.user.username
-        auth.logout(request)
-        messages.success(request, f'Goodbye {username}! You have been successfully logged out.')
+    def form_valid(self, form):
+        """Handle successful login with cart merging."""
+        # Store session key before login (it changes after login)
+        session_key = self.request.session.session_key
+        
+        # Perform the login
+        response = super().form_valid(form)
+        
+        # Get the logged-in user
+        user = self.request.user
+        welcome_name = user.first_name or user.username
+        messages.success(
+            self.request, 
+            f'Welcome back, {welcome_name}! You have successfully logged in.'
+        )
+        
+        # Merge anonymous cart with user's existing cart
+        if session_key:
+            merged_items = merge_carts(user, session_key)
+            if merged_items > 0:
+                messages.info(
+                    self.request, 
+                    f'{merged_items} item(s) from your cart have been saved.'
+                )
+        
+        return response
+class CustomLogoutView(LogoutView):
+    """
+    Custom logout view with farewell message.
     
-    context = {
-        'title': 'Home - Logout'
-    }
+    Uses LogoutView because:
+    - Built-in logout handling
+    - Session cleanup
+    - Security best practices
+    - Customizable redirect behavior
+    """
+    template_name = 'users/logout.html'
     
-    return render(request, 'users/logout.html', context)
+    def dispatch(self, request, *args, **kwargs):
+        """Add farewell message before logout."""
+        if request.user.is_authenticated:
+            username = request.user.first_name or request.user.username
+            messages.success(
+                request, 
+                f'Goodbye {username}! You have been successfully logged out.'
+            )
+        return super().dispatch(request, *args, **kwargs)
+    
+    def get_context_data(self, **kwargs):
+        """Add custom context data."""
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Home - Logout'
+        return context
 
-def registration(request):
+class RegistrationView(SuccessMessageMixin, CreateView):
+    """
+    User registration view with cart transfer functionality.
     
-    if request.method == 'POST':
-        form = UserRegistrationForm(data=request.POST)
-        if form.is_valid():
-            user = form.save()
-            
-            # Transfer anonymous cart to the new user
-            if request.session.session_key:
-                merged_items = merge_carts(user, request.session.session_key)
-                if merged_items > 0:
-                    messages.info(request, f'{merged_items} item(s) have been added to your cart.')
-                    
-            messages.success(request, f'Account created successfully for {user.username}! You can now log in.')
-            
-            return redirect('users:login')
-    else:
-        form = UserRegistrationForm()
+    Uses CreateView because:
+    - Handles user model creation
+    - Built-in form validation
+    - Automatic form rendering
+    - Success message integration
+    """
+    form_class = UserRegistrationForm
+    template_name = 'users/registration.html'
+    success_url = reverse_lazy('users:login')
+    success_message = 'Account created successfully for %(username)s! You can now log in.'
     
-    context = {
-        'title': 'Home - Registration',
-        'form': form
-    }
+    def get_context_data(self, **kwargs):
+        """Add custom context data."""
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Home - Registration'
+        return context
+    
+    def form_valid(self, form):
+        """Handle successful registration with cart transfer."""
+        # Save the user
+        response = super().form_valid(form)
+        
+        # Transfer anonymous cart to the new user
+        if self.request.session.session_key:
+            merged_items = merge_carts(self.object, self.request.session.session_key)
+            if merged_items > 0:
+                messages.info(
+                    self.request, 
+                    f'{merged_items} item(s) have been added to your cart.'
+                )
+        
+        return response
 
-    return render(request, 'users/registration.html', context)
-
-@login_required
-def profile(request):
-    if request.method == 'POST':
-        form = UserProfileForm(request.POST, request.FILES, instance=request.user)
-        if form.is_valid():
-            # Check what changed
-            old_username = request.user.username
-            new_username = form.cleaned_data.get('username')
-            image_changed = 'image' in request.FILES
-            
-            # Save the form
-            user = form.save()
-            
-            # Provide appropriate success message
-            success_parts = []
-            if old_username != new_username:
-                success_parts.append(f'username updated to "{new_username}"')
-            if image_changed:
-                success_parts.append('profile photo updated')
-            
-            if success_parts:
-                message = f'Profile updated successfully! {", ".join(success_parts).capitalize()}.'
-            else:
-                message = 'Profile updated successfully!'
-            
-            messages.success(request, message)
-            return redirect('users:profile')
+class ProfileView(LoginRequiredMixin, UpdateView):
+    """
+    User profile view for updating user information.
+    
+    Uses UpdateView because:
+    - Handles user model updates
+    - Built-in form validation  
+    - Automatic form rendering
+    - Login required integration
+    """
+    form_class = UserProfileForm
+    template_name = 'users/profile.html'
+    success_url = reverse_lazy('users:profile')
+    
+    def get_object(self):
+        """Return the current user as the object to update."""
+        return self.request.user
+    
+    def get_context_data(self, **kwargs):
+        """Add orders data to context."""
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Home - Profile'
+        
+        # Get user's orders with related items
+        context['orders'] = Order.objects.filter(
+            user=self.request.user
+        ).prefetch_related(
+            'orderitem_set__product'
+        ).order_by('-created_at')
+        
+        return context
+    
+    def form_valid(self, form):
+        """Handle successful profile update with custom messages."""
+        # Check what changed before saving
+        old_username = self.request.user.username
+        new_username = form.cleaned_data.get('username')
+        image_changed = 'image' in self.request.FILES
+        
+        # Save the form
+        response = super().form_valid(form)
+        
+        # Provide appropriate success message
+        success_parts = []
+        if old_username != new_username:
+            success_parts.append(f'username updated to "{new_username}"')
+        if image_changed:
+            success_parts.append('profile photo updated')
+        
+        if success_parts:
+            message = f'Profile updated successfully! {", ".join(success_parts).capitalize()}.'
         else:
-            # Form has validation errors - they'll be displayed in the template
-            context = {
-                'title': 'Home - Profile',
-                'form': form
-            }
-            return render(request, 'users/profile.html', context)
-    else:
-        # GET request - create form with current user data
-        form = UserProfileForm(instance=request.user)
-    
-    # Get user's orders with related items
-    orders = Order.objects.filter(user=request.user).prefetch_related(
-        'orderitem_set__product'
-    ).order_by('-created_at')
-    
-    context = {
-        'title': 'Home - Profile',
-        'form': form,
-        'orders': orders,
-    }
-    
-    return render(request, 'users/profile.html', context)
+            message = 'Profile updated successfully!'
+        
+        messages.success(self.request, message)
+        return response
 
-@login_required
-def users_cart(request):
-    return render(request, 'users/users_cart.html')
+
+class UsersCartView(LoginRequiredMixin, TemplateView):
+    """
+    User cart page view.
+    
+    Uses TemplateView because:
+    - Simple template rendering
+    - Login required integration
+    - Clean and minimal for display-only pages
+    """
+    template_name = 'users/users_cart.html'
