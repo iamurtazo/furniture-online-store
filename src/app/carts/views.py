@@ -11,15 +11,6 @@ from carts.utils import get_user_cart
 # Create your views here.
 
 class CartAddView(View):
-    """
-    AJAX view for adding products to cart.
-    
-    Uses View because:
-    - Handles AJAX POST requests
-    - Returns JSON responses
-    - Custom logic that doesn't fit standard generic views
-    """
-    
     def post(self, request):
         """Handle adding product to cart via AJAX POST request."""
         product_id = request.POST.get('good_id')
@@ -91,15 +82,6 @@ class CartAddView(View):
 
 
 class CartChangeView(View):
-    """
-    AJAX view for changing cart item quantities.
-    
-    Uses View because:
-    - Handles AJAX POST requests  
-    - Returns JSON responses
-    - Implements security checks for cart ownership
-    """
-    
     def post(self, request):
         """Handle cart quantity changes via AJAX POST request."""
         cart_id = request.POST.get('cart_id')
@@ -179,15 +161,6 @@ class CartChangeView(View):
         }, status=405)
 
 class CartRemoveView(View):
-    """
-    AJAX view for removing items from cart.
-    
-    Uses View because:
-    - Handles AJAX POST requests
-    - Returns JSON responses
-    - Implements security checks for cart ownership
-    """
-    
     def post(self, request):
         """Handle cart item removal via AJAX POST request."""
         cart_id = request.POST.get('cart_id')

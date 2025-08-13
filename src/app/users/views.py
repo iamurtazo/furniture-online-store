@@ -14,15 +14,6 @@ from orders.models import Order, OrderItem
 # Create your views here.
 
 class CustomLoginView(LoginView):
-    """
-    Custom login view with cart merging functionality.
-    
-    Uses LoginView because:
-    - Built-in authentication handling
-    - Form validation and security
-    - Session management
-    - Customizable success behavior
-    """
     form_class = UserLoginForm
     template_name = 'users/login.html'
     success_url = reverse_lazy('main:index')
@@ -60,15 +51,6 @@ class CustomLoginView(LoginView):
         
         return response
 class CustomLogoutView(LogoutView):
-    """
-    Custom logout view with farewell message.
-    
-    Uses LogoutView because:
-    - Built-in logout handling
-    - Session cleanup
-    - Security best practices
-    - Customizable redirect behavior
-    """
     template_name = 'users/logout.html'
     
     def dispatch(self, request, *args, **kwargs):
@@ -88,15 +70,6 @@ class CustomLogoutView(LogoutView):
         return context
 
 class RegistrationView(SuccessMessageMixin, CreateView):
-    """
-    User registration view with cart transfer functionality.
-    
-    Uses CreateView because:
-    - Handles user model creation
-    - Built-in form validation
-    - Automatic form rendering
-    - Success message integration
-    """
     form_class = UserRegistrationForm
     template_name = 'users/registration.html'
     success_url = reverse_lazy('users:login')
@@ -125,15 +98,6 @@ class RegistrationView(SuccessMessageMixin, CreateView):
         return response
 
 class ProfileView(LoginRequiredMixin, UpdateView):
-    """
-    User profile view for updating user information.
-    
-    Uses UpdateView because:
-    - Handles user model updates
-    - Built-in form validation  
-    - Automatic form rendering
-    - Login required integration
-    """
     form_class = UserProfileForm
     template_name = 'users/profile.html'
     success_url = reverse_lazy('users:profile')
@@ -183,12 +147,4 @@ class ProfileView(LoginRequiredMixin, UpdateView):
 
 
 class UsersCartView(LoginRequiredMixin, TemplateView):
-    """
-    User cart page view.
-    
-    Uses TemplateView because:
-    - Simple template rendering
-    - Login required integration
-    - Clean and minimal for display-only pages
-    """
     template_name = 'users/users_cart.html'

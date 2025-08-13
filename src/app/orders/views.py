@@ -12,15 +12,6 @@ from carts.models import Cart
 from orders.models import Order, OrderItem
 
 class CreateOrderView(LoginRequiredMixin, FormView):
-    """
-    Order creation view with form handling and stock management.
-    
-    Uses FormView because:
-    - Handles complex form processing
-    - Built-in form validation
-    - Custom business logic in form_valid
-    - Transaction management for data integrity
-    """
     form_class = CreateOrderForm
     template_name = 'orders/create_order.html'
     success_url = reverse_lazy('users:profile')
@@ -123,15 +114,6 @@ class CreateOrderView(LoginRequiredMixin, FormView):
             return redirect('users:users_cart')
 
 class OrderDetailView(LoginRequiredMixin, DetailView):
-    """
-    Order detail view for viewing specific order information.
-    
-    Uses DetailView because:
-    - Displays single object details
-    - Built-in object retrieval
-    - User authorization for order access
-    - Clean template context
-    """
     model = Order
     template_name = 'orders/order_detail.html'
     context_object_name = 'order'
