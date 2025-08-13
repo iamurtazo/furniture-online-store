@@ -1,9 +1,6 @@
-{% extends "base.html" %} {% load static %}
-<!-- Fragment for insertion into block content for about page -->
-<!-- 
-If you add a lot of text for description and the footer will "overlap" the text,
-then remove the footer style insertion from the about page, and it will release it"
--->
+{% extends "base.html" %}
+{% load static %}
+
 {% block footer_css %}
 <link rel="stylesheet" href="{% static 'deps/css/my_footer_css.css' %}" />
 {% endblock %} 
@@ -143,7 +140,7 @@ then remove the footer style insertion from the about page, and it will release 
 {% block footer %}
 <footer class="py-4 bg-dark">
     <div class="container">
-        <p class="m-0 text-center text-white">Copyright &copy; IAMURTAZO 2025</p>
+        <p class="m-0 text-center text-white">Copyright &copy; iamurtazo 2025</p>
     </div>
 </footer>
 {% endblock %}
