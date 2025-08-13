@@ -1,14 +1,27 @@
 from django.shortcuts import render, redirect
+from django.views.generic import View
+from django.http import JsonResponse
+from django.template.loader import render_to_string
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 from carts.models import Cart
 from goods.models import Products
-from django.template.loader import render_to_string
-from django.http import JsonResponse
 from carts.utils import get_user_cart
 
 # Create your views here.
 
-def cart_add(request):
-    if request.method == 'POST':
+class CartAddView(View):
+    """
+    AJAX view for adding products to cart.
+    
+    Uses View because:
+    - Handles AJAX POST requests
+    - Returns JSON responses
+    - Custom logic that doesn't fit standard generic views
+    """
+    
+    def post(self, request):
+        """Handle adding product to cart via AJAX POST request."""
         product_id = request.POST.get('good_id')
         
         if not product_id:
@@ -24,89 +37,57 @@ def cart_add(request):
             }, status=404)
 
         if request.user.is_authenticated:
-            carts = Cart.objects.filter(user=request.user, product=product)
-
-            if carts.exists():
-                cart = carts.first()
-                if cart:
-                    cart.quantity += 1
-                    cart.save()
-            else:
-                Cart.objects.create(user=request.user, product=product, quantity=1)
-                
-            user_cart = get_user_cart(request)
-            
-            cart_items_html = render_to_string(
-                'carts/includes/included_cart.html',
-                {'carts': user_cart},
-                request=request,
+            # Handle authenticated user cart
+            cart, created = Cart.objects.get_or_create(
+                user=request.user, 
+                product=product,
+                defaults={'quantity': 1}
             )
-            
-            # Also render the cart button HTML to update the "Place Order" button
-            cart_button_html = render_to_string(
-                'includes/cart_button.html',
-                {'carts': user_cart},
-                request=request,
-            )
-            
-            response_data = {
-                "message": "Product added to cart successfully!",
-                "cart_items_html": cart_items_html,
-                "cart_button_html": cart_button_html,
-                "cart_total_quantity": user_cart.total_quantity() if user_cart else 0,
-                "has_items": user_cart.exists() if user_cart else False,
-            }
-
-            return JsonResponse(response_data)
+            if not created:
+                cart.quantity += 1
+                cart.save()
         else:
-            # Ensure session exists for anonymous users
+            # Handle anonymous user cart
             if not request.session.session_key:
                 request.session.create()
             
-            carts = Cart.objects.filter(
+            cart, created = Cart.objects.get_or_create(
                 session_key=request.session.session_key,
                 product=product,
+                defaults={'quantity': 1}
             )
-            
-            if carts.exists():
-                cart = carts.first()
+            if not created:
                 cart.quantity += 1
                 cart.save()
-            else:
-                Cart.objects.create(
-                    session_key=request.session.session_key,
-                    product=product,
-                    quantity=1,
-                )
-                
-            user_cart = get_user_cart(request)
-            
-            cart_items_html = render_to_string(
-                'carts/includes/included_cart.html',
-                {'carts': user_cart},
-                request=request,
-            )
-            
-            # Also render the cart button HTML to update the "Place Order" button
-            cart_button_html = render_to_string(
-                'includes/cart_button.html',
-                {'carts': user_cart},
-                request=request,
-            )
-            
-            response_data = {
-                "message": "Product added to cart successfully!",
-                "cart_items_html": cart_items_html,
-                "cart_button_html": cart_button_html,
-                "cart_total_quantity": user_cart.total_quantity() if user_cart else 0,
-                "has_items": user_cart.exists() if user_cart else False,
-            }
-            
-            return JsonResponse(response_data)
+        
+        # Generate response data
+        user_cart = get_user_cart(request)
+        
+        cart_items_html = render_to_string(
+            'carts/includes/included_cart.html',
+            {'carts': user_cart},
+            request=request,
+        )
+        
+        cart_button_html = render_to_string(
+            'includes/cart_button.html',
+            {'carts': user_cart},
+            request=request,
+        )
+        
+        return JsonResponse({
+            "message": "Product added to cart successfully!",
+            "cart_items_html": cart_items_html,
+            "cart_button_html": cart_button_html,
+            "cart_total_quantity": user_cart.total_quantity() if user_cart else 0,
+            "has_items": user_cart.exists() if user_cart else False,
+        })
     
-    return JsonResponse({
-        'error': 'Invalid request method'
-    }, status=405)
+    def get(self, request):
+        """Return error for GET requests - this is AJAX POST only."""
+        return JsonResponse({
+            'error': 'Only POST method allowed'
+        }, status=405)
 
 
 def cart_change(request):
