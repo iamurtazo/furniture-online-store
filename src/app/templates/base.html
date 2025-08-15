@@ -1,4 +1,6 @@
-{% load static %} {% load goods_tags %} {% load cache %}
+{% load static %} 
+{% load goods_tags %} 
+{% load cache %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -99,11 +101,14 @@
                             <img class="mx-1" src="{% static 'deps/icons/grid-fill.svg' %}" alt="Catalog Icon" width="16" height="16" />
                         </button>
                         <ul class="dropdown-menu bg-dark" data-bs-theme="dark">
-                            {% cache 60 'categories' %} {% tag_categories as categories %} {% for category in categories %}
-                            <li>
-                                <a class="dropdown-item text-white" href="{% url 'goods:index' category.slug %}">{{ category.name }}</a>
-                            </li>
-                            {% endfor %} {% endcache %}
+                            {% cache 60 'categories' %} 
+                                {% tag_categories as categories %} 
+                                {% for category in categories %}
+                                    <li>
+                                        <a class="dropdown-item text-white" href="{% url 'goods:index' category.slug %}">{{ category.name }}</a>
+                                    </li>
+                                {% endfor %} 
+                            {% endcache %}
                         </ul>
                     </div>
                     <!-- Cart icon, opens modal window -->
