@@ -1,5 +1,6 @@
 {% load static %} 
 {% load goods_tags %}
+{% load cache %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -57,7 +58,6 @@
                                     <i class="fas fa-user me-1"></i>Hi, {{ user.first_name|default:user.username }}
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item text-white" href="#">Cart</a></li>
                                     <li><a class="dropdown-item text-white" href="{% url 'users:profile' %}">Personal Account</a></li>
                                     {% if user.is_staff %}
                                     <li><a class="dropdown-item text-white" href="{% url 'admin:index' %}">Admin Panel</a></li>
@@ -101,9 +101,14 @@
                             <img class="mx-1" src="{% static 'deps/icons/grid-fill.svg' %}" alt="Catalog Icon" width="16" height="16" />
                         </button>
                         <ul class="dropdown-menu bg-dark" data-bs-theme="dark">
-                            {% tag_categories as categories %} {% for category in categories %}
-                            <li><a class="dropdown-item text-white" href="{% url 'goods:index' category.slug %}">{{ category.name }}</a></li>
-                            {% endfor %}
+                            {% cache 60 'categories' %} 
+                            {% tag_categories as categories %} 
+                            {% for category in categories %}
+                            <li>
+                                <a class="dropdown-item text-white" href="{% url 'goods:index' category.slug %}">{{ category.name }}</a>
+                            </li>
+                            {% endfor %} 
+                            {% endcache %}
                         </ul>
                     </div>
                     <!-- Cart icon, opens modal window -->
