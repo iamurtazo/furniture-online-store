@@ -6,10 +6,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import CreateView, UpdateView, TemplateView
 from django.urls import reverse_lazy
 from django.contrib.messages.views import SuccessMessageMixin
-from carts.models import Cart
 from carts.merge_utils import merge_carts
 from users.forms import UserLoginForm, UserRegistrationForm, UserProfileForm
-from orders.models import Order, OrderItem
+from orders.models import Order
+from common.mixins import CacheMixin
 
 # Create your views here.
 
@@ -50,6 +50,7 @@ class CustomLoginView(LoginView):
                 )
         
         return response
+
 class CustomLogoutView(LogoutView):
     template_name = 'users/logout.html'
     next_page = reverse_lazy('main:index')  # Redirect to home after logout
@@ -98,7 +99,7 @@ class RegistrationView(SuccessMessageMixin, CreateView):
         
         return response
 
-class ProfileView(LoginRequiredMixin, UpdateView):
+class ProfileView(LoginRequiredMixin, UpdateView, CacheMixin):
     form_class = UserProfileForm
     template_name = 'users/profile.html'
     success_url = reverse_lazy('users:profile')
@@ -113,11 +114,13 @@ class ProfileView(LoginRequiredMixin, UpdateView):
         context['title'] = 'Home - Profile'
         
         # Get user's orders with related items
-        context['orders'] = Order.objects.filter(
+        orders = Order.objects.filter(
             user=self.request.user
         ).prefetch_related(
             'orderitem_set__product'
         ).order_by('-created_at')
+            
+        context['orders'] = self.set_get_cache(orders, f'orders_for_user_{self.request.user.id}', 60)
         
         return context
     

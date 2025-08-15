@@ -11,6 +11,7 @@ __pycache__/
 *.egg-info/
 dist/
 build/
+cache/
 
 # SQLite DB files
 *.sqlite3
