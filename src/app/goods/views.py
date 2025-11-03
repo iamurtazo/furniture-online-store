@@ -10,7 +10,7 @@ class CatalogView(ListView):
     model = Products
     template_name = 'goods/catalog.html'
     context_object_name = 'goods'
-    paginate_by = 3
+    paginate_by = 4
     
     def get_queryset(self):
         # Get URL parameters
