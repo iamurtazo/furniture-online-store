@@ -144,7 +144,9 @@ This project currently targets local development only. Before deploying it or ac
 
 ## Demo
 
-https://github.com/iamurtazo/furniture-online-store/raw/main/furniture-online-store-demo-video.mp4
+https://github.com/user-attachments/assets/placeholder
+
+[Watch the demo video](furniture-online-store-demo-video.mp4)
 
 ## License
 
