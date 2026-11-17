@@ -146,8 +146,6 @@ This project currently targets local development only. Before deploying it or ac
 
 https://github.com/user-attachments/assets/44c48534-c247-49d7-bc50-8875e5a92d22
 
-[furniture-online-store-demo-video.mp4](furniture-online-store-demo-video.mp4).
-
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
